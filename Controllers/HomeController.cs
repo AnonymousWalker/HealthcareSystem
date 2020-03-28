@@ -21,7 +21,7 @@ namespace HealthcareSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult SignUp(AccountModel model)
+        public ActionResult SignUp(Account model)
         {
             bool isNewAccount = addPatientAccount(model);
             if (isNewAccount)
@@ -46,7 +46,7 @@ namespace HealthcareSystem.Controllers
 
         #region PRIVATE
 
-        private bool addPatientAccount(AccountModel account)
+        private bool addPatientAccount(Account account)
         {
             return true;
         }

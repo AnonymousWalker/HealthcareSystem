@@ -1,22 +1,23 @@
-﻿<!DOCTYPE html>
+@model LoginModel
+<!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <style>
-        body {
-            margin: 0;
-        }
-
-        #nav-bar-container {
-            width: 100%;
-            height: 50px;
-            background-color: #87b6eb;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <title>Sign In - HealthCare</title>
+    @Styles.Render("~/Content/custom/index.css")
 </head>
 <body>
-    <div id="nav-bar-container">
-        Navigation bar goes here
+    <img id="centerLogo" src="~/Content/image/logo.png">
+    <div class="main">
+        <p class="sign" align="center">Sign in</p>
+        @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "form1" }))
+        {
+            <input class="un" name="Username" type="text" align="center" placeholder="email">
+            <input class="pass" name="Password" type="password" align="center" placeholder="password">
+            <input class="submit" type="submit" value="Sign in"/>
+            <p class="forgot" align="center"><a href="#">Forgot Password?</p>
+        }
     </div>
 </body>
 </html>

@@ -154,3 +154,7 @@ S:\Dev\Projects\HealthcareSystem\obj\Debug\HealthcareSystem.csproj.CoreCompileIn
 S:\Dev\Projects\HealthcareSystem\obj\Debug\HealthcareSystem.csproj.CopyComplete
 S:\Dev\Projects\HealthcareSystem\obj\Debug\HealthcareSystem.dll
 S:\Dev\Projects\HealthcareSystem\obj\Debug\HealthcareSystem.pdb
+S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.dll
+S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.SqlServer.dll
+S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.xml
+S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.SqlServer.xml
