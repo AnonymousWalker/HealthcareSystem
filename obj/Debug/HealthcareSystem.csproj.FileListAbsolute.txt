@@ -128,6 +128,8 @@ S:\Dev\Projects\HealthcareSystem\bin\roslyn\vbc.rsp
 S:\Dev\Projects\HealthcareSystem\bin\roslyn\VBCSCompiler.exe
 S:\Dev\Projects\HealthcareSystem\bin\roslyn\VBCSCompiler.exe.config
 S:\Dev\Projects\HealthcareSystem\bin\Antlr3.Runtime.dll
+S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.dll
+S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.SqlServer.dll
 S:\Dev\Projects\HealthcareSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 S:\Dev\Projects\HealthcareSystem\bin\Microsoft.Web.Infrastructure.dll
 S:\Dev\Projects\HealthcareSystem\bin\Newtonsoft.Json.dll
@@ -139,6 +141,8 @@ S:\Dev\Projects\HealthcareSystem\bin\System.Web.WebPages.Deployment.dll
 S:\Dev\Projects\HealthcareSystem\bin\System.Web.WebPages.dll
 S:\Dev\Projects\HealthcareSystem\bin\System.Web.WebPages.Razor.dll
 S:\Dev\Projects\HealthcareSystem\bin\WebGrease.dll
+S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.xml
+S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.SqlServer.xml
 S:\Dev\Projects\HealthcareSystem\bin\System.Web.Helpers.xml
 S:\Dev\Projects\HealthcareSystem\bin\System.Web.Mvc.xml
 S:\Dev\Projects\HealthcareSystem\bin\System.Web.Optimization.xml
@@ -154,7 +158,3 @@ S:\Dev\Projects\HealthcareSystem\obj\Debug\HealthcareSystem.csproj.CoreCompileIn
 S:\Dev\Projects\HealthcareSystem\obj\Debug\HealthcareSystem.csproj.CopyComplete
 S:\Dev\Projects\HealthcareSystem\obj\Debug\HealthcareSystem.dll
 S:\Dev\Projects\HealthcareSystem\obj\Debug\HealthcareSystem.pdb
-S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.dll
-S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.SqlServer.dll
-S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.xml
-S:\Dev\Projects\HealthcareSystem\bin\EntityFramework.SqlServer.xml

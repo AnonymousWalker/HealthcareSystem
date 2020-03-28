@@ -40,7 +40,7 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public ActionResult Login(LoginModel model)
         {
-            bool isCorrect = loginAccount(model.Username, model.Password);
+            bool isCorrect = loginAccount(model.Email, model.Password);
             if (!isCorrect)
             {
                 //error message: invalid username or password 
@@ -58,9 +58,9 @@ namespace HealthcareSystem.Controllers
             return true;
         }
 
-        private bool loginAccount(string username, string password)
+        private bool loginAccount(string email, string password)
         {
-            var account = Db.Accounts.FirstOrDefault(acc => acc.Username == username);
+            var account = Db.Accounts.FirstOrDefault(acc => acc.Email == email);
             if (account!=null && account.Password == password) return true;
             return false;
         }

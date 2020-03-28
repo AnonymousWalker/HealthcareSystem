@@ -13,10 +13,10 @@
         <p class="sign" align="center">Sign in</p>
         @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "form1" }))
         {
-            <input class="un" name="Username" type="text" align="center" placeholder="email">
+            <input class="un" name="Email" type="text" align="center" placeholder="email">
             <input class="pass" name="Password" type="password" align="center" placeholder="password">
             <input class="submit" type="submit" value="Sign in"/>
-            <p class="forgot" align="center"><a href="#">Forgot Password?</p>
+            <p class="forgot" align="center"><a href="#">Forgot Password?</a></p>
         }
     </div>
 </body>
