@@ -9,6 +9,7 @@ namespace HealthcareSystem.Controllers
 {
     public class HomeController : Controller
     {
+        private HealthcareSystemContext Db;
         public ActionResult Index()
         {
             return View();
@@ -39,7 +40,13 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public ActionResult Login(LoginModel model)
         {
-            bool isAuth = loginAccount(model.Username, model.Password);
+            bool isCorrect = loginAccount(model.Username, model.Password);
+            if (!isCorrect)
+            {
+                //error message: invalid username or password 
+                model.ErrorMessage = "Invalid username or password";
+                return View("Login",model);
+            }
             return RedirectToAction("Index");
         }
 
@@ -53,7 +60,9 @@ namespace HealthcareSystem.Controllers
 
         private bool loginAccount(string username, string password)
         {
-            return true;
+            var account = Db.Accounts.FirstOrDefault(acc => acc.Username == username);
+            if (account!=null && account.Password == password) return true;
+            return false;
         }
 
         #endregion
