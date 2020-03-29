@@ -12,9 +12,13 @@
     <div class="loginMain">
         <p class="sign" align="center">Sign in</p>
         <form class="form1" action="/Account/Login" method="post">
-            <input class="un" name="Email" type="text" align="center" placeholder="email">
+            <input class="un " name="Email" type="text" align="center" placeholder="email" value="@Model.Email" autofocus>
+            @if (Model.ErrorMessage != "")
+            {
+                <label style="display: block; color:#ea0c08">@Model.ErrorMessage</label>
+            }
             <input class="pass" name="Password" type="password" align="center" placeholder="password">
-            <input class="submit" type="submit" value="Sign In"/>
+            <input class="submit" type="submit" value="Sign In" />
             <p class="forgot" align="center"><a href="#">Forgot Password?</a></p>
         </form> 
     </div>

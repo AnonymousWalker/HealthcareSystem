@@ -10,8 +10,13 @@ namespace HealthcareSystem.Controllers
     public class HomeController : Controller
     {
         private HealthcareSystemContext Db;
+
         public ActionResult Index()
         {
+            if (AccountController.IsLoggedIn)
+            {
+
+            }
             return View("~/Views/Account/Login.cshtml");
         }
 

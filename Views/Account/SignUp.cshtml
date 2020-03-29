@@ -1,30 +1,35 @@
 @model SignUpModel
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Sign Up</title>
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-        @Styles.Render("~/Content/custom/login.css")
-    </head>
-    <body>
-        <img id="centerLogo" src="~/Content/image/logo.png">
-        <div class="signUpMain">
-            <p class="sign" align="center">Sign Up</p>
-            <form class="form1" action="/Account/SignUp" method="post">
-                <input class="un " name="Email" type="text" align="center" placeholder="email">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign Up</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/bootstrap.css" />
+    @Styles.Render("~/Content/custom/login.css")
+</head>
+<body>
+    <img id="centerLogo" src="~/Content/image/logo.png">
+    <div class="signUpMain">
+        <p class="sign" align="center">Sign Up</p>
+        <form class="form1" action="/Account/SignUp" method="post">
+            <input class="un " name="Email" type="text" align="center" placeholder="email" value="@Model.Email" autofocus>
+            @if (Model.ErrorMessage != "")
+            {
+                <label style="display: block; color:#ea0c08">@Model.ErrorMessage</label>
+            }
+            else
+            {
                 <label style="display: block;">Your email will be used to sign in</label>
-                <input class="pass" name="Password" type="password" align="center" placeholder="Password">
-                <input class="pass" type="password" align="center" placeholder="Confirm Password">
-                @*<input class="un " name="DateOfBirth" type="text" align="center" placeholder="Date of Birth">
-                <label style="display: block;">example: 2/31/1975</label>*@
-                <input class="un " name="Phone" type="text" align="center" placeholder="Phone Number">
-                <label style="display: block;">example: 334-660-8451</label>
-                <input class="un " name="Firstname" type="text" align="center" placeholder="First Name">
-                <input class="un " name="Lastname" type="text" align="center" placeholder="Last Name">
-                <input class="submit" type="submit" value="Sign Up" />
-            </form>
-        </div>
-    </body>
+            }
+            <input class="pass" name="Password" type="password" align="center" placeholder="Password">
+            <input class="pass" type="password" align="center" placeholder="Confirm Password">
+            <input class="un " name="Phone" type="text" align="center" placeholder="Phone Number" value="@Model.Phone">
+            <label style="display: block;">example: 334-660-8451</label>
+            <input class="un " name="Firstname" type="text" align="center" placeholder="First Name" value="@Model.Firstname">
+            <input class="un " name="Lastname" type="text" align="center" placeholder="Last Name" value="@Model.Lastname">
+            <input class="submit" type="submit" value="Sign Up" />
+        </form>
+    </div>
+</body>
 </html>
