@@ -6,7 +6,7 @@ using System.Web;
 
 namespace HealthcareSystem.Models
 {
-    public class Account
+    public abstract class Account
     {
         public int AccountId { get; set; }
         public string Email { get; set; }
@@ -20,7 +20,7 @@ namespace HealthcareSystem.Models
     {
         public string InsuranceNumber { get; set; }
         public string BillingAddress { get; set; }
-
+        public DateTime? DayOfBirth { get; set; }
         public virtual ICollection<Appointment> Appointments { get; set; }
         public virtual ICollection<MedicalRecord> MedicalRecords { get; set; }
     }
@@ -28,7 +28,7 @@ namespace HealthcareSystem.Models
     public class EmployeeAccount : Account
     {
         public string SSN { get; set; }
-        public double? Salary { get; set; }
+        public double Salary { get; set; }
         public EmployeeRole Role { get; set; }
     }
 }

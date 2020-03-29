@@ -3,10 +3,19 @@ body {
     font-family: 'Ubuntu', sans-serif;
 }
 
-.main {
+.loginMain {
     background-color: #FFFFFF;
     width: 400px;
-    height: 400px;
+    margin: auto;
+    padding-bottom: 5px;
+    border-radius: 1.5em;
+    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+}
+
+.signUpMain {
+    background-color: #FFFFFF;
+    width: 400px;
+    height: 800px;
     margin: auto;
     border-radius: 1.5em;
     box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
@@ -98,8 +107,14 @@ a {
 }
 
 @media (max-width: 600px) {
-    .main {
+    .loginMain {
         border-radius: 0px;
+    }
+}
+
+@media (max-width: 450px) {
+    .loginMain, .signUpMain {
+        width: auto;
     }
 }
 
@@ -108,4 +123,14 @@ a {
     margin-left: auto;
     margin-right: auto;
     width: 15%;
+}
+
+label {
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 27px;
+    font-family: 'Ubuntu', sans-serif;
+    color: #8C55AA;
 }

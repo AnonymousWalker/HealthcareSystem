@@ -12,4 +12,10 @@ namespace HealthcareSystem.Models
         Nurse = 3,
         CEO = 4
     }
+
+    public enum AccountType
+    {
+        Patient = 1,
+        Employee = 2
+    }
 }

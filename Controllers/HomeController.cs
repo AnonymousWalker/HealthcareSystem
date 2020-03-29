@@ -12,59 +12,9 @@ namespace HealthcareSystem.Controllers
         private HealthcareSystemContext Db;
         public ActionResult Index()
         {
-            return View();
+            return View("~/Views/Account/Login.cshtml");
         }
 
-        public ActionResult SignUp()
-        {
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult SignUp(Account model)
-        {
-            bool isNewAccount = addPatientAccount(model);
-            if (isNewAccount)
-            {
-                return RedirectToAction("Login");
-            }
-            return RedirectToAction("SignUp");  // account already exists, reprompt with message
-        }
-
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Login(LoginModel model)
-        {
-            bool isCorrect = loginAccount(model.Email, model.Password);
-            if (!isCorrect)
-            {
-                //error message: invalid username or password 
-                model.ErrorMessage = "Invalid username or password";
-                return View("Login",model);
-            }
-            return RedirectToAction("Index");
-        }
-
-
-        #region PRIVATE
-
-        private bool addPatientAccount(Account account)
-        {
-            return true;
-        }
-
-        private bool loginAccount(string email, string password)
-        {
-            var account = Db.Accounts.FirstOrDefault(acc => acc.Email == email);
-            if (account!=null && account.Password == password) return true;
-            return false;
-        }
-
-        #endregion
+ 
     }
 }
