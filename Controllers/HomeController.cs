@@ -11,6 +11,11 @@ namespace HealthcareSystem.Controllers
     {
         private HealthcareSystemContext Db;
 
+        public HomeController()
+        {
+            Db = new HealthcareSystemContext();
+        }
+
         public ActionResult Index()
         {
             if (AccountController.IsLoggedIn)
@@ -20,6 +25,17 @@ namespace HealthcareSystem.Controllers
             return View("~/Views/Account/Login.cshtml");
         }
 
+        public ActionResult Apointment()
+        {
+            var appointments = Db.Appointments.Where(ap => ap.Time.Date == DateTime.Today);
+            TimeSpan t;
+            for (int i = 9; i <= 16; i++)
+            {
+                t = new TimeSpan(i, 0, 0);   
+                
+            }
+            return View();
+        }
  
     }
 }
