@@ -9,15 +9,18 @@
 </head>
 <body>
     <img id="centerLogo" src="~/Content/image/logo.png">
-    <div class="main">
+    <div class="loginMain">
         <p class="sign" align="center">Sign in</p>
-        @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @class = "form1" }))
-        {
-            <input class="un" name="Username" type="text" align="center" placeholder="email">
+        <form class="form1" action="/Account/Login" method="post">
+            <input class="un " name="Email" type="text" align="center" placeholder="email" value="@Model.Email" autofocus>
+            @if (Model.ErrorMessage != "")
+            {
+                <label style="display: block; color:#ea0c08">@Model.ErrorMessage</label>
+            }
             <input class="pass" name="Password" type="password" align="center" placeholder="password">
-            <input class="submit" type="submit" value="Sign in"/>
-            <p class="forgot" align="center"><a href="#">Forgot Password?</p>
-        }
+            <input class="submit" type="submit" value="Sign In" />
+            <p class="forgot" align="center"><a href="#">Forgot Password?</a></p>
+        </form> 
     </div>
 </body>
 </html>

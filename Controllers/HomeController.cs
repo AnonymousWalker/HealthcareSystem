@@ -10,61 +10,32 @@ namespace HealthcareSystem.Controllers
     public class HomeController : Controller
     {
         private HealthcareSystemContext Db;
+
+        public HomeController()
+        {
+            Db = new HealthcareSystemContext();
+        }
+
         public ActionResult Index()
         {
-            return View();
-        }
-
-        public ActionResult SignUp()
-        {
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult SignUp(Account model)
-        {
-            bool isNewAccount = addPatientAccount(model);
-            if (isNewAccount)
+            if (AccountController.IsLoggedIn)
             {
-                return RedirectToAction("Login");
+
             }
-            return RedirectToAction("SignUp");  // account already exists, reprompt with message
+            return View("~/Views/Account/Login.cshtml");
         }
 
-        public ActionResult Login()
+        public ActionResult Apointment()
         {
+            var appointments = Db.Appointments.Where(ap => ap.Time.Date == DateTime.Today);
+            TimeSpan t;
+            for (int i = 9; i <= 16; i++)
+            {
+                t = new TimeSpan(i, 0, 0);   
+                
+            }
             return View();
         }
-
-        [HttpPost]
-        public ActionResult Login(LoginModel model)
-        {
-            bool isCorrect = loginAccount(model.Username, model.Password);
-            if (!isCorrect)
-            {
-                //error message: invalid username or password 
-                model.ErrorMessage = "Invalid username or password";
-                return View("Login",model);
-            }
-            return RedirectToAction("Index");
-        }
-
-
-        #region PRIVATE
-
-        private bool addPatientAccount(Account account)
-        {
-            return true;
-        }
-
-        private bool loginAccount(string username, string password)
-        {
-            var account = Db.Accounts.FirstOrDefault(acc => acc.Username == username);
-            if (account!=null && account.Password == password) return true;
-            return false;
-        }
-
-        #endregion
+ 
     }
 }
