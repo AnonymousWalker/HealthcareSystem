@@ -27,15 +27,30 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult Apointment()
         {
-            var appointments = Db.Appointments.Where(ap => ap.Time.Date == DateTime.Today);
-            TimeSpan t;
+            //var doctors = Db.Accounts.OfType<EmployeeAccount>()
+            //    .Where(acc => acc.Role == EmployeeRole.Doctor)
+            //    .Select({
+
+            //}).ToList();
+
+            var appointments = Db.Appointments.Where(ap => ap.Time.Date == DateTime.Today).ToList();
             for (int i = 9; i <= 16; i++)
             {
-                t = new TimeSpan(i, 0, 0);   
-                
+                foreach (var ap in appointments)
+                {
+                    //unavailable for making appointment
+                    if (ap.Time.Hour == i)
+                    {
+                        
+                    }
+                    else
+                    {
+
+                    }
+                }
             }
             return View();
         }
- 
+
     }
 }
