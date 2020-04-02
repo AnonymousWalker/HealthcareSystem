@@ -13,7 +13,7 @@
     <div class="signUpMain">
         <p class="sign" align="center">Sign Up</p>
         <form class="form1" action="/Account/SignUp" method="post">
-            <input class="un " name="Email" type="text" align="center" placeholder="email" value="@Model.Email" autofocus>
+            <input class="un " name="Email" type="email" align="center" placeholder="email" value="@Model.Email" autofocus>
             @if (Model.ErrorMessage != "")
             {
                 <label style="display: block; color:#ea0c08">@Model.ErrorMessage</label>

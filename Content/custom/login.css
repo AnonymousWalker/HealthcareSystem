@@ -104,12 +104,16 @@ form.form1 {
 a {
     text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
     color: #E1BEE7;
-    text-decoration: none
+    text-decoration: none;
 }
 
 @media (max-width: 600px) {
     .loginMain {
         border-radius: 0px;
+    }
+
+    #centerLogo {
+        width: 30% !important;
     }
 }
 

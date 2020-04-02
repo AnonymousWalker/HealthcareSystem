@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace HealthcareSystem.Controllers
 {
@@ -25,32 +26,68 @@ namespace HealthcareSystem.Controllers
             return View("~/Views/Account/Login.cshtml");
         }
 
-        public ActionResult Apointment()
+        public ActionResult MakeAppointment()
         {
-            //var doctors = Db.Accounts.OfType<EmployeeAccount>()
-            //    .Where(acc => acc.Role == EmployeeRole.Doctor)
-            //    .Select({
+            Dictionary<int, AppointmentModel> appointmentViewModels = getAppointments();
+            return View(appointmentViewModels);
+        }
 
-            //}).ToList();
+        [HttpGet]
+        public ActionResult MakeAppointment(int patientId, int doctorId, DateTime time)
+        {
+            createAppointment(patientId, doctorId, time);
+            return View("Success");
+        }
 
-            var appointments = Db.Appointments.Where(ap => ap.Time.Date == DateTime.Today).ToList();
+        #region PRIVATE
+
+        private Dictionary<int, AppointmentModel> getAppointments()
+        {
+            var appointmentViewModels = new Dictionary<int, AppointmentModel>();
+            var appointments = Db.Appointments
+                .Where(ap => ap.Time.Date == DateTime.Today)
+                .Join(Db.Accounts, ap => ap.DoctorId, doctor => doctor.AccountId, (ap, doctor) =>
+                    new AppointmentModel
+                    {
+                        AppointmentId = ap.AppointmentId,
+                        Time = ap.Time,
+                        Doctor = new KeyValuePair<int, string>(doctor.AccountId, doctor.Firstname),
+                        PatientId = ap.PatientId
+                    })
+                .ToList();
+
             for (int i = 9; i <= 16; i++)
             {
                 foreach (var ap in appointments)
                 {
-                    //unavailable for making appointment
+                    //appointment has already been made
                     if (ap.Time.Hour == i)
                     {
-                        
+                        appointmentViewModels.Add(i, ap);
                     }
                     else
                     {
-
+                        appointmentViewModels.Add(i, new AppointmentModel());
                     }
                 }
             }
-            return View();
+
+            return appointmentViewModels;
         }
 
+        private bool createAppointment(int patientId, int doctorId, DateTime time)
+        {
+            Db.Appointments.Add(new Appointment
+            {
+                Time = time,
+                DoctorId = doctorId,
+                PatientId = patientId
+            });
+            //Db.SaveChanges();
+
+            return true;
+        }
+
+        #endregion
     }
 }
