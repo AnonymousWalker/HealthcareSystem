@@ -45,10 +45,19 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public ActionResult SignUp(SignUpModel model)
         {
+            //validate input + decrypt?
+            if (!ModelState.IsValid)
+            {
+                return View("SignUp", model);
+            }
+
             bool isNewAccount = addPatientAccount(model);
             if (isNewAccount)
             {
-                return View("Login", new LoginModel { Email = model.Email });
+                IsLoggedIn = true;
+                var account = verifyExistingAccount(model.Email, model.Password);
+                Session["AccountId"] = account.AccountId;
+                return View("Index", "Home");
             }
 
             model.ErrorMessage = "Account has already existed!";
@@ -63,7 +72,8 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public ActionResult Login(LoginModel model)
         {
-            var account = verifyAccount(model.Email, model.Password);
+            //validate + decrypt?
+            var account = verifyExistingAccount(model.Email, model.Password);
             if (account != null)
             {
                 IsLoggedIn = true;
@@ -102,7 +112,7 @@ namespace HealthcareSystem.Controllers
             return true;
         }
 
-        private Account verifyAccount(string email, string password)
+        private Account verifyExistingAccount(string email, string password)
         {
             var account = Db.Accounts.FirstOrDefault(acc => acc.Email == email);
             if (account != null && account.Password == password)

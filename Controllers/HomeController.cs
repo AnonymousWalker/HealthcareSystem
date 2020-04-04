@@ -21,7 +21,7 @@ namespace HealthcareSystem.Controllers
         {
             if (AccountController.IsLoggedIn)
             {
-
+                var id = Convert.ToInt32(Session["AccountId"]);
             }
             return View("~/Views/Account/Login.cshtml");
         }
