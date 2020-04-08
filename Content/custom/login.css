@@ -130,7 +130,8 @@ a {
     width: 15%;
 }
 
-label {
+label, .field-validation-error {
+    display:block;
     font-weight: 700;
     font-size: 14px;
     letter-spacing: 1px;
@@ -139,3 +140,8 @@ label {
     font-family: 'Ubuntu', sans-serif;
     color: #8C55AA;
 }
+
+.field-validation-error {
+    color: #dc3232 !important;
+}
+

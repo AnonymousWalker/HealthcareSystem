@@ -72,6 +72,10 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public ActionResult Login(LoginModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Login", model);
+            }
             //validate + decrypt?
             var account = verifyExistingAccount(model.Email, model.Password);
             if (account != null)

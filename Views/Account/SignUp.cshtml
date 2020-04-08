@@ -16,18 +16,21 @@
             <input class="un " name="Email" type="email" align="center" placeholder="email" value="@Model.Email" autofocus>
             @if (Model.ErrorMessage != "")
             {
-                <label style="display: block; color:#ea0c08">@Model.ErrorMessage</label>
+                <label class="field-validation-error">@Model.ErrorMessage</label>@Html.ValidationMessage("Email")
             }
             else
             {
-                <label style="display: block;">Your email will be used to sign in</label>
+                <label>Your email will be used to sign in</label>
             }
             <input class="pass" name="Password" type="password" align="center" placeholder="Password">
+            @Html.ValidationMessageFor(x => x.Password)
             <input class="pass" type="password" align="center" placeholder="Confirm Password">
             <input class="un " name="Phone" type="text" align="center" placeholder="Phone Number" value="@Model.Phone">
-            <label style="display: block;">example: 334-660-8451</label>
+            <label>example: 334-660-8451</label>
             <input class="un " name="Firstname" type="text" align="center" placeholder="First Name" value="@Model.Firstname">
+            @Html.ValidationMessageFor(x => x.Firstname)
             <input class="un " name="Lastname" type="text" align="center" placeholder="Last Name" value="@Model.Lastname">
+            @Html.ValidationMessageFor(x => x.Lastname)
             <input class="submit" type="submit" value="Sign Up" />
         </form>
     </div>
