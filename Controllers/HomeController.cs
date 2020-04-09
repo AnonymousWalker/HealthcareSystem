@@ -28,7 +28,7 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult MakeAppointment()
         {
-            Dictionary<int, AppointmentModel> appointmentViewModels = getAppointments();
+            Dictionary<int, AppointmentModel> appointmentViewModels = getAppointmentsByDate();
             return View(appointmentViewModels);
         }
 
@@ -39,13 +39,24 @@ namespace HealthcareSystem.Controllers
             return View("Success");
         }
 
+        public IList<AppointmentModel> PatientAppointments(int patientId)
+        {
+            return getPatientAppointments(patientId);
+        }
+
+
+
         #region PRIVATE
 
-        private Dictionary<int, AppointmentModel> getAppointments()
+        private Dictionary<int, AppointmentModel> getAppointmentsByDate(DateTime? date = null)
         {
+            if (!date.HasValue)
+            {
+                date = DateTime.Today;
+            }
             var appointmentViewModels = new Dictionary<int, AppointmentModel>();
             var appointments = Db.Appointments
-                .Where(ap => ap.Time.Date == DateTime.Today)
+                .Where(ap => ap.Time.Date == date)
                 .Join(Db.Accounts, ap => ap.DoctorId, doctor => doctor.AccountId, (ap, doctor) =>
                     new AppointmentModel
                     {
@@ -53,8 +64,7 @@ namespace HealthcareSystem.Controllers
                         Time = ap.Time,
                         Doctor = new KeyValuePair<int, string>(doctor.AccountId, doctor.Firstname),
                         PatientId = ap.PatientId
-                    })
-                .ToList();
+                    }).ToList();
 
             for (int i = 9; i <= 16; i++)
             {
@@ -83,11 +93,22 @@ namespace HealthcareSystem.Controllers
                 DoctorId = doctorId,
                 PatientId = patientId
             });
-            //Db.SaveChanges();
 
             return true;
         }
 
+        private IList<AppointmentModel> getPatientAppointments(int patientId)
+        {
+            return Db.Appointments.Where(ap => ap.PatientId == patientId)
+                                .Join(Db.Accounts, ap => ap.DoctorId, doctor => doctor.AccountId, (ap, doctor) =>
+                                  new AppointmentModel
+                                  {
+                                      AppointmentId = ap.AppointmentId,
+                                      Time = ap.Time,
+                                      Doctor = new KeyValuePair<int, string>(doctor.AccountId, doctor.Firstname),
+                                      PatientId = ap.PatientId
+                                  }).ToList();
+        }
         #endregion
     }
 }

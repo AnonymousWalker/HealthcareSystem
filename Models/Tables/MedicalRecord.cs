@@ -13,7 +13,9 @@ namespace HealthcareSystem.Models.Tables
         public string BloodPressure { get; set; }
         public short Pulse { get; set; }
         public string Description { get; set; }
+        public DateTime Date { get; set; }
 
+        public int PatientId { get; set; }
         public virtual PatientAccount PatientAccount { get; set; }
     }
 }
