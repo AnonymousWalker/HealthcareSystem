@@ -17,9 +17,14 @@ namespace HealthcareSystem.Controllers
             Db = new HealthcareSystemContext();
         }
 
-        public ActionResult Index()
+        //Profile
+        public ActionResult Profile()
         {
-            int id = Convert.ToInt32(Session["AccountId"]);
+            if (!IsLoggedIn) {
+                RedirectToAction("Login");
+            }
+            
+            int id = Convert.ToInt32(Session["AccountId"]); 
             if (id != 0)
             {
                 PatientAccount pAccount = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == id);
@@ -34,6 +39,7 @@ namespace HealthcareSystem.Controllers
                 };
                 return View(model);
             }
+
             return RedirectToAction("Login");
         }
 

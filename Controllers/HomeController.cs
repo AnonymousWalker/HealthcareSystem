@@ -22,6 +22,9 @@ namespace HealthcareSystem.Controllers
             if (AccountController.IsLoggedIn)
             {
                 var id = Convert.ToInt32(Session["AccountId"]);
+                var account = Db.Accounts.Find(id);
+                ViewBag.FirstName = account.Firstname;
+                ViewBag.LastName = account.Lastname;
             }
             return View();
         }

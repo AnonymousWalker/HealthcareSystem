@@ -25,7 +25,7 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult MakeAppointment()
         {
-            Dictionary<int, AppointmentModel> appointmentViewModels = getAppointmentsByDate();
+            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments();
             return View(appointmentViewModels);
         }
 
@@ -104,16 +104,16 @@ namespace HealthcareSystem.Controllers
 
 
 
-
         #region PRIVATE
 
-        private Dictionary<int, AppointmentModel> getAppointmentsByDate(DateTime? date = null)
+        private Dictionary<int, List<AppointmentModel>> getAvailableAppointments(DateTime? date = null)
         {
             if (!date.HasValue)
             {
                 date = DateTime.Today;
             }
-            var appointmentViewModels = new Dictionary<int, AppointmentModel>();
+
+            var appointmentViewModels = new Dictionary<int, List<AppointmentModel>>();
             var appointments = Db.Appointments
                 .Where(ap => ap.Time.Date == date)
                 .Join(Db.Accounts, ap => ap.DoctorId, doctor => doctor.AccountId, (ap, doctor) =>
@@ -125,20 +125,30 @@ namespace HealthcareSystem.Controllers
                         PatientId = ap.PatientId
                     }).ToList();
 
-            for (int i = 9; i <= 16; i++)
+            var doctorList = Db.Accounts.OfType<EmployeeAccount>().Where(acc => acc.Role == EmployeeRole.Doctor).ToList();
+            List<AppointmentModel> apEachHour;
+            for (int i = 9; i <= 16; i++)   //time of each appointment
             {
-                foreach (var ap in appointments)
+                apEachHour = new List<AppointmentModel>();
+                foreach (var doctor in doctorList)
                 {
-                    //appointment has already been made
-                    if (ap.Time.Hour == i)
+                    //appointment has already existed
+                    if (appointments.Any(ap => ap.Time.Hour == i && ap.Doctor.Key == doctor.AccountId))
                     {
-                        appointmentViewModels.Add(i, ap);
+                        apEachHour.Add(new AppointmentModel
+                        {
+                            AppointmentId = -1  //not available
+                        });
                     }
                     else
                     {
-                        appointmentViewModels.Add(i, new AppointmentModel());
+                        apEachHour.Add(new AppointmentModel
+                        {
+                            AppointmentId = 0   //available
+                        });
                     }
                 }
+                appointmentViewModels.Add(i, apEachHour);
             }
 
             return appointmentViewModels;

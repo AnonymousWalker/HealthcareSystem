@@ -11,8 +11,8 @@ namespace HealthcareSystem.Models
     {
         public HealthcareSystemContext() : base("HealthcareSystem")
         {
-            Database.SetInitializer(new CreateDatabaseIfNotExists<HealthcareSystemContext>());
-            //Database.SetInitializer<SchoolDBContext>(new DropCreateDatabaseIfModelChanges<SchoolDBContext>());
+            //Database.SetInitializer(new CreateDatabaseIfNotExists<HealthcareSystemContext>());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<HealthcareSystemContext>());
 
         }
 
