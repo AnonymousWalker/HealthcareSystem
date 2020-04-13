@@ -176,7 +176,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Views\Account\Profile.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
     <None Include="Views\Account\SignUp.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

@@ -17,30 +17,55 @@ namespace HealthcareSystem.Controllers
             Db = new HealthcareSystemContext();
         }
 
+
         //Profile
-        public ActionResult Profile()
+        public ActionResult Index()
         {
-            if (!IsLoggedIn) {
+            int id = Convert.ToInt32(Session["AccountId"]);
+            if (!IsLoggedIn || id == 0) {
                 RedirectToAction("Login");
             }
-            
-            int id = Convert.ToInt32(Session["AccountId"]); 
-            if (id != 0)
-            {
-                PatientAccount pAccount = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == id);
-                var model = new ProfileModel
-                {
-                    Email = pAccount.Email,
-                    Password = pAccount.Password,
-                    Firstname = pAccount.Firstname,
-                    Lastname = pAccount.Lastname,
-                    BillingAddress = pAccount.BillingAddress,
-                    InsuranceNumber = pAccount.InsuranceNumber
-                };
-                return View(model);
-            }
 
-            return RedirectToAction("Login");
+            // Authorization
+            var sAccount = Db.Accounts.OfType<EmployeeAccount>().FirstOrDefault(acc => acc.AccountId == id);
+            try
+            {
+                //Staff Account
+                if (sAccount != null)
+                {
+                    var model = new ProfileModel
+                    {
+                        Email = sAccount.Email,
+                        Password = sAccount.Password,
+                        Firstname = sAccount.Firstname,
+                        Lastname = sAccount.Lastname,
+                        Salary = sAccount.Salary,
+                        SSN = sAccount.SSN,
+                        Role = sAccount.Role,
+                        AccountType = AccountType.Employee
+                    };
+                    return View(model);
+                }
+                else
+                {
+                    PatientAccount pAccount = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == id);
+                    var model = new ProfileModel
+                    {
+                        Email = pAccount.Email,
+                        Password = pAccount.Password,
+                        Firstname = pAccount.Firstname,
+                        Lastname = pAccount.Lastname,
+                        BillingAddress = pAccount.BillingAddress,
+                        InsuranceNumber = pAccount.InsuranceNumber,
+                        AccountType = AccountType.Patient
+                    };
+                    return View(model);
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Login");
+            }
         }
 
         public ActionResult SignUp()
