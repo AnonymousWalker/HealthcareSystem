@@ -26,5 +26,6 @@ namespace HealthcareSystem.Models
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public virtual DbSet<ServiceStatement> ServiceStatements { get; set; }
     }
 }

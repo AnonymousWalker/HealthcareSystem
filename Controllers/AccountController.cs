@@ -44,7 +44,7 @@ namespace HealthcareSystem.Controllers
                         Role = sAccount.Role,
                         AccountType = AccountType.Employee
                     };
-                    return View(model);
+                    return View("StaffProfile",model);
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace HealthcareSystem.Controllers
                         InsuranceNumber = pAccount.InsuranceNumber,
                         AccountType = AccountType.Patient
                     };
-                    return View(model);
+                    return View("PatientProfile", model);
                 }
             }
             catch (Exception ex)

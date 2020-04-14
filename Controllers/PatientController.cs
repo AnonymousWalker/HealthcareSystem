@@ -98,8 +98,6 @@ namespace HealthcareSystem.Controllers
 
             return null;
         }
-        //doctor create treatment, prescription record => charge amount
-        //public ActionResult createStatement
 
 
 
