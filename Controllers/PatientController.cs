@@ -22,14 +22,15 @@ namespace HealthcareSystem.Controllers
             return View();
         }
 
-
+        [HttpGet]
         public ActionResult MakeAppointment()
         {
-            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments();
-            return View(appointmentViewModels);
+            //Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments();
+            //return View(appointmentViewModels);
+            return View();
         }
 
-        [HttpGet]
+        
         public ActionResult MakeAppointment(int patientId, int doctorId, DateTime time)
         {
             createAppointment(patientId, doctorId, time);
