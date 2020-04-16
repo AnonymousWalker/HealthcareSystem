@@ -25,12 +25,11 @@ namespace HealthcareSystem.Controllers
         [HttpGet]
         public ActionResult MakeAppointment()
         {
-            //Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments();
-            //return View(appointmentViewModels);
-            return View();
+            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments();
+            return View(appointmentViewModels);
         }
 
-        
+        [HttpPost]
         public ActionResult MakeAppointment(int patientId, int doctorId, DateTime time)
         {
             createAppointment(patientId, doctorId, time);
@@ -111,16 +110,18 @@ namespace HealthcareSystem.Controllers
             {
                 date = DateTime.Today;
             }
+            DateTime nextDay = date.Value.AddDays(1);
 
             var appointmentViewModels = new Dictionary<int, List<AppointmentModel>>();
             var appointments = Db.Appointments
-                .Where(ap => ap.Time.Date == date)
+                .Where(ap => ap.Time >= date && ap.Time < nextDay)
                 .Join(Db.Accounts, ap => ap.DoctorId, doctor => doctor.AccountId, (ap, doctor) =>
                     new AppointmentModel
                     {
                         AppointmentId = ap.AppointmentId,
                         Time = ap.Time,
-                        Doctor = new KeyValuePair<int, string>(doctor.AccountId, doctor.Firstname),
+                        DoctorId = ap.DoctorId,
+                        DoctorName = doctor.Firstname + " " + doctor.Lastname,
                         PatientId = ap.PatientId
                     }).ToList();
 
@@ -132,18 +133,24 @@ namespace HealthcareSystem.Controllers
                 foreach (var doctor in doctorList)
                 {
                     //appointment has already existed
-                    if (appointments.Any(ap => ap.Time.Hour == i && ap.Doctor.Key == doctor.AccountId))
+                    if (appointments.Any(ap => ap.Time.Hour == i && ap.DoctorId == doctor.AccountId))
                     {
                         apEachHour.Add(new AppointmentModel
                         {
-                            AppointmentId = -1  //not available
+                            AppointmentId = -1,  //not available
+                            DoctorId = doctor.AccountId,
+                            DoctorName = doctor.Firstname + " " + doctor.Lastname,
+                            Time = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, i, 0, 0)
                         });
                     }
                     else
                     {
                         apEachHour.Add(new AppointmentModel
                         {
-                            AppointmentId = 0   //available
+                            AppointmentId = 0,   //available
+                            DoctorId = doctor.AccountId,
+                            DoctorName = doctor.Firstname + " " + doctor.Lastname,
+                            Time = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, i, 0, 0)
                         });
                     }
                 }
@@ -173,7 +180,8 @@ namespace HealthcareSystem.Controllers
                                   {
                                       AppointmentId = ap.AppointmentId,
                                       Time = ap.Time,
-                                      Doctor = new KeyValuePair<int, string>(doctor.AccountId, doctor.Firstname),
+                                      DoctorId = ap.DoctorId,
+                                      DoctorName = doctor.Firstname + " " + doctor.Lastname,
                                       PatientId = ap.PatientId
                                   }).ToList();
         }

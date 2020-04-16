@@ -135,6 +135,7 @@
     </Compile>
     <Compile Include="Models\AppointmentModel.cs" />
     <Compile Include="Models\Enums.cs" />
+    <Compile Include="Models\MakeAppointmentModel.cs" />
     <Compile Include="Models\MedicalRecordModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
     <Compile Include="Models\Tables\Account.cs" />
@@ -155,7 +156,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom\home.css" />
     <Content Include="Content\custom\login.css" />
-    <Content Include="Content\custom\makeAppointment.css" />
+    <Content Include="Content\custom\make-appointment.css" />
     <Content Include="Content\image\appointment.jpg" />
     <Content Include="Content\image\history.png" />
     <Content Include="Content\image\list.jpg" />
@@ -169,6 +170,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\custom\make-appointment.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -197,6 +199,8 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Patient\MakeAppointment.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Patient\_AppointmentRow.cshtml" />
+    <Content Include="Views\Shared\_NavigationBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

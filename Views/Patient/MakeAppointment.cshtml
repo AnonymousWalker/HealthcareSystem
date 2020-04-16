@@ -4,15 +4,15 @@
 <head>
     <title> Make an Appointment </title>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-    @Styles.Render("/Content/custom/makeAppointment.css")
-    @Styles.Render("/Content/custom/home.css")
-    <script src="script.js"></script>
+    @Styles.Render("~/Content/custom/make-appointment.css")
+    @Styles.Render("~/Content/custom/home.css")
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    @Scripts.Render("~/Scripts/custom/make-appointment.js")
 </head>
 <body>
     <nav>
         <div class="header">
             <h2 class="logo">Healthcare System</h2>
-            <!-- Temp Header? -->
             <input type="checkbox" id="chk">
             <label for="chk" class="show-menu-btn">
                 <i class="fas fa-ellipsis-h"></i>
@@ -22,7 +22,7 @@
 
                 <a href="@Url.Action("Index","Home")">Home</a>
                 <a href="@Url.Action("About","Home")">About</a>
-                <a href="#>Services</a>
+                <a href="#">Services</a>
                 <a href="#">Contact</a>
                 <a href="@Url.Action("Index","Account")">Account</a>
 
@@ -36,39 +36,23 @@
     <h1 class="blue" style="clear: both;">Make an Appointment</h1>
     <div class="datepicker">
         <h1> Pick a Date</h1>
-        <input type="date" id="myDate" value="">
+        <input id="datepicker" type="date">
         <br /><br />
     </div>
 
     <table class="container">
         <thead>
             <tr>
-                <th><h1>Avaiable Time</h1></th>
-                <th><h1>Name</h1></th>
-                <th><h1>Status</h1></th>
+                <th><h1>Time</h1></th>
+                <th><h1>Doctor</h1></th>
+                <th><h1>Action</h1></th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1:32:50 AM</td>
-                <td>Longdd</td>
-                <td><a href="#" class="myButton">Book</a></td>
-            </tr>
-            <tr>
-                <td>00:51:22</td>
-                <td></td>
-                <td><a href="#" class="myButton">Book</a></td>
-            </tr>
-            <tr>
-                <td>00:24:34</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>00:12:10</td>
-                <td></td>
-                <td></td>
-            </tr>
+            @foreach (var hourSlot in Model)
+            {
+                @Html.Partial("_AppointmentRow", hourSlot.Value)
+            }
         </tbody>
     </table>
 </body>

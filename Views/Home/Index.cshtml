@@ -8,41 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body style="background: white;">
-
-    <nav>
-        <div class="header">
-            <h2 class="logo">Healthcare System</h2>
-            <!-- Temp Header? -->
-            <input type="checkbox" id="chk">
-            <label for="chk" class="show-menu-btn">
-                <i class="fas fa-ellipsis-h"></i>
-            </label>
-
-            <div class="menu">
-                <a href="@Url.Action("Index","Home")">Home</a>
-                <a href="@Url.Action("About","Home")">About</a>
-                <a href="#>Services</a>
-                <a href="#">Contact</a>
-                <a href="@Url.Action("Index","Account")">Account</a>
-
-                <label for="chk" class="hide-menu-btn">
-                    <i class="fas fa-times"></i>
-                </label>
-
-            </div>
-        </div>
-    </nav>
-
+    @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
     <div style="overflow: visible; width: 65%; height: 50%; float: right; margin-right: 20%;">
         <img id="rightLogo" src="~/Content/image/welcome-logo.png">
         <h1>Welcome @ViewBag.FirstName @ViewBag.LastName!</h1>
     </div>
 
-    <!-- <figure class="half" style="display:flex; float: left; "> -->
-    <a href="https://www.youtube.com/"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/appointment.jpg"></a>
+    <a href="@Url.Action("MakeAppointment","Patient")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/appointment.jpg"></a>
     <a href="https://www.youtube.com/"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/list.jpg"></a>
-    <!-- </figure> -->
-
     <br><br>
     <a href="https://www.youtube.com/"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/profile.jpg"></a>
     <a href="https://www.youtube.com/"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/history.png"></a>
