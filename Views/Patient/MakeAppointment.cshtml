@@ -1,5 +1,4 @@
-﻿@model Dictionary<int, List<AppointmentModel>>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title> Make an Appointment </title>
@@ -21,7 +20,7 @@
         <br /><br />
     </div>
 
-    <table class="container">
+    <table class="container ap-table">
         <thead>
             <tr>
                 <th><h1>Time</h1></th>
@@ -30,7 +29,8 @@
             </tr>
         </thead>
         <tbody class="ap-table-body">
-            @Html.Partial("_AppointmentTable", Model)
+            @{Html.RenderAction("GetAvailableAppointmentsByDate", "Patient");} 
+            @*@Html.Partial("_AppointmentTable", Model)*@
         </tbody>
     </table>
 </body>

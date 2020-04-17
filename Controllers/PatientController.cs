@@ -22,26 +22,16 @@ namespace HealthcareSystem.Controllers
             return View();
         }
 
+        //Landing Page for Make appointment
         [HttpGet]
         public ActionResult MakeAppointment(string dateString = "")
         {
             ViewBag.PatientId = Convert.ToInt32(Session["AccountId"]);
-            DateTime date;
-            if (dateString == "")
-            {
-                date = DateTime.Today;
-            }
-            else
-            {
-                //render appointment table 
-                date = DateTime.Parse(dateString);
-                
-            }
-            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments(date);
-            return View(appointmentViewModels);
+            return View();
         }
 
-        [HttpGet]
+        //AJAX Pick Date
+        [HttpGet]   
         public ActionResult GetAvailableAppointmentsByDate(string dateString = "")
         {
             DateTime date;
