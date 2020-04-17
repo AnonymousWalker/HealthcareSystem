@@ -23,17 +23,49 @@ namespace HealthcareSystem.Controllers
         }
 
         [HttpGet]
-        public ActionResult MakeAppointment()
+        public ActionResult MakeAppointment(string dateString = "")
         {
-            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments();
+            ViewBag.PatientId = Convert.ToInt32(Session["AccountId"]);
+            DateTime date;
+            if (dateString == "")
+            {
+                date = DateTime.Today;
+            }
+            else
+            {
+                //render appointment table 
+                date = DateTime.Parse(dateString);
+                
+            }
+            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments(date);
             return View(appointmentViewModels);
         }
 
-        [HttpPost]
-        public ActionResult MakeAppointment(int patientId, int doctorId, DateTime time)
+        [HttpGet]
+        public ActionResult GetAvailableAppointmentsByDate(string dateString = "")
         {
-            createAppointment(patientId, doctorId, time);
-            return View("Success");
+            DateTime date;
+            if (dateString == "")
+            {
+                date = DateTime.Today;
+            }
+            else
+            {
+                //render appointment table 
+                date = DateTime.Parse(dateString);
+
+            }
+            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments(date);
+            return PartialView("_AppointmentTable", appointmentViewModels);
+        }
+
+        [HttpPost]
+        public ActionResult MakeAppointment(int patientId, int doctorId, string time)
+        {
+            var apTime = DateTime.Parse(time);
+            createAppointment(patientId, doctorId, apTime);
+            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments(apTime.Date);
+            return PartialView("_AppointmentTable", appointmentViewModels);
         }
 
         [HttpGet]
@@ -104,13 +136,10 @@ namespace HealthcareSystem.Controllers
 
         #region PRIVATE
 
-        private Dictionary<int, List<AppointmentModel>> getAvailableAppointments(DateTime? date = null)
+        private Dictionary<int, List<AppointmentModel>> getAvailableAppointments(DateTime date)
         {
-            if (!date.HasValue)
-            {
-                date = DateTime.Today;
-            }
-            DateTime nextDay = date.Value.AddDays(1);
+            date = date.Date;
+            DateTime nextDay = date.AddDays(1);
 
             var appointmentViewModels = new Dictionary<int, List<AppointmentModel>>();
             var appointments = Db.Appointments
@@ -140,7 +169,7 @@ namespace HealthcareSystem.Controllers
                             AppointmentId = -1,  //not available
                             DoctorId = doctor.AccountId,
                             DoctorName = doctor.Firstname + " " + doctor.Lastname,
-                            Time = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, i, 0, 0)
+                            Time = new DateTime(date.Year, date.Month, date.Day, i, 0, 0)
                         });
                     }
                     else
@@ -150,7 +179,7 @@ namespace HealthcareSystem.Controllers
                             AppointmentId = 0,   //available
                             DoctorId = doctor.AccountId,
                             DoctorName = doctor.Firstname + " " + doctor.Lastname,
-                            Time = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, i, 0, 0)
+                            Time = new DateTime(date.Year, date.Month, date.Day, i, 0, 0)
                         });
                     }
                 }
@@ -168,7 +197,7 @@ namespace HealthcareSystem.Controllers
                 DoctorId = doctorId,
                 PatientId = patientId
             });
-
+            Db.SaveChanges();
             return true;
         }
 

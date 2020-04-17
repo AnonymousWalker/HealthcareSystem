@@ -199,7 +199,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Patient\MakeAppointment.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Patient\_AppointmentRow.cshtml" />
+    <Content Include="Views\Patient\_AppointmentTable.cshtml" />
     <Content Include="Views\Shared\_NavigationBar.cshtml" />
   </ItemGroup>
   <ItemGroup>

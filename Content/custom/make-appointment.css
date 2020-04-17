@@ -150,6 +150,12 @@ a {
   border-radius: 50%;
 }
 
+#datepicker {
+    border-radius: 5px;
+    padding: 3px 3px 3px 10px;
+    font-size: 15px;
+}
+
 .doctor-selector {
     background: transparent;
     border-radius: 7px;
@@ -157,3 +163,4 @@ a {
     font-size: inherit;
     color: inherit;
 }
+

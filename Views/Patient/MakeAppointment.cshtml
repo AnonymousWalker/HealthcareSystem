@@ -10,29 +10,10 @@
     @Scripts.Render("~/Scripts/custom/make-appointment.js")
 </head>
 <body>
-    <nav>
-        <div class="header">
-            <h2 class="logo">Healthcare System</h2>
-            <input type="checkbox" id="chk">
-            <label for="chk" class="show-menu-btn">
-                <i class="fas fa-ellipsis-h"></i>
-            </label>
-
-            <div class="menu">
-
-                <a href="@Url.Action("Index","Home")">Home</a>
-                <a href="@Url.Action("About","Home")">About</a>
-                <a href="#">Services</a>
-                <a href="#">Contact</a>
-                <a href="@Url.Action("Index","Account")">Account</a>
-
-                <label for="chk" class="hide-menu-btn">
-                    <i class="fas fa-times"></i>
-                </label>
-
-            </div>
-        </div>
-    </nav>
+    @Html.Hidden("GetAppointmentURL", Url.Action("GetAvailableAppointmentsByDate", "Patient"))
+    @Html.Hidden("MakeAppointmentURL", Url.Action("MakeAppointment", "Patient"))
+    @Html.Hidden("PatientId", (int)ViewBag.PatientId)
+    @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
     <h1 class="blue" style="clear: both;">Make an Appointment</h1>
     <div class="datepicker">
         <h1> Pick a Date</h1>
@@ -48,11 +29,8 @@
                 <th><h1>Action</h1></th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var hourSlot in Model)
-            {
-                @Html.Partial("_AppointmentRow", hourSlot.Value)
-            }
+        <tbody class="ap-table-body">
+            @Html.Partial("_AppointmentTable", Model)
         </tbody>
     </table>
 </body>
