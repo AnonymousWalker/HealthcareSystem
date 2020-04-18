@@ -1,5 +1,5 @@
 ﻿@model Dictionary<int, List<AppointmentModel>>
-@if (Model.Any() || Model.Values.Any())
+@if (Model.Values.Any() && Model.Values.First().Count > 0)
 {
     foreach (var hourSlot in Model)
     {
