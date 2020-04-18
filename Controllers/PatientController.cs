@@ -76,49 +76,13 @@ namespace HealthcareSystem.Controllers
             return false;
         }
 
-        public ActionResult MedicalRecord(int patientId = 0)
+        public ActionResult MedicalRecord(int patientId)
         {
-            if (patientId != 0)
-            {
-                var model = getMedicalRecords(patientId);
-                return View(model);
-            }
-            return View();
-        }
-
-        public ActionResult EnterMedicalRecord(MedicalRecordModel model)
-        {
-            //nurse update patient's medical record after health check
-            Db.MedicalRecords.Add(new MedicalRecord
-            {
-                Weight = model.Weight,
-                Height = model.Height,
-                BloodPressure = model.BloodPressure,
-                Pulse = model.Pulse,
-                Date = DateTime.Now,
-                Description = model.Description,
-                PatientId = model.PatientId
+            var records = Db.MedicalRecords.Where(rec => rec.PatientId == patientId)
+                            .OrderByDescending(rec => rec.Date).ToList();
+            return View(new MedicalRecordModel { 
+                
             });
-
-            Db.SaveChanges();
-            return null;
-        }
-
-        public ActionResult EditMedicalRecord(MedicalRecordModel model)
-        {
-            //nurse update patient's medical record after health check
-            var record = Db.MedicalRecords.Where(rec => rec.PatientId == model.Id && rec.Date == model.Date).FirstOrDefault();
-            if (record != null)
-            {
-                record.Weight = model.Weight;
-                record.Height = model.Height;
-                record.BloodPressure = model.BloodPressure;
-                record.Pulse = model.Pulse;
-                record.Description = model.Description;
-                Db.SaveChanges();
-            }
-
-            return null;
         }
 
 

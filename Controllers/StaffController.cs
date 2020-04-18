@@ -55,6 +55,22 @@ namespace HealthcareSystem.Controllers
             return View(record);
         }
 
+        public ActionResult EditMedicalRecord(MedicalRecordModel model)
+        {
+            //nurse update patient's medical record after health check
+            var record = Db.MedicalRecords.Where(rec => rec.PatientId == model.Id && rec.Date == model.Date).FirstOrDefault();
+            if (record != null)
+            {
+                record.Weight = model.Weight;
+                record.Height = model.Height;
+                record.BloodPressure = model.BloodPressure;
+                record.Pulse = model.Pulse;
+                record.Description = model.Description;
+                Db.SaveChanges();
+            }
+
+            return null;
+        }
 
         //doctor create treatment, prescription record => charge amount
         public ActionResult InputTreatmentService(HealthcareServiceModel model)
