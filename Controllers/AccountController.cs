@@ -88,7 +88,7 @@ namespace HealthcareSystem.Controllers
                 IsLoggedIn = true;
                 var account = verifyExistingAccount(model.Email, model.Password);
                 Session["AccountId"] = account.AccountId;
-                return View("Index", "Home");
+                return RedirectToAction("Index", "Home");
             }
 
             model.ErrorMessage = "Account has already existed!";

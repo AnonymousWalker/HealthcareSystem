@@ -1,0 +1,41 @@
+﻿@model MedicalRecordModel
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="logo.png">
+    <title>Medical Record Input</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo">
+    @Styles.Render("~/Content/custom/home.css")
+</head>
+<body>
+    @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
+
+    <img id="centerLogo" src="~/Content/image/logo.png">
+    <div class="signUpMain">
+        <p class="sign" align="center">Medical Record Input<br />(@Model.PatientName)</p>
+        <form class="form1" action="@Url.Action("InputMedicalRecord","Staff")" method="post">
+            <input type="hidden" name="PatientId" value="@Model.PatientId"/>
+            <input class="un" name="Weight" type="text" align="center" placeholder="Patient Weight(In Lbs)" />
+            <input class="un" name="Height" type="text" align="center" placeholder="Height (In Inches)" />
+            <input class="un" name="BloodPressure" type="text" align="center" placeholder="Blood Pressure(In mmHg)" />
+            <input class="un" name="Pulse" type="text" align="center" placeholder="Pulse(In BPM)" />
+            <input class="un" name="LabResult" type="text" align="center" placeholder="Lab Result" />
+            <input class="un" name="RadiologyReport" type="text" align="center" placeholder="Radiology Result" />
+            <input class="un" name="PathologyReport" type="text" align="center" placeholder="Pathology Result" />
+            <input class="un" name="AllegyInformation" type="text" align="center" placeholder="Allergy Info" />
+            <input class="un" name="Description" type="text" align="center" placeholder="Description" />
+            <label style="display: block;">Date of Filing</label>
+            <input class="un " name="Date" type="Date" align="center" placeholder="Date" />
+
+            <input class="submit" type="submit" value="Submit" />
+        </form>
+    </div>
+
+</body>
+</html>

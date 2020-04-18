@@ -201,10 +201,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Patient\_AppointmentTable.cshtml" />
     <Content Include="Views\Shared\_NavigationBar.cshtml" />
+    <Content Include="Views\Staff\InputMedicalRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Staff\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -145,6 +145,10 @@ namespace HealthcareSystem.Controllers
                     }).ToList();
 
             var doctorList = Db.Accounts.OfType<EmployeeAccount>().Where(acc => acc.Role == EmployeeRole.Doctor).ToList();
+            if (doctorList.Count == 0)
+            {
+                return appointmentViewModels;
+            }
             List<AppointmentModel> apEachHour;
             for (int i = 9; i <= 16; i++)   //time of each appointment
             {

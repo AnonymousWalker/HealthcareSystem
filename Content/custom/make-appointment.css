@@ -151,8 +151,9 @@ a {
 }
 
 #datepicker {
-    border-radius: 5px;
-    padding: 3px 3px 3px 10px;
+    width: 220px;
+    background: white;
+    margin: 0;
     font-size: 15px;
 }
 

@@ -11,7 +11,7 @@ namespace HealthcareSystem.Models.Tables
     {
         public int Id { get; set; }
         public double Weight { get; set; }
-        public double? Height { get; set; } 
+        public double Height { get; set; } 
         public string BloodPressure { get; set; }
         public short Pulse { get; set; }
         public string Description { get; set; }

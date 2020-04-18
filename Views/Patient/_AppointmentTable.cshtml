@@ -1,17 +1,19 @@
 ﻿@model Dictionary<int, List<AppointmentModel>>
-
-@foreach (var hourSlot in Model)
+@if (Model.Any() || Model.Values.Any())
 {
-    <tr>
-        <td class="time-td">@hourSlot.Value.First().Time.ToShortTimeString()</td>
-        <td class="selector-td">
-            <select class="doctor-selector">
-                @foreach (var appointment in hourSlot.Value)
-                {
-                    <option value="@appointment.DoctorId" @((appointment.AppointmentId<0)?"disabled":"")>@appointment.DoctorName</option>
-                }
-            </select>
-        </td>
-        <td class="action-td"><a href="#" class="myButton" onclick="makeAppointment(this)">Book</a></td>
-    </tr>
+    foreach (var hourSlot in Model)
+    {
+        <tr>
+            <td class="time-td">@hourSlot.Value.First().Time.ToShortTimeString()</td>
+            <td class="selector-td">
+                <select class="doctor-selector">
+                    @foreach (var appointment in hourSlot.Value)
+                    {
+                        <option value="@appointment.DoctorId" @((appointment.AppointmentId < 0) ? "disabled" : "")>@appointment.DoctorName</option>
+                    }
+                </select>
+            </td>
+            <td class="action-td"><a href="#" class="myButton" onclick="makeAppointment(this)">Book</a></td>
+        </tr>
+    }
 }
