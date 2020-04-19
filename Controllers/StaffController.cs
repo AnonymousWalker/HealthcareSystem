@@ -26,7 +26,7 @@ namespace HealthcareSystem.Controllers
         public ActionResult InputMedicalRecord(int patientId)
         {
             var patient = Db.Accounts.Find(patientId);
-            return View(new MedicalRecordModel { PatientId = patientId, PatientName = patient.Firstname + " " + patient.Lastname });
+            return View(new MedicalRecordModel { PatientId = patientId , PatientName = patient.Firstname + " " + patient.Lastname });
         }
 
         [HttpPost]
@@ -49,7 +49,7 @@ namespace HealthcareSystem.Controllers
                     PatientId = record.PatientId
                 });
                 Db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("MedicalRecord", "Patient", new { patientId = record.PatientId });
             }
             //error
             return View(record);
@@ -58,7 +58,8 @@ namespace HealthcareSystem.Controllers
         public ActionResult EditMedicalRecord(MedicalRecordModel model)
         {
             //nurse update patient's medical record after health check
-            var record = Db.MedicalRecords.Where(rec => rec.PatientId == model.Id && rec.Date == model.Date).FirstOrDefault();
+            var date = DateTime.Parse(model.DateString);
+            var record = Db.MedicalRecords.Where(rec => rec.PatientId == model.Id && rec.Date == date).FirstOrDefault();
             if (record != null)
             {
                 record.Weight = model.Weight;
@@ -66,8 +67,9 @@ namespace HealthcareSystem.Controllers
                 record.BloodPressure = model.BloodPressure;
                 record.Pulse = model.Pulse;
                 record.Description = model.Description;
-                Db.SaveChanges();
+                record.Date = date;
             }
+                Db.SaveChanges();
 
             return null;
         }

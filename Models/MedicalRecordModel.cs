@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HealthcareSystem.Models.Tables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,6 +14,7 @@ namespace HealthcareSystem.Models
         public string BloodPressure { get; set; }
         public short Pulse { get; set; }
         public string Description { get; set; }
+        public string DateString { get; set; }
         public DateTime Date { get; set; }
 
         public string LabResult { get; set; }
@@ -21,6 +23,6 @@ namespace HealthcareSystem.Models
         public string AllegyInformation { get; set; }
 
         public int PatientId { get; set; }
-        public string PatientName { get; set; }
+        public string PatientName { get; set; } = "";
     }
 }

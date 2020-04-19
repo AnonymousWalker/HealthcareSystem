@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo">
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
     @Styles.Render("~/Content/custom/home.css")
 </head>
 <body>
@@ -31,11 +32,24 @@
             <input class="un" name="AllegyInformation" type="text" align="center" placeholder="Allergy Info" />
             <input class="un" name="Description" type="text" align="center" placeholder="Description" />
             <label style="display: block;">Date of Filing</label>
-            <input class="un " name="Date" type="Date" align="center" placeholder="Date" />
-
+            <input class="un " name="Date" type="Date" align="center" placeholder="Date"/>
             <input class="submit" type="submit" value="Submit" />
         </form>
     </div>
 
+    <script>
+        $(document).ready(function () {
+            if ($("input[name='Date']").val() === "") {
+                var today = new Date();
+                var year = today.getFullYear()
+                var month = today.getMonth() + 1;
+                var day = today.getDate();
+                if (month < 10) month = "0" + month;
+                if (day < 10) day = "0" + day;
+                var dateString = year + "-" + month + "-" + day;
+                $("input[name='Date']").val(dateString);
+            }
+        });
+    </script>
 </body>
 </html>
