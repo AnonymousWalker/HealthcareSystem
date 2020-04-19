@@ -158,6 +158,7 @@
     <Content Include="Content\custom\login.css" />
     <Content Include="Content\custom\make-appointment.css" />
     <Content Include="Content\custom\medical-record.css" />
+    <Content Include="Content\custom\profile.css" />
     <Content Include="Content\image\appointment.jpg" />
     <Content Include="Content\image\history.png" />
     <Content Include="Content\image\list.jpg" />
@@ -182,7 +183,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\PatientProfile.cshtml" />
     <None Include="Views\Account\SignUp.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -204,6 +205,7 @@
     <Content Include="Views\Shared\_NavigationBar.cshtml" />
     <Content Include="Views\Staff\InputMedicalRecord.cshtml" />
     <Content Include="Views\Patient\MedicalRecord.cshtml" />
+    <Content Include="Views\Account\StaffProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
