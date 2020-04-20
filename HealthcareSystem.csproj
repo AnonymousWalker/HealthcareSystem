@@ -155,6 +155,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom\home.css" />
+    <Content Include="Content\custom\appointment-list.css" />
     <Content Include="Content\custom\login.css" />
     <Content Include="Content\custom\make-appointment.css" />
     <Content Include="Content\custom\medical-record.css" />
@@ -206,6 +207,7 @@
     <Content Include="Views\Staff\InputMedicalRecord.cshtml" />
     <Content Include="Views\Patient\MedicalRecord.cshtml" />
     <Content Include="Views\Account\StaffProfile.cshtml" />
+    <Content Include="Views\Patient\AppointmentList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -12,14 +12,14 @@
     @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
     <div style="overflow: visible; width: 65%; height: 50%; float: right; margin-right: 20%;">
         <img id="rightLogo" src="~/Content/image/welcome-logo.png">
-        <h1>Welcome @ViewBag.FirstName @ViewBag.LastName!</h1>
+        <h1>Welcome @ViewBag.FirstName @ViewBag.LastName! @Session["AccountId"] </h1>
     </div>
-
+    @{ var patientId = Convert.ToInt32(Session["AccountId"]);}
     <a href="@Url.Action("MakeAppointment","Patient")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/appointment.jpg"></a>
-    <a href="https://www.youtube.com/"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/list.jpg"></a>
+    <a href="@Url.Action("AppointmentList","Patient", new { patientId })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/list.jpg"></a>
     <br><br>
-    <a href="https://www.youtube.com/"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/profile.jpg"></a>
-    <a href="https://www.youtube.com/"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/history.png"></a>
+    <a href="@Url.Action("Index","Account")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/profile.jpg"></a>
+    <a href="@Url.Action("MedicalRecord","Patient", new { patientId })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/history.png"></a>
 
 </body>
 </html>

@@ -55,6 +55,7 @@ namespace HealthcareSystem.Controllers
                         Password = pAccount.Password,
                         Firstname = pAccount.Firstname,
                         Lastname = pAccount.Lastname,
+                        Phone = pAccount.Phone,
                         BillingAddress = pAccount.BillingAddress,
                         InsuranceNumber = pAccount.InsuranceNumber,
                         AccountType = AccountType.Patient

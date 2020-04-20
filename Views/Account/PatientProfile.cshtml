@@ -1,4 +1,4 @@
-﻿
+﻿@model ProfileModel
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -13,97 +13,39 @@
     @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
     <div class="container">
         <div class="row">
-            <h2>Your Profile</h2>
-
-
-            <div class="col-md-7 ">
-
-                <div class="panel-panel-default">
-                    <div class="panel-heading">
-                        <h4>User Profile</h4>
-                        <li>
-                            <a data-profile-action="edit" ; href="#">Edit</a>
-                        </li>
-                    </div>
-                    <div class="panel-body">
-
-                        <div class="box box-info">
-
-                            <div class="box-body">
-                                <div class="col-sm-6">
-                                    <div>
-                                        <img alt="User Pic" src="E:\web development\nav bar/2.jpg" id="profile-image1" class="img-circle img-responsive">
-
-                                        <input id="profile-image-upload" class="hidden" type="file">
-                                        <!-- <div style="color:#999;" >click here to change profile image</div> -->
-                                        <!--Upload Image Js And Css-->
-                                    </div>
-                                    <br>
-                                    <!-- /input-group -->
-                                </div>
-                                <div class="col-sm-6">
-                                    <h4 style="color:#00b1b1;">Dang Long </h4></span>
-                                    <span><p>Developer</p></span>
-                                </div>
-                                <div class="clearfix"></div>
-                                <hr style="margin:5px 0 5px 0;">
-
-
-                                <div class="col-sm-5 col-xs-6 title ">First Name:</div><div class="col-sm-7 col-xs-6 ">Dang</div>
-                                <div class="clearfix"></div>
-                                <div class="bot-border"></div>
-
-                                <div class="col-sm-5 col-xs-6 title ">Middle Name:</div><div class="col-sm-7"> Long</div>
-                                <div class="clearfix"></div>
-                                <div class="bot-border"></div>
-
-                                <div class="col-sm-5 col-xs-6 title ">Last Name:</div><div class="col-sm-7"> Long</div>
-                                <div class="clearfix"></div>
-                                <div class="bot-border"></div>
-
-                                <div class="col-sm-5 col-xs-6 title ">UserName:</div><div class="col-sm-7"> khech45</div>
-                                <div class="clearfix"></div>
-                                <div class="bot-border"></div>
-
-                                <div class="col-sm-5 col-xs-6 title ">Password:</div><div class="col-sm-7"> ****</div>
-                                <div class="clearfix"></div>
-                                <div class="bot-border"></div>
-
-
-
-                                <div class="col-sm-5 col-xs-6 title ">Date Of Birth:</div><div class="col-sm-7">19 May 1997</div>
-
-                                <div class="clearfix"></div>
-                                <div class="bot-border"></div>
-
-
-                                <div class="col-sm-5 col-xs-6 title ">Email:</div><div class="col-sm-7">sample@sample.com</div>
-
-
-                                <div class="clearfix"></div>
-                                <div class="bot-border"></div>
-                                <div class="col-sm-5 col-xs-6 title ">Billing Address:</div><div class="col-sm-7">516 Formal street Troy AL</div>
-
-
-                                <div class="clearfix"></div>
-                                <div class="bot-border"></div>
-
-                                <div class="col-sm-5 col-xs-6 title ">Gender:</div><div class="col-sm-7">Male</div>
-
-
-
-
-                            </div>
-
-
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
-
+            <div class="col-md-5 profile-section">
+                <div class="row">
+                    <div class="col-md-10"><h2>Your Profile</h2></div>
+                    <div class="col-md-2"><h2><a style="font-size: 18px;">Edit</a></h2></div>
                 </div>
+                <div class="panel-body">
+                    <div class="box-body">
+                        <hr style="margin:5px;">
 
+                        <div class="col-md-4 title ">Email:</div><div class="col-md-8">@Model.Email</div>
+                        <div class="clearfix"></div>
 
+                        <div class="col-md-4 title ">Password:</div><div class="col-md-8"> ****</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-4 title ">First Name:</div><div class="col-md-8">@Model.Firstname</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-4 title ">Last Name:</div><div class="col-md-8">@Model.Lastname</div>
+                        <div class="clearfix"></div>
+
+                        @if (Model.DayOfBirth.HasValue)
+                        {
+                            <div class="col-md-4 title ">Date Of Birth:</div><div class="col-md-8">@Model.DayOfBirth.Value.ToShortDateString()</div>
+                            <div class="clearfix"></div>
+                        }
+                        <div class="col-md-4 title ">Phone:</div><div class="col-md-8">@Model.Phone</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-4 title ">Billing Address:</div><div class="col-md-8">@Model.BillingAddress</div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

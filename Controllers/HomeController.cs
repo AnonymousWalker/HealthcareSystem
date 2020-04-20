@@ -19,7 +19,7 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult Index()
         {
-            if (AccountController.IsLoggedIn)
+            if (AccountController.IsLoggedIn && Session["AccountId"] != null)
             {
                 var id = Convert.ToInt32(Session["AccountId"]);
                 var account = Db.Accounts.Find(id);

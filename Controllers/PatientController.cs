@@ -24,8 +24,12 @@ namespace HealthcareSystem.Controllers
 
         //Landing Page for Make appointment
         [HttpGet]
-        public ActionResult MakeAppointment(string dateString = "")
+        public ActionResult MakeAppointment(int patientId)
         {
+            if (patientId == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             ViewBag.PatientId = Convert.ToInt32(Session["AccountId"]);
             return View();
         }
@@ -58,10 +62,14 @@ namespace HealthcareSystem.Controllers
             return PartialView("_AppointmentTable", appointmentViewModels);
         }
 
-        [HttpGet]
-        public IList<AppointmentModel> PatientAppointments(int patientId)
+        public ActionResult AppointmentList(int patientId)
         {
-            return getPatientAppointments(patientId);
+            if (patientId == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var appointments = getPatientAppointments(patientId);
+            return View(appointments);
         }
 
         public bool CancelAppointment(int appointmentId)
@@ -78,6 +86,10 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult MedicalRecord(int patientId)
         {
+            if (patientId == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var patient = Db.Accounts.FirstOrDefault(acc => acc.AccountId == patientId);
             if (patient != null)
             {
@@ -95,6 +107,10 @@ namespace HealthcareSystem.Controllers
 
 
         #region PRIVATE
+        private bool authenticateLoginStatus()
+        {
+            return true;
+        }
 
         private Dictionary<int, List<AppointmentModel>> getAvailableAppointments(DateTime date)
         {
