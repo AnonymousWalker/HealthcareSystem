@@ -72,6 +72,7 @@ namespace HealthcareSystem.Controllers
             return View(appointments);
         }
 
+        [HttpGet]
         public bool CancelAppointment(int appointmentId)
         {
             var ap = Db.Appointments.Find(appointmentId);

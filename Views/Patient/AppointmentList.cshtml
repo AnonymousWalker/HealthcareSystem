@@ -1,4 +1,4 @@
-﻿
+﻿@model IList<AppointmentModel>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +8,12 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     @Styles.Render("~/Content/custom/appointment-list.css")
     @Styles.Render("~/Content/custom/home.css")
+    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Scripts.Render("~/Scripts/custom/appointment-list.js")
 </head>
 <body style="background: white;">
     @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
-
+    @Html.Hidden("CancelURL", Url.Action("CancelAppointment", "Patient"))
     <div style="overflow: auto; width: 65%;margin: auto auto 30px auto; clear:both">
         <h1>Your Appointments</h1>
     </div>
@@ -25,11 +27,19 @@
             </tr>
         </thead>
         <tbody style="line-height: 25px;">
-            <tr>
-                <td>cell1_1</td>
-                <td>cell2_1</td>
-                <td style="width: 40%;">cell3_1</td>
-            </tr>
+            @foreach (var appointment in Model)
+            {
+                <tr>
+                    <td>
+                        @if (appointment.Time > DateTime.Now) {
+                            <a href="#" class="cancel-ap-btn" style="float:left; margin-left: 3px;margin-right:-5px; font-size:16px" data-appointmentid="@appointment.AppointmentId">x</a>
+                        }
+                        @appointment.Time.ToShortDateString()
+                    </td>
+                    <td>@appointment.Time.ToShortTimeString()</td>
+                    <td style="width: 40%;">@appointment.DoctorName</td>
+                </tr>
+            }
         </tbody>
         </tr>
     </table>
