@@ -115,7 +115,7 @@ namespace HealthcareSystem.Controllers
 
         private Dictionary<int, List<AppointmentModel>> getAvailableAppointments(DateTime date)
         {
-            date = date.Date;
+            date = date.Date;   //reset to 12AM
             DateTime nextDay = date.AddDays(1);
 
             var appointmentViewModels = new Dictionary<int, List<AppointmentModel>>();
@@ -132,16 +132,20 @@ namespace HealthcareSystem.Controllers
                     }).ToList();
 
             var doctorList = Db.Accounts.OfType<EmployeeAccount>().Where(acc => acc.Role == EmployeeRole.Doctor).ToList();
-            if (doctorList.Count == 0)
+            var now = DateTime.Now;
+
+            if (doctorList.Count == 0 || date < now.Date)
             {
                 return appointmentViewModels;
             }
+
             List<AppointmentModel> apEachHour;
             for (int i = 9; i <= 16; i++)   //time of each appointment
             {
                 apEachHour = new List<AppointmentModel>();
                 foreach (var doctor in doctorList)
                 {
+                    if (date == now.Date && i <= now.Hour) continue;
                     //appointment has already existed
                     if (appointments.Any(ap => ap.Time.Hour == i && ap.DoctorId == doctor.AccountId))
                     {

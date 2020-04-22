@@ -12,8 +12,8 @@
     @Scripts.Render("~/Scripts/custom/appointment-list.js")
 </head>
 <body style="background: white;">
-    @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
-    @Html.Hidden("CancelURL", Url.Action("CancelAppointment", "Patient"))
+    @{Html.RenderAction("NavigationBar", "Home"); }
+        @Html.Hidden("CancelURL", Url.Action("CancelAppointment", "Patient"))
     <div style="overflow: auto; width: 65%;margin: auto auto 30px auto; clear:both">
         <h1>Your Appointments</h1>
     </div>

@@ -1,9 +1,8 @@
-﻿@model IList<MedicalRecordModel>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <link rel="icon" href="logo.png">
-    <title>Healthcare System</title>
+    <title>Patient Medical Record</title>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     @Styles.Render("~/Content/custom/medical-record.css")
@@ -13,10 +12,10 @@
     @{Html.RenderAction("NavigationBar", "Home");}
 
     <div style="clear: both;">
-        <h1>Medical Record: @ViewBag.PatientName</h1>
+        <h1>Find Medical Record</h1>
     </div>
-
-   @Html.Partial("_MedicalRecordTable", Model)
-
+    <div class="">
+    <input />
+    </div>
 </body>
 </html>

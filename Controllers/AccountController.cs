@@ -122,6 +122,15 @@ namespace HealthcareSystem.Controllers
 
         }
 
+        public ActionResult SignOut()
+        {
+            if (IsLoggedIn || Session["AccountId"] != null)
+            {
+                IsLoggedIn = false;
+                Session["AccountId"] = null;
+            }
+            return RedirectToAction("Index", "Home");
+        }
 
 
         #region PRIVATE

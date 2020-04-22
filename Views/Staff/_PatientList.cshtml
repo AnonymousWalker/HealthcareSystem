@@ -1,0 +1,24 @@
+﻿@model IList<PatientAccount>
+
+<table class="purpleHorizon">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody style="line-height: 25px;">
+        @foreach (var patient in Model)
+        {
+            <tr data-patientid="@patient.AccountId">
+                <td>@patient.Firstname</td>
+                <td>@patient.Lastname</td>
+                <td>@patient.Phone</td>
+                <td>@patient.BillingAddress</td>
+            </tr>
+        }
+    </tbody>
+    </tr>
+</table>

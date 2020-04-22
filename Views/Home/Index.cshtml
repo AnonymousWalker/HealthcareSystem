@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model IndexModel
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,17 +10,36 @@
     <link rel="icon" href="~/Content/image/logo.png">
 </head>
 <body style="background: white;">
-    @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
+    @{Html.RenderAction("NavigationBar", "Home");}
     <div style="overflow: visible; width: 65%; height: 50%; float: right; margin-right: 20%;">
         <img id="rightLogo" src="~/Content/image/welcome-logo.png">
-        <h1>Welcome @ViewBag.FirstName @ViewBag.LastName!</h1>
+        <h1>Welcome @Model.Name!</h1>
     </div>
-    @{ var patientId = Convert.ToInt32(Session["AccountId"]);}
-    <a href="@Url.Action("MakeAppointment","Patient", new { patientId })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/appointment.jpg"></a>
-    <a href="@Url.Action("AppointmentList","Patient", new { patientId })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/list.jpg"></a>
-    <br><br>
-    <a href="@Url.Action("Index","Account")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/profile.jpg"></a>
-    <a href="@Url.Action("MedicalRecord","Patient", new { patientId })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/history.png"></a>
+    @if (!Model.Role.HasValue)
+    {
+        <a href="@Url.Action("MakeAppointment","Patient", new { patientId = Model.AccountId})"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/appointment.jpg"></a>
+        <a href="@Url.Action("AppointmentList","Patient", new { patientId = Model.AccountId})"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/list.jpg"></a>
+        <br><br>
+        <a href="@Url.Action("Index","Account")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/profile.jpg"></a>
+        <a href="@Url.Action("MedicalRecord","Patient", new { patientId = Model.AccountId})"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/history.png"></a>
+    }
+    else if (Model.Role.HasValue && Model.Role == EmployeeRole.Staff)
+    {
+        Html.RenderPartial("_StaffIndex");
+    }
+    else if (Model.Role.HasValue && Model.Role == EmployeeRole.Doctor)
+    {
+        Html.RenderPartial("_DoctorIndex");
+    }
+    else if (Model.Role.HasValue && Model.Role == EmployeeRole.Nurse)
+    {
+        Html.RenderPartial("_NurseIndex");
+    }
+    else if (Model.Role.HasValue && Model.Role == EmployeeRole.CEO)
+    {
+        Html.RenderPartial("_CEOIndex");
+    }
+
 
 </body>
 </html>

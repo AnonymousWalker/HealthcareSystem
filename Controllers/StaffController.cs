@@ -91,7 +91,7 @@ namespace HealthcareSystem.Controllers
             return null;
         }
 
-        public ActionResult SearchPatient(string firstName, string lastName = "", string address = "", int patientId = 0)
+        public ActionResult SearchPatient(string firstName, string lastName = "", string phone = "", string address = "", int patientId = 0)
         {
             IList<PatientAccount> patientList;
             patientList = Db.Accounts.OfType<PatientAccount>()
@@ -101,9 +101,50 @@ namespace HealthcareSystem.Controllers
             {
                 patientList = patientList.Where(p => p.BillingAddress.Contains(address)).ToList();
             }
+            if (phone != "")
+            {
+                patientList = patientList.Where(p => p.Phone.Contains(address)).ToList();
+            }
 
-            return View(patientList);
+            return PartialView("_PatientList", patientList);
         }
-        
+
+        public ActionResult PatientMedicalRecord()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PatientMedicalRecord(int patientId)
+        {
+            ViewBag.PatientName = Db.Accounts.Find(patientId);
+            var records = getMedicalRecords(patientId);
+            return View("~/Views/Patient/MedicalRecord.cshtml", records);
+        }
+
+        #region PRIVATE
+        private List<MedicalRecordModel> getMedicalRecords(int patientId)
+        {
+            return Db.MedicalRecords.Where(rec => rec.PatientId == patientId)
+                            .Join(Db.Accounts, rec => rec.PatientId, acc => acc.AccountId, (rec, acc)
+                            => new MedicalRecordModel
+                            {
+                                Weight = rec.Weight,
+                                Height = rec.Height,
+                                BloodPressure = rec.BloodPressure,
+                                Pulse = rec.Pulse,
+                                Description = rec.Description,
+                                Date = rec.Date,
+                                LabResult = rec.LabResult,
+                                PathologyReport = rec.PathologyReport,
+                                RadiologyReport = rec.RadiologyReport,
+                                AllegyInformation = rec.AllegyInformation,
+                                PatientId = rec.PatientId,
+                                PatientName = acc.Firstname + " " + acc.Lastname
+                            })
+                            .OrderByDescending(rec => rec.Date)
+                            .ToList();
+        }
+        #endregion
     }
 }

@@ -15,7 +15,7 @@
     @Styles.Render("~/Content/custom/home.css")
 </head>
 <body>
-    @Html.Partial("~/Views/Shared/_NavigationBar.cshtml")
+    @{Html.RenderAction("NavigationBar", "Home");}
 
     <img id="centerLogo" src="~/Content/image/logo.png">
     <div class="signUpMain">
