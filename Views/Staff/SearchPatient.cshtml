@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="logo.png">
+    <title>Patient Medical Record</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    @Styles.Render("~/Content/custom/medical-record.css")
+    @Styles.Render("~/Content/custom/home.css")
+    @Scripts.Render("~/Scripts/custom/search-patient.js")
+</head>
+<body style="background: white;">
+    @{Html.RenderAction("NavigationBar", "Home");}
+    @Html.Hidden("SearchURL", Url.Action("SearchPatient", "Staff"))
+    @Html.Hidden("PatientRecordURL", Url.Action("PatientMedicalRecords","Staff"))
+    @Html.Hidden("InputRecordURL", Url.Action("InputMedicalRecord","Staff"))
+    @Html.Hidden("ActionType", (string)ViewBag.Action)
+    <div style="clear: both;">
+        <h1>Find Patient Record</h1>
+    </div>
+    <div class="">
+        <input type="text" id="fname-input" name="firstName" placeholder="First name" />
+        <input type="text" id="lname-input" name="lastName" placeholder="Last name" />
+        <input type="text" id="phone-input" name="phone" placeholder="Phone" />
+        <input type="button" id="search-btn" value="Search" />
+    </div>
+
+    <div id="result-table">
+
+    </div>
+</body>
+</html>

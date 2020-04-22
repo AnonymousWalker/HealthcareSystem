@@ -138,6 +138,7 @@
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\MakeAppointmentModel.cs" />
     <Compile Include="Models\MedicalRecordModel.cs" />
+    <Compile Include="Models\PatientMedicalRecordModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
     <Compile Include="Models\Tables\Account.cs" />
     <Compile Include="Models\Tables\Appointment.cs" />
@@ -182,6 +183,7 @@
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\custom\appointment-list.js" />
     <Content Include="Scripts\custom\make-appointment.js" />
+    <Content Include="Scripts\custom\search-patient.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -221,8 +223,9 @@
     <Content Include="Views\Home\_DoctorIndex.cshtml" />
     <Content Include="Views\Home\_CEOIndex.cshtml" />
     <Content Include="Views\Patient\_MedicalRecordTable.cshtml" />
-    <Content Include="Views\Staff\PatientMedicalRecord.cshtml" />
+    <Content Include="Views\Staff\SearchPatient.cshtml" />
     <Content Include="Views\Staff\_PatientList.cshtml" />
+    <Content Include="Views\Staff\PatientMedicalRecords.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

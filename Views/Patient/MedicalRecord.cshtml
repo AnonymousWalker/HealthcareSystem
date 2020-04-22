@@ -1,4 +1,4 @@
-﻿@model IList<MedicalRecordModel>
+﻿@model PatientMedicalRecordModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,10 +13,10 @@
     @{Html.RenderAction("NavigationBar", "Home");}
 
     <div style="clear: both;">
-        <h1>Medical Record: @ViewBag.PatientName</h1>
+        <h1>Medical Record: @Model.PatientName</h1>
     </div>
 
-   @Html.Partial("_MedicalRecordTable", Model)
+   @Html.Partial("_MedicalRecordTable", Model.Records)
 
 </body>
 </html>

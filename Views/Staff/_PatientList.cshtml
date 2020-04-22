@@ -1,4 +1,11 @@
 ﻿@model IList<PatientAccount>
+@Styles.Render("~/Content/custom/appointment-list.css")
+<style>
+    tbody tr:hover {
+        background-color: #CC3BFC !important;
+        cursor:pointer;
+    }
+</style>
 
 <table class="purpleHorizon">
     <thead>
@@ -12,7 +19,7 @@
     <tbody style="line-height: 25px;">
         @foreach (var patient in Model)
         {
-            <tr data-patientid="@patient.AccountId">
+            <tr data-patientid="@patient.AccountId" style="background-color:#555555;">
                 <td>@patient.Firstname</td>
                 <td>@patient.Lastname</td>
                 <td>@patient.Phone</td>
@@ -20,5 +27,4 @@
             </tr>
         }
     </tbody>
-    </tr>
 </table>

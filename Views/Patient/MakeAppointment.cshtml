@@ -8,7 +8,7 @@
     <script src="~/Scripts/jquery-3.4.1.js"></script>
     @Scripts.Render("~/Scripts/custom/make-appointment.js")
 </head>
-<body>
+<body style="background-image: linear-gradient(to right, #cb2d3e, #bbd7e2);">
     @Html.Hidden("GetAppointmentURL", Url.Action("GetAvailableAppointmentsByDate", "Patient"))
     @Html.Hidden("MakeAppointmentURL", Url.Action("MakeAppointment", "Patient"))
     @Html.Hidden("PatientId", (int)ViewBag.PatientId)

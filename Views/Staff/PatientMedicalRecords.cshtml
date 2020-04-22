@@ -1,0 +1,22 @@
+﻿@model PatientMedicalRecordModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Patient Medical Records</title>
+    @Styles.Render("~/Content/custom/medical-record.css")
+    @Styles.Render("~/Content/custom/home.css")
+</head>
+<body>
+    @{Html.RenderAction("NavigationBar", "Home");}
+    @Html.Hidden("PatientId", Model.PatientId)
+    <div style="clear: both;">
+        <h1>Medical Record: @Model.PatientName</h1>
+    </div>
+    <a href="@Url.Action("SearchPatient","Staff", new { actionType = "view" })">Back</a><br />
+    <a href="@Url.Action("InputMedicalRecord","Staff", new { patientId = Model.PatientId })">Input</a>
+    @Html.Partial("~/Views/Patient/_MedicalRecordTable.cshtml", Model.Records)
+
+</body>
+</html>

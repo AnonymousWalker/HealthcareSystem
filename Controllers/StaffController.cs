@@ -91,35 +91,50 @@ namespace HealthcareSystem.Controllers
             return null;
         }
 
-        public ActionResult SearchPatient(string firstName, string lastName = "", string phone = "", string address = "", int patientId = 0)
+        public ActionResult SearchPatient(string actionType = "")
+        {
+            //action from index: "input" or "view" medical record
+            if (actionType != "")
+            {
+                ViewBag.Action = actionType;
+            }
+            return View();
+        }
+
+        //AJAX
+        [HttpPost]
+        public ActionResult SearchPatient(string firstName, string phone = "", string lastName = "")
         {
             IList<PatientAccount> patientList;
-            patientList = Db.Accounts.OfType<PatientAccount>()
-                        .Where(p => p.Firstname.Contains(firstName) || p.Lastname.Contains(lastName))
-                        .ToList();
-            if (address != "")
-            {
-                patientList = patientList.Where(p => p.BillingAddress.Contains(address)).ToList();
-            }
             if (phone != "")
             {
-                patientList = patientList.Where(p => p.Phone.Contains(address)).ToList();
+                patientList = Db.Accounts.OfType<PatientAccount>()
+                            .Where(p => p.Firstname.Contains(firstName) || p.Phone.Contains(phone))
+                            .ToList();
+            } else if (lastName != "")
+            {
+                patientList = Db.Accounts.OfType<PatientAccount>()
+                            .Where(p => p.Firstname.Contains(firstName) || p.Lastname.Contains(lastName))
+                            .ToList();
             }
+            patientList = Db.Accounts.OfType<PatientAccount>()
+                            .Where(p => p.Firstname.Contains(firstName))
+                            .ToList();
+
 
             return PartialView("_PatientList", patientList);
         }
 
-        public ActionResult PatientMedicalRecord()
+        public ActionResult PatientMedicalRecords(int patientId)
         {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult PatientMedicalRecord(int patientId)
-        {
-            ViewBag.PatientName = Db.Accounts.Find(patientId);
+            var patient = Db.Accounts.Find(patientId);
+            var patientName = (patient != null) ? patient.Firstname + " " + patient.Lastname : "Unknown Patient";
             var records = getMedicalRecords(patientId);
-            return View("~/Views/Patient/MedicalRecord.cshtml", records);
+            return View(new PatientMedicalRecordModel {
+                PatientId = patient.AccountId,
+                PatientName = patientName,
+                Records = records
+            });
         }
 
         #region PRIVATE

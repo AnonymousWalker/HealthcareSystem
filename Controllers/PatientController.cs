@@ -87,6 +87,7 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult MedicalRecord(int patientId)
         {
+            var model = new PatientMedicalRecordModel();
             if (patientId == 0)
             {
                 return RedirectToAction("Login", "Account");
@@ -94,18 +95,22 @@ namespace HealthcareSystem.Controllers
             var patient = Db.Accounts.FirstOrDefault(acc => acc.AccountId == patientId);
             if (patient != null)
             {
-                ViewBag.PatientName = patient.Firstname + " " + patient.Lastname;
+                model.PatientName = patient.Firstname + " " + patient.Lastname;
             }
             else
             {
-                ViewBag.PatientName = "Unknown Patient";
+                model.PatientName = "Unknown Patient";
             }
 
-            List<MedicalRecordModel> records = getMedicalRecords(patientId);
-            return View(records);
+            model.Records = getMedicalRecords(patientId);
+            return View(model);
         }
 
-
+        public ActionResult GetMedicalRecordTable(int patientId)
+        {
+            var model = getMedicalRecords(patientId);
+            return PartialView("_MedicalRecordTable", model);
+        }
 
         #region PRIVATE
         private bool authenticateLoginStatus()
@@ -143,9 +148,9 @@ namespace HealthcareSystem.Controllers
             for (int i = 9; i <= 16; i++)   //time of each appointment
             {
                 apEachHour = new List<AppointmentModel>();
+                if (date == now.Date && i <= now.Hour) continue;
                 foreach (var doctor in doctorList)
                 {
-                    if (date == now.Date && i <= now.Hour) continue;
                     //appointment has already existed
                     if (appointments.Any(ap => ap.Time.Hour == i && ap.DoctorId == doctor.AccountId))
                     {
@@ -197,7 +202,9 @@ namespace HealthcareSystem.Controllers
                                       DoctorId = ap.DoctorId,
                                       DoctorName = doctor.Firstname + " " + doctor.Lastname,
                                       PatientId = ap.PatientId
-                                  }).ToList();
+                                  })
+                                  .OrderByDescending(ap => ap.Time)
+                                  .ToList();
         }
 
         private List<MedicalRecordModel> getMedicalRecords(int patientId)

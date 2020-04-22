@@ -1,5 +1,5 @@
 body {
-    background-color: #F3EBF6;
+    background-color: white;
     font-family: 'Ubuntu', sans-serif;
     padding: 0;
     margin: 0;
@@ -298,7 +298,6 @@ body {
     margin: 0;
     height: 50vh;
     width: 100%;
-    background-image: linear-gradient(to right, #cb2d3e, #bbd7e2);
 }
 
 /*form{
