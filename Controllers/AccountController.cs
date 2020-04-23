@@ -35,6 +35,7 @@ namespace HealthcareSystem.Controllers
                 {
                     var model = new ProfileModel
                     {
+                        AccountId = staff.AccountId,
                         Email = staff.Email,
                         Password = staff.Password,
                         Firstname = staff.Firstname,
@@ -49,16 +50,17 @@ namespace HealthcareSystem.Controllers
                 }
                 else
                 {
-                    PatientAccount pAccount = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == id);
+                    PatientAccount patient = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == id);
                     var model = new ProfileModel
                     {
-                        Email = pAccount.Email,
-                        Password = pAccount.Password,
-                        Firstname = pAccount.Firstname,
-                        Lastname = pAccount.Lastname,
-                        Phone = pAccount.Phone,
-                        BillingAddress = pAccount.BillingAddress,
-                        InsuranceNumber = pAccount.InsuranceNumber,
+                        AccountId = patient.AccountId,
+                        Email = patient.Email,
+                        Password = patient.Password,
+                        Firstname = patient.Firstname,
+                        Lastname = patient.Lastname,
+                        Phone = patient.Phone,
+                        BillingAddress = patient.BillingAddress,
+                        InsuranceNumber = patient.InsuranceNumber,
                         AccountType = AccountType.Patient
                     };
                     return View("PatientProfile", model);
@@ -133,6 +135,25 @@ namespace HealthcareSystem.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpPost]
+        public ActionResult EditPatientInfo(ProfileModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var account = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == model.AccountId);
+                if (account != null)
+                {
+                    account.Password = model.Password;
+                    account.Firstname = model.Firstname;
+                    account.Lastname = model.Lastname;
+                    account.Phone = model.Phone;
+                    account.BillingAddress = model.BillingAddress;
+                    account.InsuranceNumber = model.InsuranceNumber;
+                    Db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Index");
+        }
 
         #region PRIVATE
 

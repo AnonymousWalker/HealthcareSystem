@@ -4,6 +4,8 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <script src="script.js"></script>
     @Styles.Render("~/Content/custom/home.css")
@@ -12,12 +14,12 @@
 <body style="background-image: linear-gradient(to right, #cb2d3e, #bbd7e2);">
     @{Html.RenderAction("NavigationBar", "Home");}
     <a href="@Url.Action("SignOut","Account")">Sign Out</a>
-    <div class="container">
+    <div class="profile-container container">
         <div class="row">
             <div class="col-md-5 profile-section">
                 <div class="row">
                     <div class="col-md-10"><h2>Your Profile</h2></div>
-                    <div class="col-md-2"><h2><a style="font-size: 18px;">Edit</a></h2></div>
+                    <div class="col-md-2"><h2><a style="font-size: 18px;" data-toggle="modal" data-target="#editModal">Edit</a></h2></div>
                 </div>
                 <div class="panel-body">
                     <div class="box-body">
@@ -45,14 +47,17 @@
 
                         <div class="col-md-4 title ">Billing Address:</div><div class="col-md-8">@Model.BillingAddress</div>
                         <div class="clearfix"></div>
+
+                        <div class="col-md-4 title ">Insurance #:</div><div class="col-md-8">@Model.InsuranceNumber</div>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-
+    <!-- Modal Prompt -->
+    @Html.Partial("_EditProfile", Model)
 
 
 </body>

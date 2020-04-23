@@ -224,6 +224,7 @@
     <Content Include="Views\Staff\PatientMedicalRecords.cshtml" />
     <Content Include="Views\Staff\DoctorAppointmentList.cshtml" />
     <Content Include="Views\Staff\CreateAppointment.cshtml" />
+    <Content Include="Views\Account\_EditProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
