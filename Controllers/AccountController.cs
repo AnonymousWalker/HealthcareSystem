@@ -27,21 +27,22 @@ namespace HealthcareSystem.Controllers
             }
 
             // Authorization
-            var sAccount = Db.Accounts.OfType<EmployeeAccount>().FirstOrDefault(acc => acc.AccountId == id);
+            var staff = Db.Accounts.OfType<EmployeeAccount>().FirstOrDefault(acc => acc.AccountId == id);
             try
             {
                 //Staff Account
-                if (sAccount != null)
+                if (staff != null)
                 {
                     var model = new ProfileModel
                     {
-                        Email = sAccount.Email,
-                        Password = sAccount.Password,
-                        Firstname = sAccount.Firstname,
-                        Lastname = sAccount.Lastname,
-                        Salary = sAccount.Salary,
-                        SSN = sAccount.SSN,
-                        Role = sAccount.Role,
+                        Email = staff.Email,
+                        Password = staff.Password,
+                        Firstname = staff.Firstname,
+                        Lastname = staff.Lastname,
+                        Phone = staff.Phone,
+                        Salary = staff.Salary,
+                        SSN = staff.SSN,
+                        Role = staff.Role,
                         AccountType = AccountType.Employee
                     };
                     return View("StaffProfile",model);

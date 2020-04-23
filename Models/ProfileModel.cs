@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -20,6 +21,7 @@ namespace HealthcareSystem.Models
         
         //Employee
         public string SSN { get; set; } = "";
+        [DisplayFormat(DataFormatString = "{0:c}")]
         public double? Salary { get; set; }
         public EmployeeRole? Role { get; set; }
     }

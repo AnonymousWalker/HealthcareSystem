@@ -137,6 +137,18 @@ namespace HealthcareSystem.Controllers
             });
         }
 
+        public ActionResult AppointmentList()
+        {
+            if (AccountController.IsLoggedIn)
+            {
+                var id = Convert.ToInt32(Session["AccountId"]);
+                var model = getAppointments(id);
+                return View("DoctorAppointmentList",model);
+            }
+            return RedirectToAction("Login", "Account");
+        }
+
+
         #region PRIVATE
         private List<MedicalRecordModel> getMedicalRecords(int patientId)
         {
@@ -159,6 +171,21 @@ namespace HealthcareSystem.Controllers
                             })
                             .OrderByDescending(rec => rec.Date)
                             .ToList();
+        }
+
+        private IList<AppointmentModel> getAppointments(int doctorId)
+        {
+            return Db.Appointments.Where(ap => ap.DoctorId == doctorId)
+                                .Join(Db.Accounts, ap => ap.PatientId, pt => pt.AccountId, (ap, pt) =>
+                                    new AppointmentModel
+                                    {
+                                        AppointmentId = ap.AppointmentId,
+                                        Time = ap.Time,
+                                        PatientId = ap.PatientId,
+                                        PatientName = pt.Firstname + " " + pt.Lastname
+                                    })
+                                    .OrderByDescending(ap => ap.Time)
+                                    .ToList();
         }
         #endregion
     }

@@ -28,6 +28,7 @@ namespace HealthcareSystem.Controllers
         {
             if (patientId == 0)
             {
+
                 return RedirectToAction("Login", "Account");
             }
             ViewBag.PatientId = Convert.ToInt32(Session["AccountId"]);
@@ -53,6 +54,7 @@ namespace HealthcareSystem.Controllers
             return PartialView("_AppointmentTable", appointmentViewModels);
         }
 
+        //AJAX
         [HttpPost]
         public ActionResult MakeAppointment(int patientId, int doctorId, string time)
         {
@@ -106,24 +108,15 @@ namespace HealthcareSystem.Controllers
             return View(model);
         }
 
-        public ActionResult GetMedicalRecordTable(int patientId)
-        {
-            var model = getMedicalRecords(patientId);
-            return PartialView("_MedicalRecordTable", model);
-        }
 
         #region PRIVATE
-        private bool authenticateLoginStatus()
-        {
-            return true;
-        }
 
         private Dictionary<int, List<AppointmentModel>> getAvailableAppointments(DateTime date)
         {
             date = date.Date;   //reset to 12AM
             DateTime nextDay = date.AddDays(1);
-
             var appointmentViewModels = new Dictionary<int, List<AppointmentModel>>();
+
             var appointments = Db.Appointments
                 .Where(ap => ap.Time >= date && ap.Time < nextDay)
                 .Join(Db.Accounts, ap => ap.DoctorId, doctor => doctor.AccountId, (ap, doctor) =>
@@ -132,8 +125,7 @@ namespace HealthcareSystem.Controllers
                         AppointmentId = ap.AppointmentId,
                         Time = ap.Time,
                         DoctorId = ap.DoctorId,
-                        DoctorName = doctor.Firstname + " " + doctor.Lastname,
-                        PatientId = ap.PatientId
+                        DoctorName = doctor.Firstname + " " + doctor.Lastname
                     }).ToList();
 
             var doctorList = Db.Accounts.OfType<EmployeeAccount>().Where(acc => acc.Role == EmployeeRole.Doctor).ToList();

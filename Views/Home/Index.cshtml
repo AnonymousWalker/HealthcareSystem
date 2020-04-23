@@ -25,19 +25,24 @@
     }
     else if (Model.Role.HasValue && Model.Role == EmployeeRole.Staff)
     {
-        Html.RenderPartial("_StaffIndex");
+        <a href="@Url.Action("MakeAppointment","Staff", new { patientId = 0 })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/staffappointment.jpg"></a>
+        <a href="@Url.Action("SignUp","Account")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/createaccount.jpg"></a>
     }
     else if (Model.Role.HasValue && Model.Role == EmployeeRole.Doctor)
     {
-        Html.RenderPartial("_DoctorIndex");
+        <a href="@Url.Action("AppointmentList", "Staff")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/list.jpg"></a>
+        <a href="@Url.Action("SearchPatient","Staff", new { actionType = "view" })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/viewrecords.png"></a>
     }
     else if (Model.Role.HasValue && Model.Role == EmployeeRole.Nurse)
     {
-        Html.RenderPartial("_NurseIndex");
+        <a href="@Url.Action("SearchPatient","Staff", new { actionType = "input" })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/input.jpg"></a>
+        <a href="@Url.Action("SearchPatient","Staff", new { actionType = "view" })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/viewrecords.png"></a>
+
     }
     else if (Model.Role.HasValue && Model.Role == EmployeeRole.CEO)
     {
-        Html.RenderPartial("_CEOIndex");
+        <a href=""><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/viewreports.jpg"></a>
+        <a href=""><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/updatesalaree.jpg"></a>
     }
 
 

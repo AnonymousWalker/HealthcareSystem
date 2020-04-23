@@ -218,14 +218,12 @@
     <Content Include="Views\Patient\MedicalRecord.cshtml" />
     <Content Include="Views\Account\StaffProfile.cshtml" />
     <Content Include="Views\Patient\AppointmentList.cshtml" />
-    <Content Include="Views\Home\_StaffIndex.cshtml" />
-    <Content Include="Views\Home\_NurseIndex.cshtml" />
-    <Content Include="Views\Home\_DoctorIndex.cshtml" />
-    <Content Include="Views\Home\_CEOIndex.cshtml" />
     <Content Include="Views\Patient\_MedicalRecordTable.cshtml" />
     <Content Include="Views\Staff\SearchPatient.cshtml" />
     <Content Include="Views\Staff\_PatientList.cshtml" />
     <Content Include="Views\Staff\PatientMedicalRecords.cshtml" />
+    <Content Include="Views\Staff\DoctorAppointmentList.cshtml" />
+    <Content Include="Views\Staff\CreateAppointment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

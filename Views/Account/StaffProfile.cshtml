@@ -1,17 +1,59 @@
-﻿
-@{
-    Layout = null;
-}
-
-<!DOCTYPE html>
-
+﻿@model ProfileModel
+<!DOCTYPE HTML>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>StaffProfile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <script src="script.js"></script>
+    @Styles.Render("~/Content/custom/home.css")
+    @Styles.Render("~/Content/custom/profile.css")
 </head>
-<body>
-    <div> 
+<body style="background-image: linear-gradient(to right, #cb2d3e, #bbd7e2);">
+    @{Html.RenderAction("NavigationBar", "Home");}
+    <a href="@Url.Action("SignOut","Account")">Sign Out</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 profile-section">
+                <div class="row">
+                    <div class="col-md-10"><h2>Your Profile</h2></div>
+                </div>
+                <div class="panel-body">
+                    <div class="box-body">
+                        <hr style="margin:5px;">
+
+                        <div class="col-sm-5 title ">Email:</div><div class="col-sm-7">@Model.Email</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-sm-5 title ">Password:</div><div class="col-sm-7"> ****</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-sm-5 title ">First Name:</div><div class="col-sm-7">@Model.Firstname</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-sm-5 title ">Last Name:</div><div class="col-sm-7">@Model.Lastname</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-sm-5 title ">Phone:</div><div class="col-sm-7">@Model.Phone</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-sm-5 title ">SSN:</div><div class="col-sm-7">@Model.SSN</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-sm-5 title ">Salary:</div><div class="col-sm-7">@Html.DisplayFor(x=>x.Salary)</div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-sm-5 title ">Position:</div><div class="col-sm-7">@Model.Role</div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
+
+
+
 </body>
 </html>
