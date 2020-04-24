@@ -162,6 +162,7 @@
     <Content Include="Content\custom\make-appointment.css" />
     <Content Include="Content\custom\medical-record.css" />
     <Content Include="Content\custom\profile.css" />
+    <Content Include="Content\custom\row-hover.css" />
     <Content Include="Content\image\appointment.jpg" />
     <Content Include="Content\image\createaccount.jpg" />
     <Content Include="Content\image\history.png" />

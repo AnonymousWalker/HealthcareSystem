@@ -11,6 +11,7 @@ namespace HealthcareSystem.Models.Tables
     {
         public int Id { get; set; }
         public string Examination { get; set; } = "";
+        public string Scan { get; set; } = "";
         public string Treatment { get; set; } = "";
         public string Prescription { get; set; } = "";
         public DateTime Date { get; set; }

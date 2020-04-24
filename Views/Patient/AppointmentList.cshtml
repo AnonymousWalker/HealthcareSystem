@@ -10,10 +10,12 @@
     @Styles.Render("~/Content/custom/home.css")
     @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
     @Scripts.Render("~/Scripts/custom/appointment-list.js")
+    @Styles.Render("~/Content/custom/row-hover.css")
 </head>
 <body style="background: white;">
     @{Html.RenderAction("NavigationBar", "Home"); }
-        @Html.Hidden("CancelURL", Url.Action("CancelAppointment", "Patient"))
+    @Html.Hidden("CancelURL", Url.Action("CancelAppointment", "Patient"))
+    @Html.Hidden("ServiceStatementURL", Url.Action("ServiceStatement","Patient"))
     <div style="overflow: auto; width: 65%;margin: auto auto 30px auto; clear:both">
         <h1>Your Appointments</h1>
     </div>

@@ -1,11 +1,6 @@
 ﻿@model IList<PatientAccount>
 @Styles.Render("~/Content/custom/appointment-list.css")
-<style>
-    tbody tr:hover {
-        background-color: #CC3BFC !important;
-        cursor:pointer;
-    }
-</style>
+@Styles.Render("~/Content/custom/row-hover.css")
 
 <table class="purpleHorizon">
     <thead>

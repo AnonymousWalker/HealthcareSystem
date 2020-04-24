@@ -75,12 +75,13 @@ namespace HealthcareSystem.Controllers
         }
 
         //doctor create treatment, prescription record => charge amount
-        public ActionResult InputTreatmentService(HealthcareServiceModel model)
+        public ActionResult UpdateServiceStatement(HealthcareServiceModel model)
         {
             Db.ServiceStatements.Add(new ServiceStatement
             {
                 Examination = model.Examination,
                 Treatment = model.Treatment,
+                Scan = model.Scan,
                 Prescription = model.Prescription,
                 Date = model.Date,
                 Amount = model.Amount,
@@ -137,6 +138,7 @@ namespace HealthcareSystem.Controllers
             });
         }
 
+        //Doctor Appointments
         public ActionResult AppointmentList()
         {
             if (AccountController.IsLoggedIn)

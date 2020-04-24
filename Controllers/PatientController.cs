@@ -36,7 +36,7 @@ namespace HealthcareSystem.Controllers
         }
 
         //AJAX Pick Date
-        [HttpGet]   
+        [HttpGet]
         public ActionResult GetAvailableAppointmentsByDate(string dateString = "")
         {
             DateTime date;
@@ -107,6 +107,11 @@ namespace HealthcareSystem.Controllers
             model.Records = getMedicalRecords(patientId);
             return View(model);
         }
+
+        //public ActionResult ServiceStatement()
+        //{
+
+        //}
 
 
         #region PRIVATE

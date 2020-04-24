@@ -15,4 +15,15 @@
             }
         });
     });
+
+    $("tbody > tr").click(function () {
+        var urlString = $("#ServiceStatementURL").val();
+        if (urlString) {
+            urlString = $("#UpdateServiceStatementURL").val();
+        }
+        $.ajax({
+            url: urlString,
+            
+        });
+    });
 });
