@@ -17,5 +17,7 @@ namespace HealthcareSystem.Models
         public string DoctorName { get; set; } = "";
         public int PatientId { get; set; }
         public string PatientName { get; set; } = "";
+
+        public int StatementId { get; set; }
     }
 }

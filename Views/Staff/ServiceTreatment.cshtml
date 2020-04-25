@@ -1,0 +1,61 @@
+﻿@model ServiceTreatmentModel
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="logo.png">
+    <title>Service Record Input</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo">
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/custom/home.css")
+
+</head>
+<body>
+    @{Html.RenderAction("NavigationBar", "Home");}
+    <img id="centerLogo" src="~/Content/image/logo.png">
+    <div class="signUpMain">
+        <p class="sign" align="center">Service Treatment Input</p>
+        <br />
+        @using (Html.BeginForm("UpdateServiceTreatment", "Staff", FormMethod.Post))
+        {
+            @Html.HiddenFor(x => x.StatementId)
+            @Html.HiddenFor(x => x.PatientId)
+            @Html.HiddenFor(x => x.AppointmentId)
+            @Html.HiddenFor(x => x.DoctorId)
+            <div class="multiselect">
+                <div id="checkboxes">
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(x => x.BloodTest)
+                        @Html.LabelFor(x => x.BloodTest)
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(x => x.Xray)
+                        @Html.LabelFor(x => x.Xray)
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(x => x.MRI)
+                        @Html.LabelFor(x => x.MRI)
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(x => x.Radiology)
+                        @Html.LabelFor(x => x.Radiology)
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.CheckBoxFor(x => x.LabTest)
+                        @Html.LabelFor(x => x.LabTest)
+                    </div>
+                </div>
+            </div>
+            <br />
+            @Html.TextAreaFor(x => x.Prescription, new { @class = "un", align = "center", placeholder = "Prescription(s)" })
+            <input style="margin-bottom: 8%;" class="submit" type="submit" value="Submit" />
+            <a class="submit" href="doctorIndex.html" style="background: gray;">Cancel</a>
+        }
+    </div>
+</body>
+</html>

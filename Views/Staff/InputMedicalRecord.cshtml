@@ -21,25 +21,28 @@
     <div class="signUpMain">
         <p class="sign" align="center">Medical Record Input<br />(@Model.PatientName)</p>
         <form class="form1" action="@Url.Action("InputMedicalRecord","Staff")" method="post">
-            <input type="hidden" name="PatientId" value="@Model.PatientId"/>
-            <input class="un" name="Weight" type="text" align="center" placeholder="Patient Weight(In Lbs)" />
-            <input class="un" name="Height" type="text" align="center" placeholder="Height (In Inches)" />
-            <input class="un" name="BloodPressure" type="text" align="center" placeholder="Blood Pressure(In mmHg)" />
-            <input class="un" name="Pulse" type="text" align="center" placeholder="Pulse(In BPM)" />
-            <input class="un" name="LabResult" type="text" align="center" placeholder="Lab Result" />
-            <input class="un" name="RadiologyReport" type="text" align="center" placeholder="Radiology Result" />
-            <input class="un" name="PathologyReport" type="text" align="center" placeholder="Pathology Result" />
-            <input class="un" name="AllegyInformation" type="text" align="center" placeholder="Allergy Info" />
-            <input class="un" name="Description" type="text" align="center" placeholder="Description" />
+            <input type="hidden" name="RecordId" value="@Model.RecordId" />
+            <input type="hidden" name="PatientId" value="@Model.PatientId" />
+            <input class="un" name="Weight" type="text" align="center" value="@Model.Weight" placeholder="Patient Weight(In Lbs)" />
+            <input class="un" name="Height" type="text" align="center" value="@Model.Height" placeholder="Height (In Inches)" />
+            <input class="un" name="BloodPressure" type="text" align="center" value="@Model.BloodPressure" placeholder="Blood Pressure(In mmHg)" />
+            <input class="un" name="Pulse" type="text" align="center" value="@Model.Pulse" placeholder="Pulse(In BPM)" />
+            <input class="un" name="LabResult" type="text" align="center" value="@Model.LabResult" placeholder="Lab Result" />
+            <input class="un" name="RadiologyReport" type="text" align="center" value="@Model.RadiologyReport" placeholder="Radiology Result" />
+            <input class="un" name="PathologyReport" type="text" align="center" value="@Model.PathologyReport" placeholder="Pathology Result" />
+            <input class="un" name="AllegyInformation" type="text" align="center" value="@Model.AllegyInformation" placeholder="Allergy Info" />
+            <input class="un" name="Description" type="text" align="center" value="@Model.Description" placeholder="Description" />
             <label style="display: block;">Date of Filing</label>
-            <input class="un " name="Date" type="Date" align="center" placeholder="Date"/>
+            <input class="un " name="DateString" type="Date" align="center" value="@Model.DateString" placeholder="Date" />
             <input class="submit" type="submit" value="Submit" />
         </form>
     </div>
 
     <script>
+        //set date from model for datepicker
         $(document).ready(function () {
-            if ($("input[name='Date']").val() === "") {
+            var $dateInput = $("input[type='Date']");
+            if ($dateInput.attr("value") === "") {
                 var today = new Date();
                 var year = today.getFullYear()
                 var month = today.getMonth() + 1;
@@ -47,8 +50,14 @@
                 if (month < 10) month = "0" + month;
                 if (day < 10) day = "0" + day;
                 var dateString = year + "-" + month + "-" + day;
-                $("input[name='Date']").val(dateString);
+                $dateInput.val(dateString);
+            } else {
+                $dateInput.val($dateInput.attr("value"));
             }
+
+            $dateInput.change(function () {
+                $dateInput.attr("value", $dateInput.val());
+            });
         });
     </script>
 </body>

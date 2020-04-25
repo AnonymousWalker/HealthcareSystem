@@ -14,12 +14,13 @@
 </head>
 <body style="background: white;">
     @{Html.RenderAction("NavigationBar", "Home"); }
-    @Html.Hidden("UpdateServiceStatementURL", Url.Action("UpdateServiceStatement", "Staff"))
+    @Html.Hidden("UpdateServiceTreatmentURL", Url.Action("UpdateServiceTreatment", "Staff"))
     <div style="overflow: auto; width: 65%;margin: auto auto 30px auto; clear:both">
         <h1>Your Appointments</h1>
+        <h3 style="text-align:center;color:#a99999">(Select one to update services & treatment for patient)</h3>
     </div>
 
-    <table class="purpleHorizon">
+    <table id="dr-ap-table" class="purpleHorizon">
         <thead>
             <tr>
                 <th>Date</th>
@@ -30,7 +31,7 @@
         <tbody style="line-height: 25px;">
             @foreach (var appointment in Model)
             {
-                <tr>
+                <tr data-appointmentid="@appointment.AppointmentId">
                     <td>@appointment.Time.ToShortDateString()</td>
                     <td>@appointment.Time.ToShortTimeString()</td>
                     <td style="width: 40%;">@appointment.PatientName</td>

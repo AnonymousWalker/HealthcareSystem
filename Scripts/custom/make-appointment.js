@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
 
+    // Set default for datepicker
     if ($("#datepicker").val() === "") {
         var today = new Date();
         var year = today.getFullYear()

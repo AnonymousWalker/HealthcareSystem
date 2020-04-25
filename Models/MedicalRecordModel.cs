@@ -8,13 +8,13 @@ namespace HealthcareSystem.Models
 {
     public class MedicalRecordModel
     {
-        public int Id { get; set; }
+        public int RecordId { get; set; }
         public double Weight { get; set; }
         public double Height { get; set; }
         public string BloodPressure { get; set; }
         public short Pulse { get; set; }
         public string Description { get; set; }
-        public string DateString { get; set; }
+        public string DateString { get; set; } = "";
         public DateTime Date { get; set; }
 
         public string LabResult { get; set; }

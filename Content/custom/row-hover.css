@@ -2,3 +2,7 @@
     background-color: #CC3BFC !important;
     cursor: pointer;
 }
+
+tbody tr {
+    background:#555555 !important;
+}

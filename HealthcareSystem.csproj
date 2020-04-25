@@ -140,13 +140,17 @@
     <Compile Include="Models\MedicalRecordModel.cs" />
     <Compile Include="Models\PatientMedicalRecordModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
+    <Compile Include="Models\ServiceTreatmentModel.cs" />
+    <Compile Include="Models\StatementInvoiceModel.cs" />
     <Compile Include="Models\Tables\Account.cs" />
     <Compile Include="Models\Tables\Appointment.cs" />
     <Compile Include="Models\HealthcareSystemContext.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\SignUpModel.cs" />
     <Compile Include="Models\Tables\MedicalRecord.cs" />
+    <Compile Include="Models\Tables\ServiceFee.cs" />
     <Compile Include="Models\Tables\ServiceStatement.cs" />
+    <Compile Include="Models\Tables\ServiceStatementDetail.cs" />
     <Compile Include="Models\Tables\Transaction.cs" />
     <Compile Include="Models\HealthcareServiceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -158,11 +162,13 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\custom\home.css" />
     <Content Include="Content\custom\appointment-list.css" />
+    <Content Include="Content\custom\input-service.css" />
     <Content Include="Content\custom\login.css" />
     <Content Include="Content\custom\make-appointment.css" />
     <Content Include="Content\custom\medical-record.css" />
     <Content Include="Content\custom\profile.css" />
     <Content Include="Content\custom\row-hover.css" />
+    <Content Include="Content\custom\statement.css" />
     <Content Include="Content\image\appointment.jpg" />
     <Content Include="Content\image\createaccount.jpg" />
     <Content Include="Content\image\history.png" />
@@ -226,6 +232,8 @@
     <Content Include="Views\Staff\DoctorAppointmentList.cshtml" />
     <Content Include="Views\Staff\CreateAppointment.cshtml" />
     <Content Include="Views\Account\_EditProfile.cshtml" />
+    <Content Include="Views\Staff\ServiceTreatment.cshtml" />
+    <Content Include="Views\Patient\ServiceInvoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

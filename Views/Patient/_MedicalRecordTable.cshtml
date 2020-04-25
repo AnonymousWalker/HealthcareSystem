@@ -1,5 +1,5 @@
 ﻿@model IList<MedicalRecordModel>
-<table class="topaz-table">
+<table id="med-record-table" class="topaz-table">
     <thead>
         <tr>
             <th>Date</th>
@@ -17,7 +17,7 @@
     <tbody>
         @foreach (var record in Model)
         {
-            <tr>
+            <tr data-recordid="@record.RecordId">
                 <td style="width: 80px;">@record.Date.ToShortDateString()</td>
                 <td style="width:50px;">@record.Weight</td>
                 <td style="width:50px;">@record.Height</td>

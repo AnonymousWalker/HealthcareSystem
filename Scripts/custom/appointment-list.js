@@ -16,14 +16,19 @@
         });
     });
 
-    $("tbody > tr").click(function () {
-        var urlString = $("#ServiceStatementURL").val();
-        if (urlString) {
-            urlString = $("#UpdateServiceStatementURL").val();
+    $("#dr-ap-table > tbody > tr").click(function () {
+        var urlString = $("#UpdateServiceTreatmentURL").val();
+        var appointmentId = $(this).data("appointmentid");
+        if (urlString != "" && appointmentId != undefined) {
+            window.location.href = urlString + "?appointmentId=" + appointmentId;
         }
-        $.ajax({
-            url: urlString,
-            
-        });
+    });
+
+    $("#med-record-table > tbody > tr").click(function () {
+        var urlString = $("#EditMedicalRecordURL").val();
+        var recordId = $(this).data("recordid");
+        if (recordId != "" && urlString != "") {
+            window.location.href = urlString + "?recordId=" + recordId;
+        }
     });
 });

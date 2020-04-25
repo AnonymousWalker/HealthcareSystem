@@ -1,0 +1,71 @@
+﻿@model StatementInvoiceModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="logo.png">
+    <title>Healthcare System</title>
+    <link rel="stylesheet" href="statement.css">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    @Styles.Render("~/Content/custom/home.css")
+    @Styles.Render("~/Content/custom/statement.css")
+</head>
+<body style="background: white;width:auto;">
+    <div class="invoice-box">
+        <div class="img-center-ctn">
+            <img src="~/Content/image/welcome-logo.png" style="width:100%; max-width:200px;">
+        </div>
+        <h2 style="text-align:center">Service Invoice of (Patient Name) </h2>
+        <br />
+        <table cellpadding="0" cellspacing="0">
+            <tr class="information">
+                <td colspan="2">
+                    <table>
+                        <tr>
+                            <td>
+                                <b>Invoice #: @Model.InvoiceId</b><br>
+                                Created: @Model.Date.ToShortDateString()<br>
+                                Due: @Model.Date.AddDays(14).ToShortDateString()
+                            </td>
+                            <td>
+                                Healthcare Solutions<br>
+                                36079 University Road<br>
+                                Troy, AL 36081
+                            </td>
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            @if (Model.Status)
+            {
+                <tr class="heading">
+                    <td>Payment Method</td>
+                    <td>@Model.PaymentMethod #</td>
+                </tr>
+                <tr class="details">
+                    <td>@Model.PaymentMethod.ToString()</td>
+                    <td>@Model.PaymentNumber</td>
+                </tr>
+            }
+            <tr class="heading">
+                <td>Service</td>
+                <td>Amount</td>
+            </tr>
+            @foreach (var service in Model.Services)
+            {
+                <tr class="item">
+                    <td>@service.Key</td>
+                    <td>@string.Format("{0:.00}", service.Value)</td>
+                </tr>
+            }
+
+            <tr class="total">
+                <td></td>
+                <td>Balance: $@string.Format("{0:.00}", Model.TotalAmount)</td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

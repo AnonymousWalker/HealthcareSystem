@@ -108,10 +108,41 @@ namespace HealthcareSystem.Controllers
             return View(model);
         }
 
-        //public ActionResult ServiceStatement()
-        //{
+        public ActionResult ServiceInvoice(int appointmentId)
+        {
+            var model = new StatementInvoiceModel();
+            var statement = Db.ServiceStatements.Where(s => s.AppointmentId == appointmentId).FirstOrDefault();
+            if (statement != null)
+            {
+                var services = Db.ServiceStatementDetails.Where(detail => detail.StatementId == statement.Id)
+                                                        .Join(Db.ServiceFees, detail => detail.ServiceId, service => service.ServiceId, (detail, service) =>
+                                                            new
+                                                            {
+                                                                service.ServiceName,
+                                                                service.Fee
+                                                            })
+                                                        .ToList();
+                var serviceList = services.Select(s => new KeyValuePair<string, double>(s.ServiceName, s.Fee)).ToList();
+                
+                model = new StatementInvoiceModel
+                {
+                    Status = statement.Status,
+                    Date = statement.Date,
+                    Prescription = statement.Prescription,
+                    Services = serviceList,
+                    AppointmentId = statement.AppointmentId,
+                    PatientId = statement.PatientId,
+                    DoctorId = statement.DoctorId,
+                    InvoiceId = statement.Id
+                };
+                foreach (var item in serviceList)
+                {
+                    model.TotalAmount += item.Value;
+                }
+            }
 
-        //}
+            return View("ServiceInvoice", model);
+        }
 
 
         #region PRIVATE

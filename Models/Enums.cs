@@ -18,4 +18,11 @@ namespace HealthcareSystem.Models
         Patient = 1,
         Employee = 2
     }
+
+    public enum PaymentMethod
+    {
+        Cash = 1,
+        Card = 2,
+        Check = 3
+    }
 }

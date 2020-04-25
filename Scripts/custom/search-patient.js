@@ -11,14 +11,14 @@
             type: 'post',
             data: { firstName, phone, lastName },
             success: function (result) {
-                $("#result-table").html(result);
+                $("#patient-table").html(result);
             }
         });
     });
 
     
 
-    $("#result-table").on("click","tbody > tr",function () {
+    $("#patient-table").on("click","tbody > tr",function () {
         var patientId = $(this).data("patientid");
         var action = $("#ActionType").val();
         if (action != "") {

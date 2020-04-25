@@ -21,3 +21,10 @@ INSERT [dbo].[Account] ([AccountId], [Email], [Password], [Firstname], [Lastname
 GO
 SET IDENTITY_INSERT [dbo].[Account] OFF
 GO
+
+insert into ServiceFee values('Blood Test', 35.0)
+insert into ServiceFee values('X-Ray Scan', 20.0)
+insert into ServiceFee values('MRI Scan', 78.0)
+insert into ServiceFee values('Radiology', 120.0)
+insert into ServiceFee values('Lab Test', 50.0)
+insert into ServiceFee values('Appointment', 50.0)

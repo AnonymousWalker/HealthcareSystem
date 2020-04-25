@@ -34,8 +34,62 @@ namespace HealthcareSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                Db.MedicalRecords.Add(new MedicalRecord
+                // New Record
+                if (record.RecordId == 0)
                 {
+                    var date = DateTime.Parse(record.DateString);
+                    Db.MedicalRecords.Add(new MedicalRecord
+                    {
+                        Weight = record.Weight,
+                        Height = record.Height,
+                        BloodPressure = record.BloodPressure,
+                        Pulse = record.Pulse,
+                        Description = record.Description,
+                        Date = date,
+                        LabResult = record.LabResult,
+                        PathologyReport = record.PathologyReport,
+                        RadiologyReport = record.RadiologyReport,
+                        AllegyInformation = record.AllegyInformation,
+                        PatientId = record.PatientId
+                    });
+                }
+                else // Update record
+                {
+                    var medicalRecord = Db.MedicalRecords.Where(rec => rec.Id == record.RecordId).FirstOrDefault();
+                    if (medicalRecord!=null)
+                    {
+                        var date = DateTime.Parse(record.DateString);
+                        medicalRecord.Date = date;
+                        medicalRecord.Weight = record.Weight;
+                        medicalRecord.Height = record.Height;
+                        medicalRecord.BloodPressure = record.BloodPressure;
+                        medicalRecord.Pulse = record.Pulse;
+                        medicalRecord.Description = record.Description;
+                        medicalRecord.LabResult = record.LabResult;
+                        medicalRecord.PathologyReport = record.PathologyReport;
+                        medicalRecord.RadiologyReport = record.RadiologyReport;
+                        medicalRecord.AllegyInformation = record.AllegyInformation;
+                        medicalRecord.PatientId = record.PatientId;
+                    }
+                }
+                Db.SaveChanges();
+                return RedirectToAction("PatientMedicalRecords", "Staff", new { patientId = record.PatientId });
+            }
+            //error
+            return View(record);
+        }
+
+        [HttpGet]
+        public ActionResult EditMedicalRecord(int recordId)
+        {
+            // Doctor/nurse 
+            var record = Db.MedicalRecords.Find(recordId);
+            if (record != null)
+            {
+                var patient = Db.Accounts.Find(record.PatientId);
+                var model = new MedicalRecordModel
+                {
+                    RecordId = recordId,
                     Weight = record.Weight,
                     Height = record.Height,
                     BloodPressure = record.BloodPressure,
@@ -47,49 +101,13 @@ namespace HealthcareSystem.Controllers
                     RadiologyReport = record.RadiologyReport,
                     AllegyInformation = record.AllegyInformation,
                     PatientId = record.PatientId
-                });
-                Db.SaveChanges();
-                return RedirectToAction("MedicalRecord", "Patient", new { patientId = record.PatientId });
+                };
+                model.PatientName = (patient != null) ? patient.Firstname + " " + patient.Lastname : "Unknown Patient";
+                model.DateString = string.Format("{0}-{1:00}-{2:00}", record.Date.Year, record.Date.Month, record.Date.Day);
+                return View("InputMedicalRecord", model);
             }
-            //error
-            return View(record);
-        }
 
-        public ActionResult EditMedicalRecord(MedicalRecordModel model)
-        {
-            //nurse update patient's medical record after health check
-            var date = DateTime.Parse(model.DateString);
-            var record = Db.MedicalRecords.Where(rec => rec.PatientId == model.Id && rec.Date == date).FirstOrDefault();
-            if (record != null)
-            {
-                record.Weight = model.Weight;
-                record.Height = model.Height;
-                record.BloodPressure = model.BloodPressure;
-                record.Pulse = model.Pulse;
-                record.Description = model.Description;
-                record.Date = date;
-            }
-                Db.SaveChanges();
-
-            return null;
-        }
-
-        //doctor create treatment, prescription record => charge amount
-        public ActionResult UpdateServiceStatement(HealthcareServiceModel model)
-        {
-            Db.ServiceStatements.Add(new ServiceStatement
-            {
-                Examination = model.Examination,
-                Treatment = model.Treatment,
-                Scan = model.Scan,
-                Prescription = model.Prescription,
-                Date = model.Date,
-                Amount = model.Amount,
-                PatientId = model.PatientId
-            });
-            Db.SaveChanges();
-
-            return null;
+            return RedirectToAction("SearchPatient", new { actionType = "view" });
         }
 
         public ActionResult SearchPatient(string actionType = "")
@@ -150,6 +168,122 @@ namespace HealthcareSystem.Controllers
             return RedirectToAction("Login", "Account");
         }
 
+        [HttpGet]
+        public ActionResult UpdateServiceTreatment(int appointmentId)
+        {
+            var statement = Db.ServiceStatements.Where(s => s.AppointmentId == appointmentId).FirstOrDefault();
+            var appointment = Db.Appointments.Find(appointmentId);
+            // New Statement 
+            if (statement == null && appointment != null)
+            {
+                return View("ServiceTreatment", new ServiceTreatmentModel() {
+                    PatientId = appointment.PatientId,
+                    DoctorId = appointment.DoctorId,
+                    AppointmentId = appointmentId
+                });
+            }
+            // Update
+            else if (statement.Status == false && appointment!=null) 
+            {
+                var serviceList = Db.ServiceStatementDetails.Where(s => s.StatementId == statement.Id).ToList();
+                var model = new ServiceTreatmentModel();
+                model.StatementId = statement.Id;
+                model.Prescription = statement.Prescription;
+                model.AppointmentId = appointmentId;
+                model.Status = statement.Status;
+
+                // load checkboxes values
+                foreach (var service in serviceList)
+                {
+                    switch (service.ServiceId)
+                    {
+                        case 1:
+                            model.BloodTest = true;
+                            break;
+                        case 2:
+                            model.Xray = true;
+                            break;
+                        case 3:
+                            model.MRI = true;
+                            break;
+                        case 4:
+                            model.Radiology = true;
+                            break;
+                        case 5:
+                            model.LabTest = true;
+                            break;
+                        default: break;
+                    }
+                }
+                
+                return View("ServiceTreatment", model);
+            }
+
+            return RedirectToAction("AppointmentList");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateServiceTreatment(ServiceTreatmentModel model)
+        {
+            if (ModelState.IsValid) {
+                if (model.StatementId == 0)  // create new statement
+                {
+                    var newStatement = Db.ServiceStatements.Add(new ServiceStatement {
+                        Date = DateTime.Today,
+                        Prescription = model.Prescription,
+                        AppointmentId = model.AppointmentId,
+                        DoctorId = model.DoctorId,
+                        PatientId = model.PatientId,
+                    });
+
+                    List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
+                    if (model.BloodTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 1 });
+                    if (model.Xray) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 2 });
+                    if (model.MRI) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 3 });
+                    if (model.Radiology) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 4 });
+                    if (model.LabTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 5 });
+                    serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 6 });
+
+                    Db.ServiceStatementDetails.AddRange(serviceDetails);
+                }
+                else // update statement
+                {
+                    var statement = Db.ServiceStatements.Where(s => s.Id == model.StatementId).FirstOrDefault();
+                    if (statement != null)
+                    {
+                        statement.Prescription = model.Prescription;
+
+                        List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
+                        if (model.BloodTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 1 });
+                        if (model.Xray) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 2 });
+                        if (model.MRI) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 3 });
+                        if (model.Radiology) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 4 });
+                        if (model.LabTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 5 });
+                        serviceDetails.Add(new ServiceStatementDetail { StatementId = statement.Id, ServiceId = 6 });
+
+                        // remove old statement details
+                        var details = Db.ServiceStatementDetails.Where(detail => detail.StatementId == model.StatementId);
+                        Db.ServiceStatementDetails.RemoveRange(details);
+                        // then update with new details
+                        Db.ServiceStatementDetails.AddRange(serviceDetails);
+                    }
+                    else
+                    {
+                        return View("ServiceTreatment", new ServiceTreatmentModel()
+                        {
+                            PatientId = model.PatientId,
+                            DoctorId = model.DoctorId,
+                            AppointmentId = model.AppointmentId
+                        });
+                    }
+
+                }
+                Db.SaveChanges();
+                return RedirectToAction("AppointmentList");
+            }
+            return View("ServiceTreatment", model);
+        }
+
 
         #region PRIVATE
         private List<MedicalRecordModel> getMedicalRecords(int patientId)
@@ -158,6 +292,7 @@ namespace HealthcareSystem.Controllers
                             .Join(Db.Accounts, rec => rec.PatientId, acc => acc.AccountId, (rec, acc)
                             => new MedicalRecordModel
                             {
+                                RecordId = rec.Id,
                                 Weight = rec.Weight,
                                 Height = rec.Height,
                                 BloodPressure = rec.BloodPressure,
