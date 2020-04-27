@@ -12,6 +12,7 @@ namespace HealthcareSystem.Models.Tables
         public int TransactionId { get; set; }
         public int StatementId { get; set; }
         public double Amount { get; set; }
+        public string Status { get; set; } = "";
         public DateTime Date { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public string PaymentNumber { get; set; } = "";

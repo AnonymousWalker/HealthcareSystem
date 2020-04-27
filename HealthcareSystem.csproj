@@ -140,6 +140,7 @@
     <Compile Include="Models\MakeAppointmentModel.cs" />
     <Compile Include="Models\MedicalRecordModel.cs" />
     <Compile Include="Models\PatientMedicalRecordModel.cs" />
+    <Compile Include="Models\PaymentModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
     <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\ServiceTreatmentModel.cs" />
@@ -170,6 +171,7 @@
     <Content Include="Content\custom\login.css" />
     <Content Include="Content\custom\make-appointment.css" />
     <Content Include="Content\custom\medical-record.css" />
+    <Content Include="Content\custom\payment.css" />
     <Content Include="Content\custom\profile.css" />
     <Content Include="Content\custom\row-hover.css" />
     <Content Include="Content\custom\statement.css" />
@@ -239,6 +241,7 @@
     <Content Include="Views\Staff\ServiceTreatment.cshtml" />
     <Content Include="Views\Patient\ServiceInvoice.cshtml" />
     <Content Include="Views\Staff\DailyMonthlyReport.cshtml" />
+    <Content Include="Views\Patient\Payment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -123,7 +123,7 @@ namespace HealthcareSystem.Controllers
                                                             })
                                                         .ToList();
                 var serviceList = services.Select(s => new KeyValuePair<string, double>(s.ServiceName, s.Fee)).ToList();
-                
+
                 model = new StatementInvoiceModel
                 {
                     Status = statement.Status,
@@ -149,6 +149,55 @@ namespace HealthcareSystem.Controllers
             return View("ServiceInvoice", model);
         }
 
+        public ActionResult Payment(int invoiceId)
+        {
+            var id = Convert.ToInt32(Session["AccountId"]);
+            var statement = Db.ServiceStatements.Find(invoiceId);
+            var patient = Db.Accounts.OfType<PatientAccount>().Where(p => p.AccountId == id).FirstOrDefault();
+            if (statement != null && id != 0)
+            {
+                return View(new PaymentModel
+                {
+                    StatementId = invoiceId,
+                    Amount = statement.Amount,
+                    BillingAddress = patient.BillingAddress
+                });
+            }
+            ViewBag.ErrorMessage = "Cannot make a payment at this time. Please try again later!";
+            return View("~/Views/Shared/Error.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult Payment(PaymentModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var statement = Db.ServiceStatements.Find(model.StatementId);
+                if (statement != null)
+                {
+
+                    Db.Transactions.Add(new Transaction
+                    {
+                        StatementId = model.StatementId,
+                        Amount = statement.Amount,
+                        BillingAddress = model.BillingAddress,
+                        Date = DateTime.Now,
+                        PayerName = model.CardHolder,
+                        PaymentNumber = model.PaymentNumber,
+                        PaymentMethod = PaymentMethod.Card,
+                        Status = "Pending"
+                    });
+                    Db.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "This invoice is not available for payment at the moment. Please try again later";
+                    return View("~/Views/Shared/Error.cshtml");
+                }
+            }
+            return View(model);
+        }
 
         #region PRIVATE
 

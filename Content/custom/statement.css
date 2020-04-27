@@ -80,3 +80,39 @@
     width: 200px;
     margin: auto;
 }
+
+.payment-link {
+    color: #fff !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #1079db;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    border: none;
+    transition: all 0.4s ease 0s;
+}
+
+    .payment-link:hover {
+        background-image: linear-gradient(to right, rgb(235, 53, 53), rgb(211, 78, 235));
+        letter-spacing: 1px;
+        -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+        -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+        box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+        transition: all 0.4s ease 0s;
+    }
+
+.paid-stamp {
+    font-weight: bold;
+    width: 60px;
+    text-align: center;
+    border: 3px dashed red !important;
+    border-radius: 0px !important;
+    background: white !important;
+    color: red !important;
+}
+
+    .paid-stamp:hover {
+        opacity: 1.0;
+        box-shadow: none;
+    }
