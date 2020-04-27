@@ -13,7 +13,11 @@
     <link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo">
     @Styles.Render("~/Content/bootstrap.min.css")
     @Styles.Render("~/Content/custom/home.css")
-
+    <style>
+        #checkboxes > div {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     @{Html.RenderAction("NavigationBar", "Home");}
@@ -54,7 +58,7 @@
             <br />
             @Html.TextAreaFor(x => x.Prescription, new { @class = "un", align = "center", placeholder = "Prescription(s)" })
             <input style="margin-bottom: 8%;" class="submit" type="submit" value="Submit" />
-            <a class="submit" href="doctorIndex.html" style="background: gray;">Cancel</a>
+            <a class="submit" href="@Url.Action("AppointmentList","Staff")" style="background: gray;">Cancel</a>
         }
     </div>
 </body>

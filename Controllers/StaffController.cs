@@ -23,10 +23,65 @@ namespace HealthcareSystem.Controllers
             return View();
         }
 
+        public static void GenerateDailyReport()
+        {
+            var database = new HealthcareSystemContext();
+            var dailyReports = database.ServiceStatements.Where(st => st.Date.Date == DateTime.Today)
+                        .GroupBy(st => st.DoctorId).Select(group => new
+                        {
+                            DoctorId = group.Key,
+                            Revenue = group.Sum(st => st.DoctorId)
+                        })
+                        .Join(database.Accounts, st => st.DoctorId, acc => acc.AccountId, (st, acc) => new ReportModel
+                        {
+                            DoctorId = st.DoctorId,
+                            Revenue = st.Revenue,
+                            DoctorName = acc.Firstname + " " + acc.Lastname
+                        }).ToList();
+            
+            database.DailyReports.AddRange(dailyReports.Select(x => new DailyReport { DoctorId = x.DoctorId, Revenue = x.Revenue, Date = DateTime.Now }));
+            database.SaveChanges();
+        }
+
+        public static void GenerateMonthlyReport()
+        {
+            var database = new HealthcareSystemContext();
+            var monthlyReports = database.ServiceStatements.Where(st => st.Date.Month == DateTime.Today.Month)
+                        .GroupBy(st => st.DoctorId).Select(group => new
+                        {
+                            DoctorId = group.Key,
+                            Revenue = group.Sum(st => st.DoctorId)
+                        })
+                        .Join(database.Accounts, st => st.DoctorId, acc => acc.AccountId, (st, acc) => new ReportModel
+                        {
+                            DoctorId = st.DoctorId,
+                            Revenue = st.Revenue,
+                            DoctorName = acc.Firstname + " " + acc.Lastname
+                        }).ToList();
+            database.MonthlyReports.AddRange(monthlyReports.Select(x => new MonthlyReport { DoctorId = x.DoctorId, Revenue = x.Revenue, Date = DateTime.Now }));
+        }
+
         public ActionResult InputMedicalRecord(int patientId)
         {
             var patient = Db.Accounts.Find(patientId);
-            return View(new MedicalRecordModel { PatientId = patientId , PatientName = patient.Firstname + " " + patient.Lastname });
+            return View(new MedicalRecordModel { PatientId = patientId, PatientName = patient.Firstname + " " + patient.Lastname });
+        }
+
+        public ActionResult ViewDailyReport()
+        {
+            DateTime today = DateTime.Today;
+            DateTime nextDay = today.AddDays(1);
+            var dailyReports = Db.DailyReports.Where(report => report.Date >= today && report.Date < nextDay).OrderByDescending(report => report.Revenue);
+            return View("DailyMonthlyReport", dailyReports);
+        }
+
+        public ActionResult ViewMonthlyReport()
+        {
+            DateTime thisMonth = DateTime.Today;
+            thisMonth = thisMonth.AddDays(-thisMonth.Day + 1);  //return the first day of month
+            DateTime nextMonth = thisMonth.AddMonths(1);
+            var monthlyReports = Db.MonthlyReports.Where(report => report.Date >= thisMonth && report.Date < nextMonth).OrderByDescending(report => report.Revenue);
+            return View("DailyMonthlyReport", monthlyReports);
         }
 
         [HttpPost]
@@ -56,7 +111,7 @@ namespace HealthcareSystem.Controllers
                 else // Update record
                 {
                     var medicalRecord = Db.MedicalRecords.Where(rec => rec.Id == record.RecordId).FirstOrDefault();
-                    if (medicalRecord!=null)
+                    if (medicalRecord != null)
                     {
                         var date = DateTime.Parse(record.DateString);
                         medicalRecord.Date = date;
@@ -130,7 +185,8 @@ namespace HealthcareSystem.Controllers
                 patientList = Db.Accounts.OfType<PatientAccount>()
                             .Where(p => p.Firstname.Contains(firstName) || p.Phone.Contains(phone))
                             .ToList();
-            } else if (lastName != "")
+            }
+            else if (lastName != "")
             {
                 patientList = Db.Accounts.OfType<PatientAccount>()
                             .Where(p => p.Firstname.Contains(firstName) || p.Lastname.Contains(lastName))
@@ -149,7 +205,8 @@ namespace HealthcareSystem.Controllers
             var patient = Db.Accounts.Find(patientId);
             var patientName = (patient != null) ? patient.Firstname + " " + patient.Lastname : "Unknown Patient";
             var records = getMedicalRecords(patientId);
-            return View(new PatientMedicalRecordModel {
+            return View(new PatientMedicalRecordModel
+            {
                 PatientId = patient.AccountId,
                 PatientName = patientName,
                 Records = records
@@ -163,7 +220,7 @@ namespace HealthcareSystem.Controllers
             {
                 var id = Convert.ToInt32(Session["AccountId"]);
                 var model = getAppointments(id);
-                return View("DoctorAppointmentList",model);
+                return View("DoctorAppointmentList", model);
             }
             return RedirectToAction("Login", "Account");
         }
@@ -176,14 +233,15 @@ namespace HealthcareSystem.Controllers
             // New Statement 
             if (statement == null && appointment != null)
             {
-                return View("ServiceTreatment", new ServiceTreatmentModel() {
+                return View("ServiceTreatment", new ServiceTreatmentModel()
+                {
                     PatientId = appointment.PatientId,
                     DoctorId = appointment.DoctorId,
                     AppointmentId = appointmentId
                 });
             }
             // Update
-            else if (statement.Status == false && appointment!=null) 
+            else if (statement.Status == false && appointment != null)
             {
                 var serviceList = Db.ServiceStatementDetails.Where(s => s.StatementId == statement.Id).ToList();
                 var model = new ServiceTreatmentModel();
@@ -215,7 +273,7 @@ namespace HealthcareSystem.Controllers
                         default: break;
                     }
                 }
-                
+
                 return View("ServiceTreatment", model);
             }
 
@@ -225,60 +283,9 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public ActionResult UpdateServiceTreatment(ServiceTreatmentModel model)
         {
-            if (ModelState.IsValid) {
-                if (model.StatementId == 0)  // create new statement
-                {
-                    var newStatement = Db.ServiceStatements.Add(new ServiceStatement {
-                        Date = DateTime.Today,
-                        Prescription = model.Prescription,
-                        AppointmentId = model.AppointmentId,
-                        DoctorId = model.DoctorId,
-                        PatientId = model.PatientId,
-                    });
-
-                    List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
-                    if (model.BloodTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 1 });
-                    if (model.Xray) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 2 });
-                    if (model.MRI) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 3 });
-                    if (model.Radiology) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 4 });
-                    if (model.LabTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 5 });
-                    serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 6 });
-
-                    Db.ServiceStatementDetails.AddRange(serviceDetails);
-                }
-                else // update statement
-                {
-                    var statement = Db.ServiceStatements.Where(s => s.Id == model.StatementId).FirstOrDefault();
-                    if (statement != null)
-                    {
-                        statement.Prescription = model.Prescription;
-
-                        List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
-                        if (model.BloodTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 1 });
-                        if (model.Xray) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 2 });
-                        if (model.MRI) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 3 });
-                        if (model.Radiology) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 4 });
-                        if (model.LabTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 5 });
-                        serviceDetails.Add(new ServiceStatementDetail { StatementId = statement.Id, ServiceId = 6 });
-
-                        // remove old statement details
-                        var details = Db.ServiceStatementDetails.Where(detail => detail.StatementId == model.StatementId);
-                        Db.ServiceStatementDetails.RemoveRange(details);
-                        // then update with new details
-                        Db.ServiceStatementDetails.AddRange(serviceDetails);
-                    }
-                    else
-                    {
-                        return View("ServiceTreatment", new ServiceTreatmentModel()
-                        {
-                            PatientId = model.PatientId,
-                            DoctorId = model.DoctorId,
-                            AppointmentId = model.AppointmentId
-                        });
-                    }
-
-                }
-                Db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                updateServiceTreatment(model);
                 return RedirectToAction("AppointmentList");
             }
             return View("ServiceTreatment", model);
@@ -323,6 +330,84 @@ namespace HealthcareSystem.Controllers
                                     })
                                     .OrderByDescending(ap => ap.Time)
                                     .ToList();
+        }
+
+        private void updateServiceTreatment(ServiceTreatmentModel model)
+        {
+            if (model.StatementId == 0)  // create new statement
+            {
+                var newStatement = Db.ServiceStatements.Add(new ServiceStatement
+                {
+                    Date = DateTime.Today,
+                    Prescription = model.Prescription,
+                    AppointmentId = model.AppointmentId,
+                    DoctorId = model.DoctorId,
+                    PatientId = model.PatientId,
+                });
+
+                var serviceFees = Db.ServiceFees.Select(x => new { x.ServiceId, x.Fee });
+                List<int> serviceIds = new List<int>();
+                if (model.BloodTest)
+                {
+                    serviceIds.Add(1);
+                }
+                if (model.Xray)
+                {
+                    serviceIds.Add(2);
+                }
+                if (model.MRI)
+                {
+                    serviceIds.Add(3);
+                }
+                if (model.Radiology)
+                {
+                    serviceIds.Add(4);
+                }
+                if (model.LabTest)
+                {
+                    serviceIds.Add(5);
+                }
+
+                List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
+                
+                // Add appointment fee as default
+                var appointmentFee = serviceFees.FirstOrDefault(s => s.ServiceId == 6);
+                newStatement.Amount += (appointmentFee != null) ? appointmentFee.Fee : 0;
+                serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = 6 });
+
+                // Add optional services + fee
+                foreach (var serviceId in serviceIds)
+                {
+                    var fee = serviceFees.FirstOrDefault(s => s.ServiceId == serviceId);
+                    newStatement.Amount += (fee != null)? fee.Fee : 0;
+                    serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = serviceId });
+                }
+
+                Db.ServiceStatementDetails.AddRange(serviceDetails);
+            }
+            else // update statement
+            {
+                var statement = Db.ServiceStatements.Where(s => s.Id == model.StatementId).FirstOrDefault();
+                if (statement != null)
+                {
+                    statement.Prescription = model.Prescription;
+
+                    List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
+                    if (model.BloodTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 1 });
+                    if (model.Xray) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 2 });
+                    if (model.MRI) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 3 });
+                    if (model.Radiology) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 4 });
+                    if (model.LabTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 5 });
+                    serviceDetails.Add(new ServiceStatementDetail { StatementId = statement.Id, ServiceId = 6 });
+
+                    // remove old statement details
+                    var details = Db.ServiceStatementDetails.Where(detail => detail.StatementId == model.StatementId);
+                    Db.ServiceStatementDetails.RemoveRange(details);
+                    // then update with new details
+                    Db.ServiceStatementDetails.AddRange(serviceDetails);
+                }
+            }
+            Db.SaveChanges();
         }
         #endregion
     }

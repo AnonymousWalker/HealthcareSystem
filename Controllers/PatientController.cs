@@ -140,6 +140,11 @@ namespace HealthcareSystem.Controllers
                     model.TotalAmount += item.Value;
                 }
             }
+            else
+            {
+                ViewBag.ErrorMessage = "The doctor has not provided any services!";
+                return View("~/Views/Shared/Error.cshtml");
+            }
 
             return View("ServiceInvoice", model);
         }

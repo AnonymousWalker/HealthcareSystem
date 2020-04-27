@@ -126,6 +126,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\ReportScheduler.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Models\MedicalRecordModel.cs" />
     <Compile Include="Models\PatientMedicalRecordModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
+    <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\ServiceTreatmentModel.cs" />
     <Compile Include="Models\StatementInvoiceModel.cs" />
     <Compile Include="Models\Tables\Account.cs" />
@@ -147,7 +149,9 @@
     <Compile Include="Models\HealthcareSystemContext.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\SignUpModel.cs" />
+    <Compile Include="Models\Tables\DailyReport.cs" />
     <Compile Include="Models\Tables\MedicalRecord.cs" />
+    <Compile Include="Models\Tables\MonthlyReport.cs" />
     <Compile Include="Models\Tables\ServiceFee.cs" />
     <Compile Include="Models\Tables\ServiceStatement.cs" />
     <Compile Include="Models\Tables\ServiceStatementDetail.cs" />
@@ -234,6 +238,7 @@
     <Content Include="Views\Account\_EditProfile.cshtml" />
     <Content Include="Views\Staff\ServiceTreatment.cshtml" />
     <Content Include="Views\Patient\ServiceInvoice.cshtml" />
+    <Content Include="Views\Staff\DailyMonthlyReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

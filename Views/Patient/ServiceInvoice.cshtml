@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="logo.png">
     <title>Healthcare System</title>
-    <link rel="stylesheet" href="statement.css">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-    @Styles.Render("~/Content/custom/home.css")
     @Styles.Render("~/Content/custom/statement.css")
 </head>
 <body style="background: white;width:auto;">
@@ -46,6 +44,17 @@
                 <tr class="details">
                     <td>@Model.PaymentMethod.ToString()</td>
                     <td>@Model.PaymentNumber</td>
+                </tr>
+            }
+            @if (Model.Prescription != "")
+            {
+                <tr class="heading">
+                    <td>Prescription</td>
+                    <td></td>
+                </tr>
+                <tr class="item">
+                    <td>@Model.Prescription</td>
+                    <td></td>
                 </tr>
             }
             <tr class="heading">

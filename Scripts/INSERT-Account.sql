@@ -21,10 +21,36 @@ INSERT [dbo].[Account] ([AccountId], [Email], [Password], [Firstname], [Lastname
 GO
 SET IDENTITY_INSERT [dbo].[Account] OFF
 GO
+SET IDENTITY_INSERT [dbo].[Appointment] ON 
 
-insert into ServiceFee values('Blood Test', 35.0)
-insert into ServiceFee values('X-Ray Scan', 20.0)
-insert into ServiceFee values('MRI Scan', 78.0)
-insert into ServiceFee values('Radiology', 120.0)
-insert into ServiceFee values('Lab Test', 50.0)
-insert into ServiceFee values('Appointment', 50.0)
+GO
+INSERT [dbo].[Appointment] ([AppointmentId], [Time], [DoctorId], [PatientId], [EmployeeAccount_AccountId], [PatientAccount_AccountId]) VALUES (1, CAST(N'2020-04-25 14:00:00.000' AS DateTime), 2, 1, NULL, NULL)
+GO
+INSERT [dbo].[Appointment] ([AppointmentId], [Time], [DoctorId], [PatientId], [EmployeeAccount_AccountId], [PatientAccount_AccountId]) VALUES (2, CAST(N'2020-04-25 15:00:00.000' AS DateTime), 2, 1, NULL, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[Appointment] OFF
+GO
+SET IDENTITY_INSERT [dbo].[MedicalRecord] ON 
+
+GO
+INSERT [dbo].[MedicalRecord] ([Id], [Weight], [Height], [BloodPressure], [Pulse], [Description], [Date], [LabResult], [RadiologyReport], [PathologyReport], [AllegyInformation], [PatientId], [PatientAccount_AccountId]) VALUES (1, 999, 999, N'111/99', 96, N' Regular Check', CAST(N'2020-04-26 00:00:00.000' AS DateTime), N'none', NULL, N'none', NULL, 1, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[MedicalRecord] OFF
+GO
+SET IDENTITY_INSERT [dbo].[ServiceFee] ON 
+
+GO
+INSERT [dbo].[ServiceFee] ([ServiceId], [ServiceName], [Fee]) VALUES (1, N'Blood Test', 35)
+GO
+INSERT [dbo].[ServiceFee] ([ServiceId], [ServiceName], [Fee]) VALUES (2, N'X-Ray Scan', 20)
+GO
+INSERT [dbo].[ServiceFee] ([ServiceId], [ServiceName], [Fee]) VALUES (3, N'MRI Scan', 78)
+GO
+INSERT [dbo].[ServiceFee] ([ServiceId], [ServiceName], [Fee]) VALUES (4, N'Radiology', 120)
+GO
+INSERT [dbo].[ServiceFee] ([ServiceId], [ServiceName], [Fee]) VALUES (5, N'Lab Test', 50)
+GO
+INSERT [dbo].[ServiceFee] ([ServiceId], [ServiceName], [Fee]) VALUES (6, N'Appointment', 50)
+GO
+SET IDENTITY_INSERT [dbo].[ServiceFee] OFF
+GO
