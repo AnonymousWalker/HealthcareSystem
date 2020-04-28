@@ -10,13 +10,13 @@
 </head>
 <body style="background: white;width:auto;">
     <div class="invoice-box">
-        @if (true)
+        @if (Model.Status) 
         {
             <div class="button_cont" align="right"><span class="payment-link paid-stamp" href="" target="_blank" rel="nofollow noopener"><i>Paid</i></span></div>
         }
         else
         {
-            <div class="button_cont" align="right"><a class="payment-link" href="#" target="_blank" rel="nofollow noopener">Pay now</a></div>
+            <div class="button_cont" align="right"><a class="payment-link" href="@Url.Action("Payment","Patient", new { invoiceId = Model.StatementId })">Pay now</a></div>
         }
 
         <div class="img-center-ctn">
@@ -48,10 +48,10 @@
             {
                 <tr class="heading">
                     <td>Payment Method</td>
-                    <td>@Model.PaymentMethod #</td>
+                    <td>Payment #</td>
                 </tr>
                 <tr class="details">
-                    <td>@Model.PaymentMethod.ToString()</td>
+                    <td>@Model.PaymentMethod</td>
                     <td>@Model.PaymentNumber</td>
                 </tr>
             }

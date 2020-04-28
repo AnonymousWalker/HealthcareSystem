@@ -334,17 +334,19 @@ namespace HealthcareSystem.Controllers
 
         private void updateServiceTreatment(ServiceTreatmentModel model)
         {
-            if (model.StatementId == 0)  // create new statement
+            if (model.StatementId == 0)  // CREATE NEW STATEMENT
             {
                 var newStatement = Db.ServiceStatements.Add(new ServiceStatement
                 {
-                    Date = DateTime.Today,
+                    Date = DateTime.Now,
                     Prescription = model.Prescription,
+                    Amount = 0,
                     AppointmentId = model.AppointmentId,
                     DoctorId = model.DoctorId,
                     PatientId = model.PatientId,
                 });
 
+                //update service with fee
                 var serviceFees = Db.ServiceFees.Select(x => new { x.ServiceId, x.Fee });
                 List<int> serviceIds = new List<int>();
                 if (model.BloodTest)
@@ -367,7 +369,8 @@ namespace HealthcareSystem.Controllers
                 {
                     serviceIds.Add(5);
                 }
-
+                
+                // create a list for AddRange
                 List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
                 
                 // Add appointment fee as default
@@ -385,24 +388,57 @@ namespace HealthcareSystem.Controllers
 
                 Db.ServiceStatementDetails.AddRange(serviceDetails);
             }
-            else // update statement
+            else // UPDATE OLD STATEMENT
             {
-                var statement = Db.ServiceStatements.Where(s => s.Id == model.StatementId).FirstOrDefault();
-                if (statement != null)
+                var oldStatement = Db.ServiceStatements.Where(s => s.Id == model.StatementId).FirstOrDefault();
+                if (oldStatement != null)
                 {
-                    statement.Prescription = model.Prescription;
-
-                    List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
-                    if (model.BloodTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 1 });
-                    if (model.Xray) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 2 });
-                    if (model.MRI) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 3 });
-                    if (model.Radiology) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 4 });
-                    if (model.LabTest) serviceDetails.Add(new ServiceStatementDetail { StatementId = model.StatementId, ServiceId = 5 });
-                    serviceDetails.Add(new ServiceStatementDetail { StatementId = statement.Id, ServiceId = 6 });
-
+                    oldStatement.Prescription = model.Prescription;
+                    oldStatement.Date = DateTime.Now;
+                    oldStatement.Amount = 0;
+                    
                     // remove old statement details
                     var details = Db.ServiceStatementDetails.Where(detail => detail.StatementId == model.StatementId);
                     Db.ServiceStatementDetails.RemoveRange(details);
+
+                    //update new services with fee
+                    var serviceFees = Db.ServiceFees.Select(x => new { x.ServiceId, x.Fee });
+                    List<int> serviceIds = new List<int>();
+                    if (model.BloodTest)
+                    {
+                        serviceIds.Add(1);
+                    }
+                    if (model.Xray)
+                    {
+                        serviceIds.Add(2);
+                    }
+                    if (model.MRI)
+                    {
+                        serviceIds.Add(3);
+                    }
+                    if (model.Radiology)
+                    {
+                        serviceIds.Add(4);
+                    }
+                    if (model.LabTest)
+                    {
+                        serviceIds.Add(5);
+                    }
+                    // create a list for AddRange
+                    List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
+
+                    // add appointment fee 
+                    var appointmentFee = serviceFees.FirstOrDefault(s => s.ServiceId == 6);
+                    oldStatement.Amount += (appointmentFee != null) ? appointmentFee.Fee : 0;
+                    serviceDetails.Add(new ServiceStatementDetail { StatementId = oldStatement.Id, ServiceId = 6 });
+                    // add optional services + fee
+                    foreach (var serviceId in serviceIds)
+                    {
+                        var fee = serviceFees.FirstOrDefault(s => s.ServiceId == serviceId);
+                        oldStatement.Amount += (fee != null) ? fee.Fee : 0;
+                        serviceDetails.Add(new ServiceStatementDetail { StatementId = oldStatement.Id, ServiceId = serviceId });
+                    }
+
                     // then update with new details
                     Db.ServiceStatementDetails.AddRange(serviceDetails);
                 }

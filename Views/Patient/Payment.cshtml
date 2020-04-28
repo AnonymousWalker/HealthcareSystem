@@ -26,7 +26,7 @@
                     </div>
                     <div class="card space icon-relative">
                         <label class="label">Card number:</label>
-                        @Html.TextBoxFor(x => x.PaymentNumber, new { @class = "input", placeholder = "# on card" })
+                        @Html.TextBoxFor(x => x.PaymentNumber, new { @class = "input", placeholder = "Card # (14-19 digits)" })
                         @Html.ValidationMessageFor(x => x.PaymentNumber)
                     </div>
                     <div class="card space icon-relative">

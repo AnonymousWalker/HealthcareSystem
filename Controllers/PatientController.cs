@@ -108,12 +108,23 @@ namespace HealthcareSystem.Controllers
             return View(model);
         }
 
-        public ActionResult ServiceInvoice(int appointmentId)
+        public ActionResult ServiceInvoice(int invoiceId)
         {
             var model = new StatementInvoiceModel();
-            var statement = Db.ServiceStatements.Where(s => s.AppointmentId == appointmentId).FirstOrDefault();
+            var statement = Db.ServiceStatements.Where(s => s.Id == invoiceId).FirstOrDefault();
             if (statement != null)
             {
+                Transaction transaction;
+                if (statement.Status) // paid --> get payment info
+                {
+                    transaction = Db.Transactions.Where(t => t.StatementId == invoiceId).FirstOrDefault();
+                    if (transaction != null)
+                    {
+                        model.Status = true;
+                        model.PaymentMethod = transaction.PaymentMethod;
+                        model.PaymentNumber = "xxxx" + transaction.PaymentNumber.Substring(transaction.PaymentNumber.Length - 4);
+                    }
+                }
                 var services = Db.ServiceStatementDetails.Where(detail => detail.StatementId == statement.Id)
                                                         .Join(Db.ServiceFees, detail => detail.ServiceId, service => service.ServiceId, (detail, service) =>
                                                             new
@@ -124,17 +135,16 @@ namespace HealthcareSystem.Controllers
                                                         .ToList();
                 var serviceList = services.Select(s => new KeyValuePair<string, double>(s.ServiceName, s.Fee)).ToList();
 
-                model = new StatementInvoiceModel
-                {
-                    Status = statement.Status,
-                    Date = statement.Date,
-                    Prescription = statement.Prescription,
-                    Services = serviceList,
-                    AppointmentId = statement.AppointmentId,
-                    PatientId = statement.PatientId,
-                    DoctorId = statement.DoctorId,
-                    InvoiceId = statement.Id
-                };
+                model.Status = statement.Status;
+                model.Date = statement.Date;
+                model.Prescription = statement.Prescription;
+                model.Services = serviceList;
+                model.AppointmentId = statement.AppointmentId;
+                model.StatementId = statement.Id;
+                model.PatientId = statement.PatientId;
+                model.DoctorId = statement.DoctorId;
+                model.InvoiceId = statement.Id;
+
                 foreach (var item in serviceList)
                 {
                     model.TotalAmount += item.Value;
@@ -153,14 +163,23 @@ namespace HealthcareSystem.Controllers
         {
             var id = Convert.ToInt32(Session["AccountId"]);
             var statement = Db.ServiceStatements.Find(invoiceId);
-            var patient = Db.Accounts.OfType<PatientAccount>().Where(p => p.AccountId == id).FirstOrDefault();
+
             if (statement != null && id != 0)
             {
+                var patient = Db.Accounts.OfType<PatientAccount>().Where(p => p.AccountId == id).FirstOrDefault();
                 return View(new PaymentModel
                 {
                     StatementId = invoiceId,
                     Amount = statement.Amount,
                     BillingAddress = patient.BillingAddress
+                });
+            }
+            else if (statement != null) // no need to login
+            {
+                return View(new PaymentModel
+                {
+                    StatementId = invoiceId,
+                    Amount = statement.Amount,
                 });
             }
             ViewBag.ErrorMessage = "Cannot make a payment at this time. Please try again later!";
@@ -175,7 +194,7 @@ namespace HealthcareSystem.Controllers
                 var statement = Db.ServiceStatements.Find(model.StatementId);
                 if (statement != null)
                 {
-
+                    statement.Status = true;    //paid
                     Db.Transactions.Add(new Transaction
                     {
                         StatementId = model.StatementId,
