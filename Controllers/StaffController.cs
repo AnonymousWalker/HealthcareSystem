@@ -223,7 +223,7 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult SearchPatient(string actionType = "")
         {
-            //action from index: "input" or "view" medical record
+            //action from index: "input" or "view" medical record or "make-apt" to make appointment for returning patient
             if (actionType != "")
             {
                 ViewBag.Action = actionType;

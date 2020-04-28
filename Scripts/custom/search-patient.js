@@ -22,8 +22,19 @@
         var patientId = $(this).data("patientid");
         var action = $("#ActionType").val();
         if (action != "") {
-            var urlString = (action == "view")? $("#PatientRecordURL").val() : $("#InputRecordURL").val();
-            window.location.href = urlString + "?patientid=" + patientId;
+            var urlString;
+            if (action == "make-apt") {
+                urlString = $("#MakeAppointmentURL").val();
+                window.location.href = urlString + "?patientid=" + patientId;
+            }
+            else if (action == "view") {
+                urlString = $("#PatientRecordURL").val();
+                window.location.href = urlString + "?patientid=" + patientId;
+            }
+            else if (action == "input") {
+                urlString = $("#InputRecordURL").val();
+                window.location.href = urlString + "?patientid=" + patientId;
+            }
         }
     });
 

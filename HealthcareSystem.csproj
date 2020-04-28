@@ -171,7 +171,7 @@
     <Content Include="Content\custom\input-service.css" />
     <Content Include="Content\custom\login.css" />
     <Content Include="Content\custom\make-appointment.css" />
-    <Content Include="Content\custom\medical-record.css" />
+    <Content Include="Content\custom\patient-record.css" />
     <Content Include="Content\custom\payment.css" />
     <Content Include="Content\custom\profile.css" />
     <Content Include="Content\custom\report.css" />

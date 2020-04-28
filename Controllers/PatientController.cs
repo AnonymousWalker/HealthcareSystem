@@ -31,7 +31,7 @@ namespace HealthcareSystem.Controllers
 
                 return RedirectToAction("Login", "Account");
             }
-            ViewBag.PatientId = Convert.ToInt32(Session["AccountId"]);
+            ViewBag.PatientId = patientId;
             return View();
         }
 

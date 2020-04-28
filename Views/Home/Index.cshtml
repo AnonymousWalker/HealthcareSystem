@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Healthcare System</title>
+    <title>Home - Healthcare System</title>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link href="~/Content/bootstrap.min.css" rel="stylesheet">
     @Styles.Render("~/Content/custom/home.css")
@@ -25,7 +25,7 @@
     }
     else if (Model.Role.HasValue && Model.Role == EmployeeRole.Staff)
     {
-        <a href="@Url.Action("MakeAppointment","Staff", new { patientId = 0 })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/staffappointment.jpg"></a>
+        <a href="@Url.Action("SearchPatient","Staff", new { actionType = "make-apt" })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/staffappointment.jpg"></a>
         <a href="@Url.Action("SignUp","Account")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/createaccount.jpg"></a>
         <a href="@Url.Action("SearchPatient","Staff", new { actionType = "view" })" ><img style="width:40%; height: 100%; margin-top: 2%; margin-left: 28%;" src="~/Content/image/viewrecords.png"></a>
     }
