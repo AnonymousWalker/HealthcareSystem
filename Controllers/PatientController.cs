@@ -28,7 +28,6 @@ namespace HealthcareSystem.Controllers
         {
             if (patientId == 0)
             {
-
                 return RedirectToAction("Login", "Account");
             }
             ViewBag.PatientId = patientId;
@@ -58,25 +57,44 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public ActionResult MakeAppointment(int patientId, int doctorId, string time)
         {
+            Dictionary<int, List<AppointmentModel>> appointmentViewModels;
+            if (!checkAccountExists(patientId))
+            {
+                return PartialView("_AppointmentTable", new Dictionary<int, List<AppointmentModel>>());
+            }
             var apTime = DateTime.Parse(time);
             createAppointment(patientId, doctorId, apTime);
-            Dictionary<int, List<AppointmentModel>> appointmentViewModels = getAvailableAppointments(apTime.Date);
+            appointmentViewModels = getAvailableAppointments(apTime.Date);
             return PartialView("_AppointmentTable", appointmentViewModels);
         }
 
-        public ActionResult AppointmentList(int patientId)
+        // Appointments - Patient Access
+        public ActionResult AppointmentList()
         {
-            if (patientId == 0)
+            // Access Control
+            var patientId = Convert.ToInt32(Session["AccountId"]);
+            if (!AccountController.IsLoggedIn || !checkAccountExists(patientId))
             {
                 return RedirectToAction("Login", "Account");
             }
+            if (!isPatientAccess(patientId))
+            {
+                ViewBag.ErrorMessage = "Access Denied. You do not have permission to this content!";
+                return View("~/Views/Shared/Error.cshtml");
+            }
+
             var appointments = getPatientAppointments(patientId);
             return View(appointments);
         }
 
-        [HttpGet]
-        public bool CancelAppointment(int appointmentId)
+        //AJAX
+        [HttpPost]
+        public bool CancelAppointment(int appointmentId, int patientId)
         {
+            // Access Control
+            if (!checkAccountExists(patientId) || !isPatientAccess(patientId)) {
+                return false;
+            }
             var ap = Db.Appointments.Find(appointmentId);
             if (ap != null)
             {
@@ -89,25 +107,58 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult MedicalRecord(int patientId)
         {
-            var model = new PatientMedicalRecordModel();
-            if (patientId == 0)
+            // Access Control
+            if (!checkAccountExists(patientId))
             {
                 return RedirectToAction("Login", "Account");
             }
-            var patient = Db.Accounts.FirstOrDefault(acc => acc.AccountId == patientId);
-            if (patient != null)
+            if (!isPatientAccess(patientId))
             {
-                model.PatientName = patient.Firstname + " " + patient.Lastname;
-            }
-            else
-            {
-                model.PatientName = "Unknown Patient";
+                ViewBag.ErrorMessage = "Access Denied. You do not have permission to this content!";
+                return View("~/Views/Shared/Error.cshtml");
             }
 
-            model.Records = getMedicalRecords(patientId);
+            var patient = Db.Accounts.FirstOrDefault(acc => acc.AccountId == patientId);
+            var model = new PatientMedicalRecordModel
+            {
+                PatientName = patient.Firstname + " " + patient.Lastname,
+                Records = getMedicalRecords(patientId)
+            };
             return View(model);
         }
+        // Statement List - Patient Access
+        public ActionResult GetInvoiceStatement()
+        {
+            var patientId = Convert.ToInt32(Session["AccountId"]);
+            List<StatementInvoiceModel> model;
+            
+            // Access Control
+            if (!isPatientAccess(patientId))
+            {
+                model = new List<StatementInvoiceModel>();
+                return PartialView("_ServiceInvoiceTable", model);
+            }
 
+            model = Db.ServiceStatements.Where(s => s.PatientId == patientId)
+                                .OrderByDescending(s => s.Date)
+                                .Select(s => new StatementInvoiceModel
+                                {
+                                    StatementId = s.Id,
+                                    Status = s.Status,
+                                    Date = s.Date,
+                                    TotalAmount = s.Amount
+                                })
+                                .ToList();
+            return PartialView("_ServiceInvoiceTable", model);
+        }
+
+        // Public Access
+        public ActionResult InputInvoiceNumber()
+        {
+            return View();
+        }
+
+        // Public Access
         public ActionResult ServiceInvoice(int invoiceId)
         {
             var model = new StatementInvoiceModel();
@@ -152,18 +203,14 @@ namespace HealthcareSystem.Controllers
             }
             else
             {
-                ViewBag.ErrorMessage = "The doctor has not provided any services!";
+                ViewBag.ErrorMessage = "The doctor has not yet provided any services!";
                 return View("~/Views/Shared/Error.cshtml");
             }
 
             return View("ServiceInvoice", model);
         }
 
-        //public ActionResult ServiceInvoiceList()
-        //{
-            
-        //}
-
+        // Public Access
         public ActionResult Payment(int invoiceId)
         {
             var id = Convert.ToInt32(Session["AccountId"]);
@@ -223,28 +270,24 @@ namespace HealthcareSystem.Controllers
             return View(model);
         }
 
-        public ActionResult GetInvoiceStatement()
-        {
-            var id = Convert.ToInt32(Session["AccountId"]);
-            
-            if (id != 0)
-            {
-                var model = Db.ServiceStatements.Where(s => s.PatientId == id)
-                                .OrderByDescending(s => s.Date)
-                                .Select(s => new StatementInvoiceModel {
-                                    StatementId = s.Id,
-                                    Status = s.Status,
-                                    Date = s.Date,
-                                    TotalAmount = s.Amount
-                                })
-                                .ToList();
-                return PartialView("_ServiceInvoiceTable", model);
-            }
-            return PartialView("_ServiceInvoiceTable", new List<StatementInvoiceModel>());
-        }
 
 
         #region PRIVATE
+
+        private bool checkAccountExists(int accountId)
+        {
+            return (accountId == 0 || Db.Accounts.Find(accountId) != null);
+        }
+
+        private bool isPatientAccess(int patientId)
+        {
+            if (patientId != Convert.ToInt32(Session["AccountId"]))
+            {
+                return false;
+            }
+            var account = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == patientId);
+            return (account!=null);
+        }
 
         private Dictionary<int, List<AppointmentModel>> getAvailableAppointments(DateTime date)
         {

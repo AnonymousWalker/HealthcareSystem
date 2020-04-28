@@ -1,5 +1,6 @@
 ﻿@model IndexModel
 <nav>
+
     <div class="header">
         <h2 class="logo"><a href="@Url.Action("Index","Home")" style="color: inherit; font-size:26px;">Healthcare System</a></h2>
         <input type="checkbox" id="chk">
@@ -15,15 +16,10 @@
             }
             else
             {
-                <a href="@Url.Action("About", "Home")">About</a>
+                <a id="pay-invoice-link" href="@Url.Action("InputInvoiceNumber","Patient")">Pay Invoice</a>
                 <a href="#">Contact</a>
             }
             <a href="@Url.Action("Index","Account")">Account</a>
-
-            <label for="chk" class="hide-menu-btn">
-                <i class="fas fa-times"></i>
-            </label>
-
         </div>
     </div>
 </nav>

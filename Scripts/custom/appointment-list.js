@@ -2,15 +2,18 @@
     $(".cancel-ap-btn").click(function () {
         var $btn = $(this);
         var appointmentId = parseInt($btn.data("appointmentid"));
+        var patientId = $("#PatientId").val();
         var urlString = $("#CancelURL").val();
 
         $.ajax({
             url: urlString,
-            type: "get",
-            data: { appointmentId },
+            type: "post",
+            data: { appointmentId, patientId },
             success: function (isCancelled) {
-                if (isCancelled) {
+                if (isCancelled== "True") {
                     $btn.closest("tr").remove();
+                } else {
+                    alert("You cannot cancel this appointment at the moment!");
                 }
             }
         });

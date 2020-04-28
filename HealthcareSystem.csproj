@@ -250,6 +250,8 @@
     <Content Include="Views\Patient\Payment.cshtml" />
     <Content Include="Views\Staff\_EditSalary.cshtml" />
     <Content Include="Views\Patient\_ServiceInvoiceTable.cshtml" />
+    <Content Include="Views\Shared\_InputInvoiceNumber.cshtml" />
+    <Content Include="Views\Patient\InputInvoiceNumber.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>InputInvoiceNumber</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Styles.Render("~/Content/custom/home.css")
+</head>
+<body style="background-image: linear-gradient(to right, #cb2d3e, #bbd7e2);">
+    @{Html.RenderAction("NavigationBar", "Home");}
+    @Html.Hidden("GetInvoiceURL", Url.Action("ServiceInvoice", "Patient"))
+    <div class="modal" id="invoiceModal" role="dialog" style="top:25%;">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Input Invoice Number to View and Pay</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="InvoiceNumber">Invoice #</label>
+                        <div class=" col-sm-6">
+                            <input class="form-control" id="InvoiceNumber" type="number" value="">
+                        </div>
+                        <button id="submit-btn" type="submit" class="btn btn-primary">Enter</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#invoiceModal").show();
+            $("input#InvoiceNumber").keypress(function (e) {
+                if (e.keyCode == 13) {
+                    $("#submit-btn").click();
+                }
+            })
+            $("#submit-btn").click(function () {
+                var invoiceNumber = $("#InvoiceNumber").val();
+                if (invoiceNumber != "" && invoiceNumber > 0) {
+                    window.location.href = $("#GetInvoiceURL").val() + "?invoiceId=" + invoiceNumber;
+                }
+                else {
+                    alert("Invalid input. Please try again.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

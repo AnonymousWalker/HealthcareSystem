@@ -18,5 +18,6 @@ namespace HealthcareSystem.Models.Tables
         public string PaymentNumber { get; set; } = "";
         public string PayerName { get; set; } = "";
         public string BillingAddress { get; set; } = "";
+        public string ReferenceNumber { get; set; } = "";
     }
 }

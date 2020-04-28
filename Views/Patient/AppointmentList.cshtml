@@ -14,6 +14,7 @@
 </head>
 <body style="background: white;">
     @{Html.RenderAction("NavigationBar", "Home"); }
+    @Html.Hidden("PatientId", (int)Session["AccountId"])
     @Html.Hidden("CancelURL", Url.Action("CancelAppointment", "Patient"))
     @Html.Hidden("ServiceStatementURL", Url.Action("ServiceStatement","Patient"))
     <div style="overflow: auto; width: 65%;margin: auto auto 30px auto; clear:both">
