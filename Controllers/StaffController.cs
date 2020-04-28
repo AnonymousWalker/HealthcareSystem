@@ -28,7 +28,7 @@ namespace HealthcareSystem.Controllers
             var database = new HealthcareSystemContext();
             DateTime today = DateTime.Today;
             DateTime nextDay = today.AddDays(1);
-            
+
             var dailyReports = database.ServiceStatements.Where(st => st.Date >= today && st.Date < nextDay)
                         .GroupBy(st => st.DoctorId).Select(group => new
                         {
@@ -45,7 +45,8 @@ namespace HealthcareSystem.Controllers
             var doctorList = database.Accounts.OfType<EmployeeAccount>().Where(acc => acc.Role == EmployeeRole.Doctor);
             foreach (var doctor in doctorList)
             {
-                if (!dailyReports.Any(rp => rp.DoctorId == doctor.AccountId)){
+                if (!dailyReports.Any(rp => rp.DoctorId == doctor.AccountId))
+                {
                     dailyReports.Add(new ReportModel
                     {
                         DoctorId = doctor.AccountId,
@@ -82,7 +83,8 @@ namespace HealthcareSystem.Controllers
             var doctorList = database.Accounts.OfType<EmployeeAccount>().Where(acc => acc.Role == EmployeeRole.Doctor);
             foreach (var doctor in doctorList)
             {
-                if (!monthlyReports.Any(rp => rp.DoctorId == doctor.AccountId)){
+                if (!monthlyReports.Any(rp => rp.DoctorId == doctor.AccountId))
+                {
                     monthlyReports.Add(new ReportModel
                     {
                         DoctorId = doctor.AccountId,
@@ -231,25 +233,48 @@ namespace HealthcareSystem.Controllers
 
         //AJAX
         [HttpPost]
-        public ActionResult SearchPatient(string firstName, string phone = "", string lastName = "")
+        public ActionResult SearchPatient(string firstName = "", string phone = "", string lastName = "")
         {
-            IList<PatientAccount> patientList;
+            IList<PatientAccount> patientList = new List<PatientAccount>();
+            IQueryable<PatientAccount> resultByFirstName = null;
+            IQueryable<PatientAccount> resultByLastName = null;
+            IQueryable<PatientAccount> resultByPhone = null;
+
+            if (firstName != "")
+            {
+                resultByFirstName = Db.Accounts.OfType<PatientAccount>()
+                            .Where(p => p.Firstname.Contains(firstName));
+            }
+            if (lastName != "")
+            {
+                resultByLastName = Db.Accounts.OfType<PatientAccount>()
+                            .Where(p => p.Lastname.Contains(lastName));
+            }
             if (phone != "")
             {
-                patientList = Db.Accounts.OfType<PatientAccount>()
-                            .Where(p => p.Firstname.Contains(firstName) || p.Phone.Contains(phone))
-                            .ToList();
+                resultByPhone = Db.Accounts.OfType<PatientAccount>()
+                            .Where(p => p.Phone.Contains(phone));
+                // add result to list if not exist in the list
             }
-            else if (lastName != "")
-            {
-                patientList = Db.Accounts.OfType<PatientAccount>()
-                            .Where(p => p.Firstname.Contains(firstName) || p.Lastname.Contains(lastName))
-                            .ToList();
-            }
-            patientList = Db.Accounts.OfType<PatientAccount>()
-                            .Where(p => p.Firstname.Contains(firstName))
-                            .ToList();
 
+            if (resultByFirstName != null)
+            {
+                var result = resultByFirstName.ToList();
+                patientList = patientList.Union(result).ToList();
+                //patientList.Concat(result.TakeWhile(p => !patientList.Any(list => list.AccountId == p.AccountId)));
+            }
+            if (resultByLastName != null)
+            {
+                var result= resultByLastName.ToList();
+                patientList = patientList.Union(result).ToList();
+                //patientList.Concat(result.TakeWhile(p => !patientList.Any(list => list.AccountId == p.AccountId)));
+            }
+            if (resultByPhone != null)
+            {
+                var result = resultByPhone.ToList();
+                patientList = patientList.Union(result).ToList();
+                //patientList.Concat(result.TakeWhile(p => !patientList.Any(list => list.AccountId == p.AccountId)));
+            }
 
             return PartialView("_PatientList", patientList);
         }
@@ -351,7 +376,8 @@ namespace HealthcareSystem.Controllers
             var doctor = Db.Accounts.OfType<EmployeeAccount>().Where(dr => dr.AccountId == doctorId).FirstOrDefault();
             if (doctor != null)
             {
-                return PartialView("_EditSalary", new DoctorSalary {
+                return PartialView("_EditSalary", new DoctorSalary
+                {
                     DoctorId = doctorId,
                     Salary = doctor.Salary,
                     DoctorName = doctor.Firstname + " " + doctor.Lastname

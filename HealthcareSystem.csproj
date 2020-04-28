@@ -199,7 +199,9 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\custom\appointment-list.js" />
+    <Content Include="Scripts\custom\change-salary.js" />
     <Content Include="Scripts\custom\make-appointment.js" />
+    <Content Include="Scripts\custom\profile.js" />
     <Content Include="Scripts\custom\search-patient.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -247,6 +249,7 @@
     <Content Include="Views\Staff\DailyMonthlyReport.cshtml" />
     <Content Include="Views\Patient\Payment.cshtml" />
     <Content Include="Views\Staff\_EditSalary.cshtml" />
+    <Content Include="Views\Patient\_ServiceInvoiceTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,7 +11,6 @@
 </head>
 <body style="background-image: linear-gradient(to right, #cb2d3e, #bbd7e2);">
     @{Html.RenderAction("NavigationBar", "Home");}
-    <a href="@Url.Action("SignOut","Account")">Sign Out</a>
     <div class="profile-container container">
         <div class="container">
             <div class="row">
@@ -48,10 +47,17 @@
                             <div class="clearfix"></div>
                         </div>
                     </div>
+                    <a class="sign-out-btn btn btn-default" href="@Url.Action("SignOut", "Account")">Sign Out</a>
+                </div>
+                <div class="col-md-offset-1 col-md-6 profile-section">
+                    <div class="row">
+                        <div class="col-md-10"><h2>Notification(s)</h2></div>
+                    </div>
+                    <hr style="margin:5px;">
                 </div>
             </div>
         </div>
-
+    </div>
 
 
 

@@ -22,3 +22,31 @@
     left: 20%;
     right: auto;
 }
+
+.invoice-table {
+    line-height: 2;
+    width: 100%;
+    font-size: 16px;
+}
+
+.invoice-table > tbody > tr
+{
+    cursor:pointer;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: #d1b1f5;
+}
+
+.sign-out-btn {
+    position: absolute;
+    margin-top: 40px;
+    width: 100%;
+    left: 0;
+    background: #43148e;
+    color: white;
+    font-weight: bold;
+    line-height: 2;
+    border-radius: 8px;
+    border:none;
+}

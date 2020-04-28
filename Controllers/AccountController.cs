@@ -21,7 +21,7 @@ namespace HealthcareSystem.Controllers
         //Profile
         public ActionResult Index()
         {
-            int id = Convert.ToInt32(Session["AccountId"]);
+            var id = Convert.ToInt32(Session["AccountId"]);
             if (!IsLoggedIn || id == 0) {
                 RedirectToAction("Login");
             }

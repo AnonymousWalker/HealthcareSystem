@@ -1,0 +1,30 @@
+﻿@model List<StatementInvoiceModel>
+<table class="table-hover invoice-table">
+    <thead>
+        <tr class="row">
+            <th class="col-sm-5">Date</th>
+            <th class="col-sm-5">Amount</th>
+            <th class="col-sm-2">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.Hidden("ViewInvoiceURL", Url.Action("ServiceInvoice", "Patient"))
+        @foreach (var statement in Model)
+        {
+            <tr class="row" data-invoiceid="@statement.StatementId">
+                <td class="col-sm-5">@statement.Date.ToShortDateString()</td>
+                <td class="col-sm-5">@string.Format("${0:.00}", statement.TotalAmount)</td>
+                <td class="col-sm-2">
+                    @if (statement.Status)
+                    {
+                        @:Paid
+                    }
+                    else
+                    {
+                        @:Pending
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -223,6 +223,27 @@ namespace HealthcareSystem.Controllers
             return View(model);
         }
 
+        public ActionResult GetInvoiceStatement()
+        {
+            var id = Convert.ToInt32(Session["AccountId"]);
+            
+            if (id != 0)
+            {
+                var model = Db.ServiceStatements.Where(s => s.PatientId == id)
+                                .OrderByDescending(s => s.Date)
+                                .Select(s => new StatementInvoiceModel {
+                                    StatementId = s.Id,
+                                    Status = s.Status,
+                                    Date = s.Date,
+                                    TotalAmount = s.Amount
+                                })
+                                .ToList();
+                return PartialView("_ServiceInvoiceTable", model);
+            }
+            return PartialView("_ServiceInvoiceTable", new List<StatementInvoiceModel>());
+        }
+
+
         #region PRIVATE
 
         private Dictionary<int, List<AppointmentModel>> getAvailableAppointments(DateTime date)
