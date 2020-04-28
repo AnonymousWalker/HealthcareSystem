@@ -135,6 +135,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AppointmentModel.cs" />
+    <Compile Include="Models\DoctorSalary.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\IndexModel.cs" />
     <Compile Include="Models\MakeAppointmentModel.cs" />
@@ -173,14 +174,17 @@
     <Content Include="Content\custom\medical-record.css" />
     <Content Include="Content\custom\payment.css" />
     <Content Include="Content\custom\profile.css" />
+    <Content Include="Content\custom\report.css" />
     <Content Include="Content\custom\row-hover.css" />
     <Content Include="Content\custom\statement.css" />
     <Content Include="Content\image\appointment.jpg" />
     <Content Include="Content\image\createaccount.jpg" />
+    <Content Include="Content\image\dailyReports.jpg" />
     <Content Include="Content\image\history.png" />
     <Content Include="Content\image\input.jpg" />
     <Content Include="Content\image\list.jpg" />
     <Content Include="Content\image\logo.png" />
+    <Content Include="Content\image\monthlyReports.jpg" />
     <Content Include="Content\image\profile.jpg" />
     <Content Include="Content\image\staffappointment.jpg" />
     <Content Include="Content\image\updatesalaree.jpg" />
@@ -242,6 +246,7 @@
     <Content Include="Views\Patient\ServiceInvoice.cshtml" />
     <Content Include="Views\Staff\DailyMonthlyReport.cshtml" />
     <Content Include="Views\Patient\Payment.cshtml" />
+    <Content Include="Views\Staff\_EditSalary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

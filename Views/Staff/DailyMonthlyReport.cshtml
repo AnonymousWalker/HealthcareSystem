@@ -1,17 +1,96 @@
-﻿
-@{
-    Layout = null;
-}
+﻿@model IList<ReportModel>
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/custom/home.css")
+    @Styles.Render("~/Content/custom/report.css")
     <title>DailyMonthlyReport</title>
 </head>
 <body>
-    <div> 
-    </div>
+    <style>
+        tbody tr:hover {
+            background-color: #b476e2 !important;
+            cursor: pointer;
+        }
+
+        tbody tr {
+            background: inherit;
+        }
+
+    </style>
+    @{Html.RenderAction("NavigationBar", "Home");}
+    @if (ViewBag.ReportType == "Daily")
+    {
+        <h1 class="blue" style="clear: both;">Daily Report by @DateTime.Today.ToShortDateString()</h1>
+    }
+    @if (ViewBag.ReportType == "Monthly")
+    {
+        <h1 class="blue" style="clear: both;">Monthly Report of @string.Format("{0:00}/{1}", DateTime.Today.Month, DateTime.Today.Year)</h1>
+    }
+
+    @Html.Hidden("EditSalaryURL", Url.Action("EditSalary","Staff"))
+    <table style="margin-left: 26%; margin-top: 20px;" class="redTable">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr data-doctorid="@record.DoctorId">
+                    <td>@record.DoctorName</td>
+                    <td>@record.Revenue</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="modal-ajax"></div>
+    
+    <script>
+        var doctorId = 0;
+        $(document).ready(function () {
+            $("table.redTable > tbody > tr").click(function () {
+                var urlString = $("#EditSalaryURL").val();
+                doctorId = parseInt($(this).data("doctorid"));
+                $.ajax({
+                    url: urlString,
+                    type: 'get',
+                    data: { doctorId },
+                    success: function (modal) {
+                        $("#modal-ajax").html(modal);
+                        $("#editModal").modal('toggle');
+                    }
+                });
+            });
+        });
+
+        $("#modal-ajax").on("click", "#submit-btn", function (e) {
+            e.preventDefault();
+            var urlString = $("#EditSalaryURL").val();
+            var salary = $("#Salary").val();
+            $.ajax({
+                url: urlString,
+                type: 'post',
+                data: { DoctorId: doctorId, Salary: salary },
+                success: function (isSuccess) {
+                    if (isSuccess) {
+                        alert("Success");
+                    }
+                    else {
+                        alert("An error has occurred, please try again later.");
+                    }
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>

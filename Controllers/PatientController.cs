@@ -159,6 +159,11 @@ namespace HealthcareSystem.Controllers
             return View("ServiceInvoice", model);
         }
 
+        //public ActionResult ServiceInvoiceList()
+        //{
+            
+        //}
+
         public ActionResult Payment(int invoiceId)
         {
             var id = Convert.ToInt32(Session["AccountId"]);

@@ -26,11 +26,14 @@ namespace HealthcareSystem.Controllers
         public static void GenerateDailyReport()
         {
             var database = new HealthcareSystemContext();
-            var dailyReports = database.ServiceStatements.Where(st => st.Date.Date == DateTime.Today)
+            DateTime today = DateTime.Today;
+            DateTime nextDay = today.AddDays(1);
+            
+            var dailyReports = database.ServiceStatements.Where(st => st.Date >= today && st.Date < nextDay)
                         .GroupBy(st => st.DoctorId).Select(group => new
                         {
                             DoctorId = group.Key,
-                            Revenue = group.Sum(st => st.DoctorId)
+                            Revenue = group.Sum(st => st.Amount)
                         })
                         .Join(database.Accounts, st => st.DoctorId, acc => acc.AccountId, (st, acc) => new ReportModel
                         {
@@ -38,7 +41,20 @@ namespace HealthcareSystem.Controllers
                             Revenue = st.Revenue,
                             DoctorName = acc.Firstname + " " + acc.Lastname
                         }).ToList();
-            
+            // Add doctor without any statement generated
+            var doctorList = database.Accounts.OfType<EmployeeAccount>().Where(acc => acc.Role == EmployeeRole.Doctor);
+            foreach (var doctor in doctorList)
+            {
+                if (!dailyReports.Any(rp => rp.DoctorId == doctor.AccountId)){
+                    dailyReports.Add(new ReportModel
+                    {
+                        DoctorId = doctor.AccountId,
+                        DoctorName = doctor.Firstname + " " + doctor.Lastname,
+                        Revenue = 0
+                    });
+                }
+            }
+
             database.DailyReports.AddRange(dailyReports.Select(x => new DailyReport { DoctorId = x.DoctorId, Revenue = x.Revenue, Date = DateTime.Now }));
             database.SaveChanges();
         }
@@ -46,11 +62,15 @@ namespace HealthcareSystem.Controllers
         public static void GenerateMonthlyReport()
         {
             var database = new HealthcareSystemContext();
-            var monthlyReports = database.ServiceStatements.Where(st => st.Date.Month == DateTime.Today.Month)
+            DateTime thisMonth = DateTime.Today;
+            thisMonth = thisMonth.AddDays(-thisMonth.Day + 1);  //return the first day of month
+            DateTime nextMonth = thisMonth.AddMonths(1);
+
+            var monthlyReports = database.ServiceStatements.Where(st => st.Date >= thisMonth && st.Date < nextMonth)
                         .GroupBy(st => st.DoctorId).Select(group => new
                         {
                             DoctorId = group.Key,
-                            Revenue = group.Sum(st => st.DoctorId)
+                            Revenue = group.Sum(st => st.Amount)
                         })
                         .Join(database.Accounts, st => st.DoctorId, acc => acc.AccountId, (st, acc) => new ReportModel
                         {
@@ -58,30 +78,64 @@ namespace HealthcareSystem.Controllers
                             Revenue = st.Revenue,
                             DoctorName = acc.Firstname + " " + acc.Lastname
                         }).ToList();
+            // Add doctor without any statement generated
+            var doctorList = database.Accounts.OfType<EmployeeAccount>().Where(acc => acc.Role == EmployeeRole.Doctor);
+            foreach (var doctor in doctorList)
+            {
+                if (!monthlyReports.Any(rp => rp.DoctorId == doctor.AccountId)){
+                    monthlyReports.Add(new ReportModel
+                    {
+                        DoctorId = doctor.AccountId,
+                        DoctorName = doctor.Firstname + " " + doctor.Lastname,
+                        Revenue = 0
+                    });
+                }
+            }
             database.MonthlyReports.AddRange(monthlyReports.Select(x => new MonthlyReport { DoctorId = x.DoctorId, Revenue = x.Revenue, Date = DateTime.Now }));
+            database.SaveChanges();
+        }
+
+        public ActionResult ViewDailyReport()
+        {
+            //StaffController.GenerateDailyReport(); // test 
+            DateTime today = DateTime.Today;
+            DateTime nextDay = today.AddDays(1);
+            var dailyReports = Db.DailyReports.Where(report => report.Date >= today && report.Date < nextDay)
+                                        .Join(Db.Accounts, report => report.DoctorId, acc => acc.AccountId, (report, acc) => new ReportModel
+                                        {
+                                            DoctorId = report.DoctorId,
+                                            DoctorName = acc.Firstname + " " + acc.Lastname,
+                                            Revenue = report.Revenue
+                                        })
+                                        .OrderByDescending(report => report.Revenue)
+                                        .ToList();
+            ViewBag.ReportType = "Daily";
+            return View("DailyMonthlyReport", dailyReports);
+        }
+
+        public ActionResult ViewMonthlyReport()
+        {
+            //StaffController.GenerateMonthlyReport(); // test 
+            DateTime thisMonth = DateTime.Today;
+            thisMonth = thisMonth.AddDays(-thisMonth.Day + 1);  //return the first day of month
+            DateTime nextMonth = thisMonth.AddMonths(1);
+            var monthlyReports = Db.MonthlyReports.Where(report => report.Date >= thisMonth && report.Date < nextMonth)
+                                        .Join(Db.Accounts, report => report.DoctorId, acc => acc.AccountId, (report, acc) => new ReportModel
+                                        {
+                                            DoctorId = report.DoctorId,
+                                            DoctorName = acc.Firstname + " " + acc.Lastname,
+                                            Revenue = report.Revenue
+                                        })
+                                        .OrderByDescending(report => report.Revenue)
+                                        .ToList();
+            ViewBag.ReportType = "Monthly";
+            return View("DailyMonthlyReport", monthlyReports);
         }
 
         public ActionResult InputMedicalRecord(int patientId)
         {
             var patient = Db.Accounts.Find(patientId);
             return View(new MedicalRecordModel { PatientId = patientId, PatientName = patient.Firstname + " " + patient.Lastname });
-        }
-
-        public ActionResult ViewDailyReport()
-        {
-            DateTime today = DateTime.Today;
-            DateTime nextDay = today.AddDays(1);
-            var dailyReports = Db.DailyReports.Where(report => report.Date >= today && report.Date < nextDay).OrderByDescending(report => report.Revenue);
-            return View("DailyMonthlyReport", dailyReports);
-        }
-
-        public ActionResult ViewMonthlyReport()
-        {
-            DateTime thisMonth = DateTime.Today;
-            thisMonth = thisMonth.AddDays(-thisMonth.Day + 1);  //return the first day of month
-            DateTime nextMonth = thisMonth.AddMonths(1);
-            var monthlyReports = Db.MonthlyReports.Where(report => report.Date >= thisMonth && report.Date < nextMonth).OrderByDescending(report => report.Revenue);
-            return View("DailyMonthlyReport", monthlyReports);
         }
 
         [HttpPost]
@@ -291,6 +345,35 @@ namespace HealthcareSystem.Controllers
             return View("ServiceTreatment", model);
         }
 
+        //AJAX
+        public ActionResult EditSalary(int doctorId)
+        {
+            var doctor = Db.Accounts.OfType<EmployeeAccount>().Where(dr => dr.AccountId == doctorId).FirstOrDefault();
+            if (doctor != null)
+            {
+                return PartialView("_EditSalary", new DoctorSalary {
+                    DoctorId = doctorId,
+                    Salary = doctor.Salary,
+                    DoctorName = doctor.Firstname + " " + doctor.Lastname
+                });
+            }
+            return PartialView("_EditSalary", new DoctorSalary());
+        }
+
+        //AJAX
+        [HttpPost]
+        public bool EditSalary(DoctorSalary model)
+        {
+            var doctor = Db.Accounts.OfType<EmployeeAccount>().Where(dr => dr.AccountId == model.DoctorId).FirstOrDefault();
+            if (doctor != null)
+            {
+                doctor.Salary = model.Salary;
+                Db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
 
         #region PRIVATE
         private List<MedicalRecordModel> getMedicalRecords(int patientId)
@@ -369,10 +452,10 @@ namespace HealthcareSystem.Controllers
                 {
                     serviceIds.Add(5);
                 }
-                
+
                 // create a list for AddRange
                 List<ServiceStatementDetail> serviceDetails = new List<ServiceStatementDetail>();
-                
+
                 // Add appointment fee as default
                 var appointmentFee = serviceFees.FirstOrDefault(s => s.ServiceId == 6);
                 newStatement.Amount += (appointmentFee != null) ? appointmentFee.Fee : 0;
@@ -382,7 +465,7 @@ namespace HealthcareSystem.Controllers
                 foreach (var serviceId in serviceIds)
                 {
                     var fee = serviceFees.FirstOrDefault(s => s.ServiceId == serviceId);
-                    newStatement.Amount += (fee != null)? fee.Fee : 0;
+                    newStatement.Amount += (fee != null) ? fee.Fee : 0;
                     serviceDetails.Add(new ServiceStatementDetail { StatementId = newStatement.Id, ServiceId = serviceId });
                 }
 
@@ -396,7 +479,7 @@ namespace HealthcareSystem.Controllers
                     oldStatement.Prescription = model.Prescription;
                     oldStatement.Date = DateTime.Now;
                     oldStatement.Amount = 0;
-                    
+
                     // remove old statement details
                     var details = Db.ServiceStatementDetails.Where(detail => detail.StatementId == model.StatementId);
                     Db.ServiceStatementDetails.RemoveRange(details);

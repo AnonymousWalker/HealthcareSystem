@@ -41,8 +41,8 @@
     }
     else if (Model.Role.HasValue && Model.Role == EmployeeRole.CEO)
     {
-        <a href=""><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/viewreports.jpg"></a>
-        <a href=""><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/updatesalaree.jpg"></a>
+        <a href="@Url.Action("ViewDailyReport","Staff")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/dailyReports.jpg"></a>
+        <a href="@Url.Action("ViewMonthlyReport","Staff")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/monthlyReports.jpg"></a>
     }
 
 
