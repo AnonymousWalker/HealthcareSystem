@@ -55,8 +55,8 @@ namespace HealthcareSystem.Controllers
                     });
                 }
             }
-
-            database.DailyReports.AddRange(dailyReports.Select(x => new DailyReport { DoctorId = x.DoctorId, Revenue = x.Revenue, Date = DateTime.Now }));
+            var yesterday = DateTime.Now.AddDays(-1);
+            database.DailyReports.AddRange(dailyReports.Select(x => new DailyReport { DoctorId = x.DoctorId, Revenue = x.Revenue, Date = yesterday }));
             database.SaveChanges();
         }
 
@@ -107,8 +107,9 @@ namespace HealthcareSystem.Controllers
                 return View("~/Views/Shared/Error.cshtml");
             }
             DateTime today = DateTime.Today;
-            DateTime nextDay = today.AddDays(1);
-            var dailyReports = Db.DailyReports.Where(report => report.Date >= today && report.Date < nextDay)
+            DateTime yesterday = today.AddDays(-1);
+            
+            var dailyReports = Db.DailyReports.Where(report => report.Date >= yesterday && report.Date < today)
                                         .Join(Db.Accounts, report => report.DoctorId, acc => acc.AccountId, (report, acc) => new ReportModel
                                         {
                                             DoctorId = report.DoctorId,

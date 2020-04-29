@@ -100,6 +100,7 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult Login()
         {
+            if (IsLoggedIn && Session["AccountId"] != null) return RedirectToAction("Index");
             return View(new LoginModel());
         }
 

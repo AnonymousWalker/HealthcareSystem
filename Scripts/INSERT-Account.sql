@@ -109,3 +109,15 @@ INSERT [dbo].[Transaction] ([TransactionId], [StatementId], [Amount], [Status], 
 GO
 SET IDENTITY_INSERT [dbo].[Transaction] OFF
 GO
+
+SET IDENTITY_INSERT [dbo].[DailyReport] ON 
+
+GO
+INSERT [dbo].[DailyReport] ([Id], [DoctorId], [Revenue], [Date]) VALUES (28, 2, 0, CAST(N'2020-04-28 10:15:29.503' AS DateTime))
+GO
+INSERT [dbo].[DailyReport] ([Id], [DoctorId], [Revenue], [Date]) VALUES (29, 3, 0, CAST(N'2020-04-28 10:15:29.503' AS DateTime))
+GO
+INSERT [dbo].[DailyReport] ([Id], [DoctorId], [Revenue], [Date]) VALUES (30, 4, 0, CAST(N'2020-04-28 10:15:29.503' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[DailyReport] OFF
+GO

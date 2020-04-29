@@ -28,7 +28,7 @@
 
     @if (ViewBag.ReportType == "Daily")
     {
-        <h1 class="blue" style="clear: both;">Daily Report by @DateTime.Today.ToShortDateString()</h1>
+        <h1 class="blue" style="clear: both;">Daily Report of @DateTime.Today.AddDays(-1).ToShortDateString()</h1>
     }
     @if (ViewBag.ReportType == "Monthly")
     {
