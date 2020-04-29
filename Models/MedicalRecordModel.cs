@@ -20,7 +20,7 @@ namespace HealthcareSystem.Models
         [Required(ErrorMessage = "Blood pressure is required")]
         public string BloodPressure { get; set; }
         [Required]
-        [MaxLength(3)] //(111)
+        [Range(1,300, ErrorMessage = "Invalid pulse")] //(111)
         public short Pulse { get; set; }
         [MaxLength(200)]
         public string Description { get; set; }

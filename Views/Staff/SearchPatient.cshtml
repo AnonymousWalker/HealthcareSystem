@@ -12,7 +12,7 @@
     @Styles.Render("~/Content/custom/patient-record.css")
     @Styles.Render("~/Content/custom/home.css")
     @Styles.Render("~/Content/custom/appointment-list.css")
-    @if (Model.Role == EmployeeRole.Doctor || Model.Role == EmployeeRole.Nurse)
+    @if (Model.Role == EmployeeRole.Doctor || Model.Role == EmployeeRole.Nurse || (Model.Role == EmployeeRole.Staff && Request.QueryString["actionType"]== "make-apt"))
     {
         @Styles.Render("~/Content/custom/row-hover.css")
     }
