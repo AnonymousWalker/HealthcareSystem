@@ -80,7 +80,6 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public ActionResult SignUp(SignUpModel model)
         {
-            //validate input + decrypt?
             if (!ModelState.IsValid)
             {
                 return View("SignUp", model);
@@ -111,7 +110,6 @@ namespace HealthcareSystem.Controllers
             {
                 return View("Login", model);
             }
-            //validate + decrypt?
             var account = verifyExistingAccount(model.Email, model.Password);
             if (account != null)
             {
@@ -136,8 +134,13 @@ namespace HealthcareSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditPatientInfo(ProfileModel model)
+        public ActionResult EditPatientProfile(ProfileModel model)
         {
+            if (!isPatientAccess())
+            {
+                ViewBag.ErrorMessage = "You don't have permission to edit the profile of patient";
+                return View("~/Views/Shared/Error.cshtml");
+            }
             if (ModelState.IsValid)
             {
                 var account = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == model.AccountId);
@@ -152,14 +155,24 @@ namespace HealthcareSystem.Controllers
                     Db.SaveChanges();
                 }
             }
-            return RedirectToAction("Index");
+            return PartialView("_EditProfile", model);
         }
 
         #region PRIVATE
+        private bool isPatientAccess()
+        {
+            var id = Convert.ToInt32(Session["AccountId"]);
+            if (!IsLoggedIn || id == 0)
+            {
+                return false;
+            }
+            var account = Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == id);
+            return (account!=null);
+        }
 
         private bool addPatientAccount(SignUpModel account)
         {
-            bool checkAccount = Db.Accounts.Any(acc => acc.Email == account.Email); //false;
+            bool checkAccount = Db.Accounts.Any(acc => acc.Email == account.Email); 
             if (checkAccount)
             {
                 return false;

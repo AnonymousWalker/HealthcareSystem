@@ -3,7 +3,7 @@
 <html>
 <head>
     <link rel="icon" href="logo.png">
-    <title>Medical Record Input</title>
+    <title>Update Medical Record</title>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
@@ -19,7 +19,7 @@
 
     <img id="centerLogo" src="~/Content/image/logo.png">
     <div class="signUpMain">
-        <p class="sign" align="center">Medical Record Input<br />(@Model.PatientName)</p>
+        <p class="sign" align="center">Medical Record Update<br />(@Model.PatientName)</p>
         <form class="form1" action="@Url.Action("InputMedicalRecord","Staff")" method="post">
             <input type="hidden" name="RecordId" value="@Model.RecordId" />
             <input type="hidden" name="PatientId" value="@Model.PatientId" />

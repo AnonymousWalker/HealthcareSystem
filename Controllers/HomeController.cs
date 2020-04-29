@@ -20,9 +20,9 @@ namespace HealthcareSystem.Controllers
         public ActionResult Index()
         {
             var model = new IndexModel();
-            if (AccountController.IsLoggedIn && Session["AccountId"] != null)
+            var id = Convert.ToInt32(Session["AccountId"]);
+            if (AccountController.IsLoggedIn)
             {
-                var id = Convert.ToInt32(Session["AccountId"]);
                 var account = Db.Accounts.Find(id);
                 model.AccountId = id;
                 model.Name = account.Firstname + " " + account.Lastname;
@@ -34,9 +34,9 @@ namespace HealthcareSystem.Controllers
         public ActionResult NavigationBar()
         {
             var model = new IndexModel();
-            if (AccountController.IsLoggedIn && Session["AccountId"] != null)
+            var id = Convert.ToInt32(Session["AccountId"]);
+            if (AccountController.IsLoggedIn && id != 0)
             {
-                var id = Convert.ToInt32(Session["AccountId"]);
                 var account = Db.Accounts.Find(id);
                 if (account is EmployeeAccount) model.Role = ((EmployeeAccount)account).Role;
             }
@@ -46,7 +46,7 @@ namespace HealthcareSystem.Controllers
 
         #region PRIVATE
 
-       
+
         #endregion
     }
 }

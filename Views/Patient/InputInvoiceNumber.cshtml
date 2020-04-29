@@ -42,7 +42,7 @@
             })
             $("#submit-btn").click(function () {
                 var invoiceNumber = $("#InvoiceNumber").val();
-                if (invoiceNumber != "" && invoiceNumber > 0) {
+                if (invoiceNumber != "" && invoiceNumber > 0 && invoiceNumber.length < 20) {
                     window.location.href = $("#GetInvoiceURL").val() + "?invoiceId=" + invoiceNumber;
                 }
                 else {

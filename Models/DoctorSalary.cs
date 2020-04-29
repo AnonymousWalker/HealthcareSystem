@@ -10,7 +10,7 @@ namespace HealthcareSystem.Models
     {
         public int DoctorId { get; set; }
         public string DoctorName { get; set; }
-        [Required]
+        [Required][Range(1,1000000)]
         public double Salary { get; set; }
     }
 }

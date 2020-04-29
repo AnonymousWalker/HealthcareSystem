@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -17,6 +18,7 @@ namespace HealthcareSystem.Models
         public bool MRI { get; set; } = false;
         public bool Radiology { get; set; } = false;
         public bool LabTest { get; set; } = false;
+        [MaxLength(200)]
         public string Prescription { get; set; } = "";
         public DateTime Date { get; set; }
         public bool Status { get; set; }

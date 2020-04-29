@@ -23,15 +23,16 @@
         var action = $("#ActionType").val();
         if (action != "") {
             var urlString;
+            var role = $("#Role").val();
             if (action == "make-apt") {
                 urlString = $("#MakeAppointmentURL").val();
                 window.location.href = urlString + "?patientid=" + patientId;
             }
-            else if (action == "view") {
-                urlString = $("#PatientRecordURL").val();
+            else if (action == "view" && role != "Staff") {
+                urlString = $("#PatientMedicalRecordURL").val();
                 window.location.href = urlString + "?patientid=" + patientId;
             }
-            else if (action == "input") {
+            else if (action == "input" && (role == "Doctor" || role == "Nurse")) {
                 urlString = $("#InputRecordURL").val();
                 window.location.href = urlString + "?patientid=" + patientId;
             }

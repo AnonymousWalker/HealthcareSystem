@@ -11,7 +11,7 @@ namespace HealthcareSystem.Controllers
     public class StaffController : Controller
     {
         private HealthcareSystemContext Db;
-
+        private const string ACCESS_DENIED_MSG = "Access Denied. You do not have permission to this content!";
         public StaffController()
         {
             Db = new HealthcareSystemContext();
@@ -100,6 +100,12 @@ namespace HealthcareSystem.Controllers
         public ActionResult ViewDailyReport()
         {
             //StaffController.GenerateDailyReport(); // test 
+            // Authorize Access
+            if (!isAuthorizedAccess(EmployeeRole.CEO))
+            {
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
+            }
             DateTime today = DateTime.Today;
             DateTime nextDay = today.AddDays(1);
             var dailyReports = Db.DailyReports.Where(report => report.Date >= today && report.Date < nextDay)
@@ -118,6 +124,11 @@ namespace HealthcareSystem.Controllers
         public ActionResult ViewMonthlyReport()
         {
             //StaffController.GenerateMonthlyReport(); // test 
+            if (!isAuthorizedAccess(EmployeeRole.CEO))
+            {
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
+            }
             DateTime thisMonth = DateTime.Today;
             thisMonth = thisMonth.AddDays(-thisMonth.Day + 1);  //return the first day of month
             DateTime nextMonth = thisMonth.AddMonths(1);
@@ -136,8 +147,23 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult InputMedicalRecord(int patientId)
         {
-            var patient = Db.Accounts.Find(patientId);
-            return View(new MedicalRecordModel { PatientId = patientId, PatientName = patient.Firstname + " " + patient.Lastname });
+            if (patientId <= 0)
+            {
+                ViewBag.ErrorMessage = "The record is not found.";
+                return View("~/Views/Shared/Error.cshtml");
+            }
+            if (!isAuthorizedAccess(EmployeeRole.CEO, EmployeeRole.Nurse))
+            {
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
+            }
+
+            var patient = getPatientAccount(patientId);
+            if (patient != null)
+            {
+                return View(new MedicalRecordModel { PatientId = patientId, PatientName = patient.Firstname + " " + patient.Lastname });
+            }
+            return View(new MedicalRecordModel());
         }
 
         [HttpPost]
@@ -186,14 +212,18 @@ namespace HealthcareSystem.Controllers
                 Db.SaveChanges();
                 return RedirectToAction("PatientMedicalRecords", "Staff", new { patientId = record.PatientId });
             }
-            //error
+            // model error
             return View(record);
         }
 
-        [HttpGet]
+        [HttpGet]   // Doctor/nurse 
         public ActionResult EditMedicalRecord(int recordId)
         {
-            // Doctor/nurse 
+            if (!isAuthorizedAccess(EmployeeRole.Doctor, EmployeeRole.Nurse))
+            {
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
+            }
             var record = Db.MedicalRecords.Find(recordId);
             if (record != null)
             {
@@ -223,12 +253,20 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult SearchPatient(string actionType = "")
         {
-            //action from index: "input" or "view" medical record or "make-apt" to make appointment for returning patient
-            if (actionType != "")
+            if (!isAuthorizedAccess(EmployeeRole.CEO, EmployeeRole.Doctor, EmployeeRole.Nurse, EmployeeRole.Staff))
             {
-                ViewBag.Action = actionType;
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
             }
-            return View();
+
+            int accountId = Convert.ToInt32(Session["AccountId"]);
+            var employee = getEmployeeAccount(accountId);
+            var model = new SearchPatientModel();
+            // "input" or "view" medical record, "make-apt" for making appointment (returning patient)
+            model.Action = actionType;
+            model.Role = employee.Role;
+            model.EmployeeId = employee.AccountId;
+            return View(model);
         }
 
         //AJAX
@@ -265,7 +303,7 @@ namespace HealthcareSystem.Controllers
             }
             if (resultByLastName != null)
             {
-                var result= resultByLastName.ToList();
+                var result = resultByLastName.ToList();
                 patientList = patientList.Union(result).ToList();
                 //patientList.Concat(result.TakeWhile(p => !patientList.Any(list => list.AccountId == p.AccountId)));
             }
@@ -276,37 +314,64 @@ namespace HealthcareSystem.Controllers
                 //patientList.Concat(result.TakeWhile(p => !patientList.Any(list => list.AccountId == p.AccountId)));
             }
 
+            // Filter result by role: Doctor can only see his/her patient's record
+            if (isAuthorizedAccess(EmployeeRole.Doctor))
+            {
+                int userid = Convert.ToInt32(Session["AccountId"]);
+                var patientIds = Db.Appointments.Where(s => s.DoctorId == userid)
+                                    .Select(s => s.PatientId);
+
+                patientList = patientList.TakeWhile(p => patientIds.Any(x => x == p.AccountId)).ToList();
+            }
+
             return PartialView("_PatientList", patientList);
         }
 
         public ActionResult PatientMedicalRecords(int patientId)
         {
-            var patient = Db.Accounts.Find(patientId);
-            var patientName = (patient != null) ? patient.Firstname + " " + patient.Lastname : "Unknown Patient";
-            var records = getMedicalRecords(patientId);
-            return View(new PatientMedicalRecordModel
+            if (!isAuthorizedAccess(EmployeeRole.Doctor, EmployeeRole.Nurse, EmployeeRole.CEO))
             {
-                PatientId = patient.AccountId,
-                PatientName = patientName,
-                Records = records
-            });
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
+            }
+
+            var patient = getPatientAccount(patientId);
+            if (patient != null)
+            {
+                var records = getMedicalRecords(patientId);
+
+                return View(new PatientMedicalRecordModel
+                {
+                    PatientId = patient.AccountId,
+                    PatientName = patient.Firstname + " " + patient.Lastname,
+                    Records = records
+                });
+            }
+            ViewBag.ErrorMessage = "Patient record not found";
+            return View("~/Views/Shared/Error.cshtml");
         }
 
         //Doctor Appointments
         public ActionResult AppointmentList()
         {
-            if (AccountController.IsLoggedIn)
+            if (!isAuthorizedAccess(EmployeeRole.Doctor))
             {
-                var id = Convert.ToInt32(Session["AccountId"]);
-                var model = getAppointments(id);
-                return View("DoctorAppointmentList", model);
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
             }
-            return RedirectToAction("Login", "Account");
+            var id = Convert.ToInt32(Session["AccountId"]);
+            var model = getAppointments(id);
+            return View("DoctorAppointmentList", model);
         }
 
         [HttpGet]
         public ActionResult UpdateServiceTreatment(int appointmentId)
         {
+            if (!isAuthorizedAccess(EmployeeRole.Doctor))
+            {
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
+            }
             var statement = Db.ServiceStatements.Where(s => s.AppointmentId == appointmentId).FirstOrDefault();
             var appointment = Db.Appointments.Find(appointmentId);
             // New Statement 
@@ -356,7 +421,8 @@ namespace HealthcareSystem.Controllers
                 return View("ServiceTreatment", model);
             }
 
-            return RedirectToAction("AppointmentList");
+            ViewBag.ErrorMessage = "Appointment not found";
+            return View("~/Views/Shared/Error.cshtml");
         }
 
         [HttpPost]
@@ -373,6 +439,11 @@ namespace HealthcareSystem.Controllers
         //AJAX
         public ActionResult EditSalary(int doctorId)
         {
+            if (!isAuthorizedAccess(EmployeeRole.CEO))
+            {
+                ViewBag.ErrorMessage = ACCESS_DENIED_MSG;
+                return View("~/Views/Shared/Error.cshtml");
+            }
             var doctor = Db.Accounts.OfType<EmployeeAccount>().Where(dr => dr.AccountId == doctorId).FirstOrDefault();
             if (doctor != null)
             {
@@ -390,18 +461,43 @@ namespace HealthcareSystem.Controllers
         [HttpPost]
         public bool EditSalary(DoctorSalary model)
         {
-            var doctor = Db.Accounts.OfType<EmployeeAccount>().Where(dr => dr.AccountId == model.DoctorId).FirstOrDefault();
-            if (doctor != null)
+            if (ModelState.IsValid)
             {
-                doctor.Salary = model.Salary;
-                Db.SaveChanges();
-                return true;
+                var doctor = Db.Accounts.OfType<EmployeeAccount>().Where(dr => dr.AccountId == model.DoctorId).FirstOrDefault();
+                if (doctor != null && isAuthorizedAccess(EmployeeRole.CEO))
+                {
+                    doctor.Salary = model.Salary;
+                    Db.SaveChanges();
+                    return true;
+                }
             }
             return false;
         }
 
 
         #region PRIVATE
+        private bool isAuthorizedAccess(params EmployeeRole[] roles)
+        {
+            var id = Convert.ToInt32(Session["AccountId"]);
+            if (!AccountController.IsLoggedIn || id == 0)
+            {
+                return false;
+            }
+
+            var account = Db.Accounts.OfType<EmployeeAccount>().FirstOrDefault(acc => acc.AccountId == id);
+            return roles.Any(r => r == account.Role);
+        }
+
+        private PatientAccount getPatientAccount(int patientId)
+        {
+            return Db.Accounts.OfType<PatientAccount>().FirstOrDefault(acc => acc.AccountId == patientId);
+        }
+
+        private EmployeeAccount getEmployeeAccount(int id)
+        {
+            return Db.Accounts.OfType<EmployeeAccount>().FirstOrDefault(acc => acc.AccountId == id);
+        }
+
         private List<MedicalRecordModel> getMedicalRecords(int patientId)
         {
             return Db.MedicalRecords.Where(rec => rec.PatientId == patientId)

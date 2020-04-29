@@ -144,6 +144,7 @@
     <Compile Include="Models\PaymentModel.cs" />
     <Compile Include="Models\ProfileModel.cs" />
     <Compile Include="Models\ReportModel.cs" />
+    <Compile Include="Models\SearchPatientModel.cs" />
     <Compile Include="Models\ServiceTreatmentModel.cs" />
     <Compile Include="Models\StatementInvoiceModel.cs" />
     <Compile Include="Models\Tables\Account.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Models\Tables\Transaction.cs" />
     <Compile Include="Models\HealthcareServiceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\AESCryptography.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -250,7 +252,6 @@
     <Content Include="Views\Patient\Payment.cshtml" />
     <Content Include="Views\Staff\_EditSalary.cshtml" />
     <Content Include="Views\Patient\_ServiceInvoiceTable.cshtml" />
-    <Content Include="Views\Shared\_InputInvoiceNumber.cshtml" />
     <Content Include="Views\Patient\InputInvoiceNumber.cshtml" />
   </ItemGroup>
   <ItemGroup>

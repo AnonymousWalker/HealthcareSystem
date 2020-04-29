@@ -11,7 +11,7 @@ namespace HealthcareSystem.Controllers
     public class PatientController : Controller
     {
         private HealthcareSystemContext Db;
-
+        private const string ACCESS_DENIED_MSG = "Access Denied. You do not have permission to this content!";
         public PatientController()
         {
             Db = new HealthcareSystemContext();
@@ -203,7 +203,7 @@ namespace HealthcareSystem.Controllers
             }
             else
             {
-                ViewBag.ErrorMessage = "The doctor has not yet provided any services!";
+                ViewBag.ErrorMessage = "404 - Invoice not found!";
                 return View("~/Views/Shared/Error.cshtml");
             }
 
