@@ -11,10 +11,14 @@ namespace HealthcareSystem.Models
         public int AccountId { get; set; }
         public string Email { get; set; }
         [Required]
+        [MinLength(6)]
+        [MaxLength(30)]
         public string Password { get; set; }
         [Required]
+        [MaxLength(20)]
         public string Firstname { get; set; }
         [Required]
+        [MaxLength(20)]
         public string Lastname { get; set; }
         public string Phone { get; set; }
         public AccountType AccountType { get; set; }

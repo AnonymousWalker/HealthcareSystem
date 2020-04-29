@@ -190,6 +190,7 @@
     <Content Include="Content\image\monthlyReports.jpg" />
     <Content Include="Content\image\profile.jpg" />
     <Content Include="Content\image\updatesalaree.jpg" />
+    <Content Include="Content\image\viewpatientprofile.jpg" />
     <Content Include="Content\image\viewrecords.png" />
     <Content Include="Content\image\viewreports.jpg" />
     <Content Include="Content\image\welcome-logo.png" />

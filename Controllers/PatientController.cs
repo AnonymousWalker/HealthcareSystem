@@ -105,8 +105,9 @@ namespace HealthcareSystem.Controllers
             return false;
         }
 
-        public ActionResult MedicalRecord(int patientId)
+        public ActionResult MedicalRecord()
         {
+            int patientId = Convert.ToInt32(Session["AccountId"]);
             // Access Control
             if (!checkAccountExists(patientId))
             {
@@ -276,7 +277,7 @@ namespace HealthcareSystem.Controllers
 
         private bool checkAccountExists(int accountId)
         {
-            return (accountId == 0 || Db.Accounts.Find(accountId) != null);
+            return (accountId != 0 && Db.Accounts.Find(accountId) != null);
         }
 
         private bool isPatientAccess(int patientId)

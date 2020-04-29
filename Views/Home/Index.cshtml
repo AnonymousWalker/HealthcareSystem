@@ -13,23 +13,23 @@
 </head>
 <body style="background: white;">
     @{Html.RenderAction("NavigationBar", "Home");}
-    <div style="overflow: visible; width: 65%; height: 50%; float: right; margin-right: 20%;">
+    <div style="overflow: visible; width: 65%; height: 50%; float: right; margin-right: 20%;margin-top: 15px;">
         <img id="rightLogo" src="~/Content/image/welcome-logo.png">
         <h1>Welcome @Model.Name!</h1>
     </div>
     @if (!Model.Role.HasValue)
     {
         <a href="@Url.Action("MakeAppointment","Patient", new { patientId = Model.AccountId})"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/appointment.jpg"></a>
-        <a href="@Url.Action("AppointmentList","Patient", new { patientId = Model.AccountId})"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/list.jpg"></a>
+        <a href="@Url.Action("AppointmentList","Patient")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/list.jpg"></a>
         <br><br>
         <a href="@Url.Action("Index","Account")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/profile.jpg"></a>
-        <a href="@Url.Action("MedicalRecord","Patient", new { patientId = Model.AccountId})"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/history.png"></a>
+        <a href="@Url.Action("MedicalRecord","Patient")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/history.png"></a>
     }
     else if (Model.Role.HasValue && Model.Role == EmployeeRole.Staff)
     {
         <a href="@Url.Action("SearchPatient","Staff", new { actionType = "make-apt" })"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/staffappointment.jpg"></a>
         <a href="@Url.Action("SignUp","Account")"><img style="width:40%; height: 100%; margin-left: 6%;" src="~/Content/image/createaccount.jpg"></a>
-        <a href="@Url.Action("SearchPatient","Staff", new { actionType = "view" })" ><img style="width:40%; height: 100%; margin-top: 2%; margin-left: 28%;" src="~/Content/image/viewrecords.png"></a>
+        <a href="@Url.Action("SearchPatient","Staff", new { actionType = "view" })" ><img style="width:40%; height: 100%; margin-top: 2%; margin-left: 28%;" src="~/Content/image/viewpatientprofile.jpg"></a>
     }
     else if (Model.Role.HasValue && Model.Role == EmployeeRole.Doctor)
     {

@@ -156,7 +156,8 @@ namespace HealthcareSystem.Controllers
                     Db.SaveChanges();
                 }
             }
-            return PartialView("_EditProfile", model);
+            //return PartialView("_EditProfile", model);
+            return RedirectToAction("Index");
         }
 
         #region PRIVATE
