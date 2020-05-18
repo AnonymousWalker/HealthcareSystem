@@ -1,0 +1,25 @@
+﻿@model IndexModel
+<nav>
+
+    <div class="header">
+        <h2 class="logo"><a href="@Url.Action("Index","Home")" style="color: inherit; font-size:26px;">Healthcare System</a></h2>
+        <input type="checkbox" id="chk">
+        <label for="chk" class="show-menu-btn">
+            <i class="fas fa-ellipsis-h"></i>
+        </label>
+
+        <div class="menu">
+            <a href="@Url.Action("Index","Home")">Home</a>
+            @if (Model.Role.HasValue)
+            {
+                <a href="#">Works</a>
+            }
+            else
+            {
+                <a id="pay-invoice-link" href="@Url.Action("InputInvoiceNumber","Patient")">Pay Invoice</a>
+                <a href="#">Contact</a>
+            }
+            <a href="@Url.Action("Index","Account")">Account</a>
+        </div>
+    </div>
+</nav>

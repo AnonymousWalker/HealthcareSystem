@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace HealthcareSystem.Controllers
 {
@@ -18,24 +19,34 @@ namespace HealthcareSystem.Controllers
 
         public ActionResult Index()
         {
+            var model = new IndexModel();
+            var id = Convert.ToInt32(Session["AccountId"]);
             if (AccountController.IsLoggedIn)
             {
-
+                var account = Db.Accounts.Find(id);
+                model.AccountId = id;
+                model.Name = account.Firstname + " " + account.Lastname;
+                if (account is EmployeeAccount) model.Role = ((EmployeeAccount)account).Role;
             }
-            return View("~/Views/Account/Login.cshtml");
+            return View(model);
         }
 
-        public ActionResult Apointment()
+        public ActionResult NavigationBar()
         {
-            var appointments = Db.Appointments.Where(ap => ap.Time.Date == DateTime.Today);
-            TimeSpan t;
-            for (int i = 9; i <= 16; i++)
+            var model = new IndexModel();
+            var id = Convert.ToInt32(Session["AccountId"]);
+            if (AccountController.IsLoggedIn && id != 0)
             {
-                t = new TimeSpan(i, 0, 0);   
-                
+                var account = Db.Accounts.Find(id);
+                if (account is EmployeeAccount) model.Role = ((EmployeeAccount)account).Role;
             }
-            return View();
+
+            return PartialView("~/Views/Shared/_NavigationBar.cshtml", model);
         }
- 
+
+        #region PRIVATE
+
+
+        #endregion
     }
 }

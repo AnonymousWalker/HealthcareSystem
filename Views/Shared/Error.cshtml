@@ -1,13 +1,15 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Healthcare System</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    @Styles.Render("~/Content/custom/home.css")
+    <link rel="icon" href="~/Content/image/logo.png">
 </head>
-<body>
-    <hgroup>
-        <h1>Error.</h1>
-        <h2>An error occurred while processing your request.</h2>
-    </hgroup>
+<body style="background: white;">
+    @{Html.RenderAction("NavigationBar", "Home");}
+    <h2 style="color:red">@ViewBag.ErrorMessage</h2>
 </body>
 </html>

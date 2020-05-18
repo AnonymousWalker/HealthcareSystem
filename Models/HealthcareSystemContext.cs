@@ -11,8 +11,8 @@ namespace HealthcareSystem.Models
     {
         public HealthcareSystemContext() : base("HealthcareSystem")
         {
-            Database.SetInitializer(new CreateDatabaseIfNotExists<HealthcareSystemContext>());
-            //Database.SetInitializer<SchoolDBContext>(new DropCreateDatabaseIfModelChanges<SchoolDBContext>());
+            //Database.SetInitializer(new CreateDatabaseIfNotExists<HealthcareSystemContext>());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<HealthcareSystemContext>());
 
         }
 
@@ -26,5 +26,11 @@ namespace HealthcareSystem.Models
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<MedicalRecord> MedicalRecords { get; set; }
+        public virtual DbSet<ServiceStatement> ServiceStatements { get; set; }
+        public virtual DbSet<ServiceStatementDetail> ServiceStatementDetails { get; set; }
+        public virtual DbSet<ServiceFee> ServiceFees { get; set; }
+        public virtual DbSet<DailyReport> DailyReports { get; set; }
+        public virtual DbSet<MonthlyReport> MonthlyReports { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set; }
     }
 }

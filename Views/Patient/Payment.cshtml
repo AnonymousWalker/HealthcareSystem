@@ -1,0 +1,58 @@
+﻿@model PaymentModel
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    @Styles.Render("~/Content/custom/home.css")
+    @Styles.Render("~/Content/custom/payment.css")
+</head>
+<body style="background-image: linear-gradient(to right, #cb2d3e, #bbd7e2);">
+    @{Html.RenderAction("NavigationBar", "Home");}
+    <div class="wrapper">
+        <div class="payment">
+            <div class="payment-logo">
+            </div>
+            <div class="amount">
+                <h2> Total Amount</h2>
+                <div class="price">$@string.Format("{0:.00}", Model.Amount)</div><br />
+            </div>
+            <div class="form">
+                @using (Html.BeginForm("Payment", "Patient", FormMethod.Post))
+                {
+                    @Html.HiddenFor(x=>x.StatementId)
+                    <div class="card space icon-relative">
+                        <label class="label">Card holder:</label>
+                        @Html.TextBoxFor(x => x.CardHolder, new { @class = "input", placeholder = "Name on card" })
+                        @Html.ValidationMessageFor(x => x.CardHolder)
+                    </div>
+                    <div class="card space icon-relative">
+                        <label class="label">Card number:</label>
+                        @Html.TextBoxFor(x => x.PaymentNumber, new { @class = "input", placeholder = "Card # (14-19 digits)" })
+                        @Html.ValidationMessageFor(x => x.PaymentNumber)
+                    </div>
+                    <div class="card space icon-relative">
+                        <label class="label">Billing Address:</label>
+                        @Html.TextBoxFor(x => x.BillingAddress, new { @class = "input", placeholder = "Billing address" })
+                        @Html.ValidationMessageFor(x => x.BillingAddress)
+                    </div>
+                    <div class="card-grp space">
+                        <div class="card-item icon-relative">
+                            <label class="label">Expiry date:</label>
+                            @Html.TextBoxFor(x => x.ExpDate, new { @class = "input", placeholder = "mm/yy" })
+                            @Html.ValidationMessageFor(x => x.ExpDate)
+                        </div>
+                        <div class="card-item icon-relative">
+                            <label class="label">CVC:</label>
+                            <input type="text" name="CVC" class="input" placeholder="Security Code" value="" />
+                            @Html.ValidationMessageFor(x => x.CVC)
+                        </div>
+                    </div>
+
+                    <input class="btn" type="submit" value="Pay Now" />
+                }
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

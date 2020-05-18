@@ -1,0 +1,47 @@
+﻿@model SearchPatientModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="~/Content/image/logo.png">
+    <title>Search Patient Record</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    @Scripts.Render("~/Scripts/jquery-3.4.1.js")
+    @Scripts.Render("~/Scripts/custom/search-patient.js")
+    @Styles.Render("~/Content/custom/patient-record.css")
+    @Styles.Render("~/Content/custom/home.css")
+    @Styles.Render("~/Content/custom/appointment-list.css")
+    @if (Model.Role == EmployeeRole.Doctor || Model.Role == EmployeeRole.Nurse || (Model.Role == EmployeeRole.Staff && Request.QueryString["actionType"]== "make-apt"))
+    {
+        @Styles.Render("~/Content/custom/row-hover.css")
+    }
+</head>
+<body style="background: white;">
+    @{Html.RenderAction("NavigationBar", "Home");}
+    @Html.Hidden("SearchURL", Url.Action("SearchPatient", "Staff"))
+    @Html.Hidden("PatientMedicalRecordURL", Url.Action("PatientMedicalRecords", "Staff"))
+    @Html.Hidden("InputRecordURL", Url.Action("InputMedicalRecord", "Staff"))
+    @Html.Hidden("MakeAppointmentURL", Url.Action("MakeAppointment", "Patient"))
+    @Html.Hidden("ActionType", Model.Action)
+    @Html.Hidden("Role", Model.Role)
+    <div style="clear: both;">
+        <h1>Find Patient Record</h1>
+    </div>
+    <div class="wrap">
+        <div class="filter-group">
+            <input type="text" id="fname-input" name="firstName" class="searchTerm" placeholder="Frist name" />
+            <input type="text" id="lname-input" name="lastName" class="searchTerm" placeholder="Last name" />
+            <input type="text" id="phone-input" name="phone" class="searchTerm" placeholder="Phone number" />
+
+            <button type="submit" id="search-btn" class="searchButton">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="patient-table">
+
+    </div>
+</body>
+</html>

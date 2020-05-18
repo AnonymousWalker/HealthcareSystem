@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title> Make an Appointment </title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    @Styles.Render("~/Content/custom/make-appointment.css")
+    @Styles.Render("~/Content/custom/home.css")
+    @Scripts.Render("~/Scripts/jquery-3.4.1.js")
+    @Scripts.Render("~/Scripts/custom/make-appointment.js")
+</head>
+<body style="background-image: linear-gradient(to right, #cb2d3e, #bbd7e2);">
+    @Html.Hidden("GetAppointmentURL", Url.Action("GetAvailableAppointmentsByDate", "Patient"))
+    @Html.Hidden("MakeAppointmentURL", Url.Action("MakeAppointment", "Patient"))
+    @Html.Hidden("PatientId", (int)ViewBag.PatientId)
+    @{Html.RenderAction("NavigationBar", "Home");}
+    <h1 class="blue" style="clear: both;">Make an Appointment</h1>
+    <div class="datepicker">
+        <h1> Pick a Date</h1>
+        <input id="datepicker" class="un" type="date">
+        <br /><br />
+    </div>
+
+    <table class="container ap-table">
+        <thead>
+            <tr>
+                <th><h1>Time</h1></th>
+                <th><h1>Doctor</h1></th>
+                <th><h1>Action</h1></th>
+            </tr>
+        </thead>
+        <tbody class="ap-table-body">
+            @{Html.RenderAction("GetAvailableAppointmentsByDate", "Patient");}
+        </tbody>
+    </table>
+</body>
+</html>

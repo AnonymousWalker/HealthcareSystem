@@ -1,0 +1,22 @@
+﻿@model PatientMedicalRecordModel
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="logo.png">
+    <title>Healthcare System</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    @Styles.Render("~/Content/custom/patient-record.css")
+    @Styles.Render("~/Content/custom/home.css")
+</head>
+<body style="background: white;">
+    @{Html.RenderAction("NavigationBar", "Home");}
+
+    <div style="clear: both;">
+        <h1>Medical Record: @Model.PatientName</h1>
+    </div>
+
+   @Html.Partial("_MedicalRecordTable", Model.Records)
+
+</body>
+</html>

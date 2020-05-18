@@ -1,0 +1,28 @@
+﻿@model PatientMedicalRecordModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Patient Medical Records</title>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    @Styles.Render("~/Content/custom/patient-record.css")
+    @Styles.Render("~/Content/custom/home.css")
+    @Styles.Render("~/Content/custom/row-hover.css")
+    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Scripts.Render("~/Scripts/custom/appointment-list.js")
+</head>
+<body>
+    @{Html.RenderAction("NavigationBar", "Home");}
+    @Html.Hidden("PatientId", Model.PatientId)
+    @Html.Hidden("EditMedicalRecordURL",Url.Action("EditMedicalRecord", "Staff"))
+    <div style="clear: both;">
+        <h1>Medical Record: @Model.PatientName</h1>
+        <h3 style="text-align:center;color:#a99999">(Select one to update services for patient)</h3>
+    </div>
+    <a href="@Url.Action("SearchPatient","Staff", new { actionType = "view" })">Back</a><br />
+    <a href="@Url.Action("InputMedicalRecord","Staff", new { patientId = Model.PatientId })">Input</a>
+    @Html.Partial("~/Views/Patient/_MedicalRecordTable.cshtml", Model.Records)
+
+</body>
+</html>

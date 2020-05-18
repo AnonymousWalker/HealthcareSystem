@@ -1,0 +1,52 @@
+﻿.profile-container {
+    margin-top: 5%;
+}
+
+.box-body {
+    line-height: 2;
+    font-size: 16px;
+}
+
+.panel-body {
+    padding: 0;
+}
+
+.profile-section {
+    border-radius: 10px;
+    background: white;
+    padding: 0px 25px 20px 25px;
+}
+
+.modal {
+    top: 10%;
+    left: 20%;
+    right: auto;
+}
+
+.invoice-table {
+    line-height: 2;
+    width: 100%;
+    font-size: 16px;
+}
+
+.invoice-table > tbody > tr
+{
+    cursor:pointer;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: #d1b1f5;
+}
+
+.sign-out-btn {
+    position: absolute;
+    margin-top: 40px;
+    width: 100%;
+    left: 0;
+    background: #43148e;
+    color: white;
+    font-weight: bold;
+    line-height: 2;
+    border-radius: 8px;
+    border:none;
+}

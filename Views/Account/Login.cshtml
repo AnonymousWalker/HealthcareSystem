@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <title>Sign In - HealthCare</title>
+    <link rel="icon" href="~/Content/image/logo.png">
     @Styles.Render("~/Content/custom/login.css")
 </head>
 <body>
@@ -12,15 +13,18 @@
     <div class="loginMain">
         <p class="sign" align="center">Sign in</p>
         <form class="form1" action="/Account/Login" method="post">
-            <input class="un " name="Email" type="text" align="center" placeholder="email" value="@Model.Email" autofocus>
             @if (Model.ErrorMessage != "")
             {
-                <label style="display: block; color:#ea0c08">@Model.ErrorMessage</label>
+                <label class="field-validation-error">@Model.ErrorMessage</label>
             }
+            <input class="un " name="Email" type="email" align="center" placeholder="email" value="@Model.Email" autofocus>
+            @Html.ValidationMessageFor(x => x.Email)
             <input class="pass" name="Password" type="password" align="center" placeholder="password">
             <input class="submit" type="submit" value="Sign In" />
-            <p class="forgot" align="center"><a href="#">Forgot Password?</a></p>
-        </form> 
+            <p class="forgot" align="center">
+                <a href="@Url.Action("SignUp","Account")">New user? Sign up now!</a>
+            </p>
+        </form>
     </div>
 </body>
 </html>

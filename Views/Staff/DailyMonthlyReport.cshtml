@@ -1,0 +1,62 @@
+﻿@model IList<ReportModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+    @Scripts.Render("~/Scripts/jquery-3.4.1.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/custom/change-salary.js")
+    @Styles.Render("~/Content/bootstrap.min.css")
+    @Styles.Render("~/Content/custom/home.css")
+    @Styles.Render("~/Content/custom/report.css")
+    <title>DailyMonthlyReport</title>
+</head>
+<body>
+    <style>
+        tbody tr:hover {
+            background-color: #b476e2 !important;
+            cursor: pointer;
+        }
+
+        tbody tr {
+            background: inherit;
+        }
+    </style>
+    @{Html.RenderAction("NavigationBar", "Home");}
+
+    @if (ViewBag.ReportType == "Daily")
+    {
+        <h1 class="blue" style="clear: both;">Daily Report of @DateTime.Today.AddDays(-1).ToShortDateString()</h1>
+    }
+    @if (ViewBag.ReportType == "Monthly")
+    {
+        <h1 class="blue" style="clear: both;">Monthly Report of @string.Format("{0:00}/{1}", DateTime.Today.Month, DateTime.Today.Year)</h1>
+    }
+    <h3 style="text-align:center;color:#a99999">(Select one to change salary)</h3>
+
+    @Html.Hidden("EditSalaryURL", Url.Action("EditSalary", "Staff"))
+    <table style="margin-left: 26%; margin-top: 20px;" class="redTable">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr data-doctorid="@record.DoctorId">
+                    <td>@record.DoctorName</td>
+                    <td>@record.Revenue</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="modal-ajax">
+
+    </div>
+
+</body>
+</html>

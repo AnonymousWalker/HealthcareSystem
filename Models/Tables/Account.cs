@@ -1,11 +1,13 @@
 ﻿using HealthcareSystem.Models.Tables;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace HealthcareSystem.Models
 {
+    [Table("Account", Schema = "dbo")]
     public abstract class Account
     {
         public int AccountId { get; set; }

@@ -1,0 +1,38 @@
+table.purpleHorizon {
+  border: 4px solid #792396;
+  background-color: #555555;
+  width: 60%;
+  height: auto;
+  text-align: center;
+  border-collapse: collapse;
+  margin: auto;
+}
+table.purpleHorizon td, table.purpleHorizon th {
+  border: 1px solid #c5bfbf;
+  padding: 5px 2px;
+}
+table.purpleHorizon tr:nth-child(even) {
+  background: #CC3BFC;
+}
+table.purpleHorizon thead {
+  background: #792396;
+  border-bottom: 4px solid #792396;
+}
+table.purpleHorizon thead tr{
+  border-bottom: 4px solid #c5bfbf;
+}
+table.purpleHorizon thead th {
+  font-size: 19px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  border-left: 1px solid #c5bfbf;
+}
+table.purpleHorizon thead th:first-child {
+  border-left: none;
+}
+table.purpleHorizon tbody td {
+  font-size: 13px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
