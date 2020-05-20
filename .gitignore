@@ -20,3 +20,5 @@ bld/
 [Ll]og/
 
 .vs/
+bin/
+obj/Debug/
